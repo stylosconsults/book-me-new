@@ -1,0 +1,80 @@
+{
+  "name": "bookme-website",
+  "version": "0.5.0",
+  "private": "true",
+  "description": "Hotel Booking website",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --ext=jsx,ts,tsx .",
+    "lint:fix": "eslint --ext=jsx,ts,tsx . --fix",
+    "format": "prettier --write \"./**/*.{js,jsx,ts,tsx}\"",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "eslint-config-prettier": "^8.6.0",
+    "next": "^13.1.1",
+    "next-themes": "^0.2.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-use": "^17.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "@types/react": "^18.0.26",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "autoprefixer": "^10.4.13",
+    "eslint": "^8.31.0",
+    "eslint-config-next": "13.1.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.11",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.2",
+    "tailwindcss": "^3.2.4",
+    "typescript": "^4.9.4"
+  },
+  "lint-staged": {
+    "*.tsx,*.ts,*.mdx": [
+      "eslint --fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "author": {
+    "email": "crisemcr@gmail.com",
+    "name": "Cristian Crețu",
+    "url": "https://cretu.dev"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cristicretu/ts-next-tailwind-template/issues"
+  },
+  "homepage": "https://template.cretu.dev",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "keywords": [
+    "tailwindcss",
+    "template",
+    "radix",
+    "react",
+    "nextjs"
+  ]
+}

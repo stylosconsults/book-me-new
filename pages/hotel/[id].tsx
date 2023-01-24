@@ -22,7 +22,7 @@ export default function HotelDetails() {
       <div className='mt-5'>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src='https://ui8-fleet-html.herokuapp.com/img/content/catalog-pic-1.jpg'
+          src='https://ui8-fleet-html.herokuapp.com/img/content/photo-1.1.jpg'
           alt='Bookme'
           className='top-0 left-0 w-full rounded-md max-h-[80vh] object-cover'
           draggable='false'

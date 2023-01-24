@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 interface StepsProps {
   steps: string[]
@@ -6,12 +6,7 @@ interface StepsProps {
   current: number
   title?: string
 }
-export default function Steps({
-  current,
-  setCurrent,
-  steps,
-  title,
-}: StepsProps) {
+export default function Steps({ current, setCurrent, steps }: StepsProps) {
   return (
     <div className=' relative h-fit'>
       {/* <div className='h-[2px] w-full absolute bg-gray-200 left-0 top-1/2 -translate-y-[400%]'></div> */}

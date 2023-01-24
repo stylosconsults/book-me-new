@@ -4,7 +4,7 @@ import cn from 'lib/classNames'
 interface ButtonProps {
   children: React.ReactNode
   icon?: React.ReactNode
-  className: string
+  className?: string
 }
 export default function Button({ children, icon, className }: ButtonProps) {
   return (
@@ -16,7 +16,7 @@ export default function Button({ children, icon, className }: ButtonProps) {
         'bg-transparent hover:bg-co-black',
         'border-2 border-co-gray hover:border-co-black rounded-full ocus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
         'transition duration-200 ease-in-out',
-        className
+        className ? className : ''
       )}
     >
       {icon}

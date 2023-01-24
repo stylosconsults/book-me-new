@@ -16,8 +16,8 @@ module.exports = {
       },
     },
     fontFamily: {
-      sans: ['Inter', ...fontFamily.sans],
-    },
+      sans: ['DM Sans', ...fontFamily.sans],
+    }
   },
   variants: {
     extend: {},

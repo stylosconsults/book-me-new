@@ -1,4 +1,3 @@
-// https://github.com/delbaoliveira/website/blob/main/ui/challenge/TextSlider.tsx
 import React from 'react'
 
 import { useInterval } from 'react-use'

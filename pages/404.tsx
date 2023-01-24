@@ -14,10 +14,10 @@ export default function NotFound() {
             You found something that used to exist, or you typed something
             wrong. Try that URL again or return home.
           </p>
-          <Link href='/'>
-            <a className='px-8 py-4 mx-auto text-lg font-bold text-gray-900 bg-gray-100 rounded-md dark:text-gray-100 dark:bg-gray-800'>
+          <Link href='/' legacyBehavior>
+            <p className='px-8 py-4 mx-auto text-lg font-bold text-gray-900 bg-gray-100 rounded-md dark:text-gray-100 dark:bg-gray-800'>
               Return home
-            </a>
+            </p>
           </Link>
         </div>
       </div>

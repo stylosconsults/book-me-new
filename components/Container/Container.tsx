@@ -2,10 +2,9 @@ import React from 'react'
 
 import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
-import Link from 'next/link'
 
-import Button from 'components/atoms/Button/Button'
 import Footer from 'components/Footer/Footer'
+import Navbar from 'components/organisms/Navbar'
 import cn from 'lib/classNames'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,8 +13,8 @@ export default function Container(props: any) {
   const router = useRouter()
 
   const meta = {
-    title: 'Template name',
-    description: 'Template description',
+    title: 'Bookme',
+    description: 'Booking Platform for african restaurents',
     image:
       'https://cdn.discordapp.com/attachments/797485737272541250/893912493255176192/UnicornVectorGradient_7.png',
     type: 'website',
@@ -57,43 +56,14 @@ export default function Container(props: any) {
           )}
         </Head>
 
-        <nav className='sticky w-full bg-gray-100/10 z-[1] font-sans filter-blur dark:bg-gray-1000/40 top-2 md:top-4 max-w-6xl px-4 py-2 rounded-md mx-auto flex justify-between items-center'>
-          <div className='flex flex-row gap-1 text-tertiary'>
-            <div className=''>
-              <Link href='/' legacyBehavior>
-                <a className='transition-all cursor-pointer text-primary font-bold text-xl block leading-3'>
-                  Bookme
-                </a>
-              </Link>
-              <a
-                target='_blank'
-                href='https://GoDiscoverAfrica.rw'
-                rel='noreferrer'
-                className='leading-3 text-secondary hover:underline text-xs'
-              >
-                power by GoDiscoverAfrica
-              </a>
-            </div>
-          </div>
-          <div className='flex flex-row items-center space-x-4'>
-            <Link href='/about' legacyBehavior>
-              <a className='transition-all cursor-pointer text-primary hover:text-secondary'>
-                Support
-              </a>
-            </Link>
-            <Link href='/about' legacyBehavior>
-              <a className='transition-all cursor-pointer text-primary hover:text-secondary'>
-                Language
-              </a>
-            </Link>
-            <Button>Switch to experience</Button>
-          </div>
+        <nav className='sticky w-full z-50 bg-gray-100/10 font-sans filter-blur dark:bg-gray-1000/40 top-2 md:top-4 max-w-6xl py-2 rounded-md mx-auto flex justify-between items-center'>
+          <Navbar />
         </nav>
 
         <main
           className={cn(
-            'px-4 mt-12',
-            'max-w-2xl',
+            'mt-12',
+            'max-w-6xl w-full',
             'mx-auto my-auto',
             'flex flex-col justify-center gap-12',
             'divide-y divide-gray-200 dark:divide-gray-900',

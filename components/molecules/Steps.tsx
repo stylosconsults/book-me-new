@@ -15,21 +15,20 @@ export default function Steps({ current, setCurrent, steps }: StepsProps) {
           <div
             key={index}
             className={`flex z-10 w-fit flex-col items-center cursor-pointer ${
-              index <= current ? 'text-co-black' : 'text-co-gray'
-            }`}
-            onClick={
-              setCurrent !== undefined
-                ? () => setCurrent(index)
-                : () => {
-                    // do nothing
-                  }
+              index > current && 'text-co-gray cursor-not-allowed'
             }
+              ${index == current && 'text-co-black'}`}
+            onClick={() => {
+              if (index < current) {
+                setCurrent !== undefined ? setCurrent(index) : {}
+              }
+            }}
           >
             <div
               className={`h-16 w-16 rounded-full flex items-center justify-center text-white font-bold text-2xl ${
                 index < current && 'bg-co-green'
               } ${index === current && ' bg-co-blue '} ${
-                index > current && 'bg-co-black'
+                index > current && 'bg-co-black cursor-not-allowed'
               } `}
             >
               <p>{index + 1}</p>

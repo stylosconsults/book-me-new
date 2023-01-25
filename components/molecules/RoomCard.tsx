@@ -1,8 +1,10 @@
 import React from 'react'
 
+import Image from 'next/image'
 import Link from 'next/link'
 
 import Button from 'components/atoms/Button'
+import { BlurredDataImage, ImagePlaceholderOnError } from 'utils/blurredImage'
 
 interface RoomCardProps {
   id: string
@@ -33,13 +35,17 @@ export default function RoomCard({
         width: 'calc(25% - 10px)',
       }}
     >
-      <div className='relative overflow-hidden rounded-2xl'>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+      <div className='relative overflow-hidden rounded-2xl w-full h-40'>
+        <Image
           src='https://ui8-fleet-html.herokuapp.com/img/content/catalog-pic-1.jpg'
           alt=''
           className='w-full h-32 overflow-clip duration-1000 object-cover group-hover:scale-110'
           draggable='false'
+          fill
+          loading='lazy'
+          placeholder='blur'
+          blurDataURL={BlurredDataImage}
+          onError={ImagePlaceholderOnError}
         />
       </div>
       <p className='hover:text-co-blue text-sm py-2 font-medium duration-200 text-co-black'>

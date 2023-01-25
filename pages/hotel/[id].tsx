@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react'
 
+import Image from 'next/image'
 import { FaAccusoft } from 'react-icons/fa'
 
 import Heading from 'components/atoms/Heading'
@@ -7,6 +8,7 @@ import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
 import RoomCard from 'components/molecules/RoomCard'
 import Tabs from 'components/molecules/Tabs'
+import { BlurredDataImage } from 'utils/blurredImage'
 
 export default function HotelDetails() {
   const [activeTab, setactiveTab] = useState(0)
@@ -19,14 +21,16 @@ export default function HotelDetails() {
         ]}
       />
 
-      <div className='mt-5'>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+      <div className='mt-5 max-h-[70vh] min-h-[70vh] w-full relative bg-co-blue/50 rounded-md'>
+        <Image
           src='https://ui8-fleet-html.herokuapp.com/img/content/photo-1.1.jpg'
           alt='Bookme'
-          className='top-0 left-0 w-full rounded-md max-h-[80vh] object-cover'
+          className='top-0 left-0 w-full rounded-md  object-cover'
           draggable='false'
           loading='lazy'
+          blurDataURL={BlurredDataImage}
+          placeholder='blur'
+          fill
         />
       </div>
 

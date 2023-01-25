@@ -26,10 +26,8 @@ export default function Button({
         'bg-transparent hover:bg-co-black',
         'border-2 border-co-gray hover:border-co-black rounded-full ocus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
         'transition duration-200 ease-in-out',
-        className ? className : '',
-        disabled
-          ? 'opacity-50 cursor-not-allowed bg-gray-700 text-black hover:bg-gray-700 hover:text-black'
-          : ''
+        'disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-black disabled:hover:bg-gray-700 disabled:hover:text-black',
+        className ? className : ''
       )}
     >
       {icon}

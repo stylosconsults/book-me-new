@@ -1,5 +1,6 @@
 import React from 'react'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { AiFillStar } from 'react-icons/ai'
 
@@ -12,6 +13,7 @@ interface HotelCardProps {
   date: string
   rating: number
 }
+import { BlurredDataImage, ImagePlaceholderOnError } from 'utils/blurredImage'
 
 export default function HotelCard({
   id,
@@ -30,13 +32,17 @@ export default function HotelCard({
       }}
     >
       <Link href={`/hotel/${id}`}>
-        <div className='relative overflow-hidden rounded-t-2xl'>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+        <div className='relative overflow-hidden rounded-t-2xl w-full h-52'>
+          <Image
             src='https://ui8-fleet-html.herokuapp.com/img/content/catalog-pic-1.jpg'
             alt=''
-            className='w-full h-full overflow-clip duration-1000 object-cover group-hover:scale-110'
+            className='w-full overflow-clip duration-1000 object-cover group-hover:scale-110'
             draggable='false'
+            fill
+            loading='lazy'
+            placeholder='blur'
+            blurDataURL={BlurredDataImage}
+            onError={ImagePlaceholderOnError}
           />
         </div>
         <div className='px-5 pb-5'>

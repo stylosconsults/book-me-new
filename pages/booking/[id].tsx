@@ -6,6 +6,7 @@ import Select from 'react-select'
 
 import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
+import SelectWithError from 'components/atoms/Select'
 import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
 import RoomCard from 'components/molecules/RoomCard'
@@ -42,6 +43,7 @@ export default function Booking() {
 
   const handleSelectPaymentOption = (value?: string) => {
     setselectedPaymentOption(value || '')
+    removeError('paymentOption')
   }
 
   const options = [
@@ -268,30 +270,9 @@ export default function Booking() {
       }
     }
     if (current === 2) {
-      if (getInputValue('cardNumber') === '') {
+      if (!selectedPaymentOption) {
         addOrReplaceError({
-          name: 'cardNumber',
-          message: `This field is required`,
-        })
-        hasError = true
-      }
-      if (getInputValue('cardHolderName') === '') {
-        addOrReplaceError({
-          name: 'cardHolderName',
-          message: `This field is required`,
-        })
-        hasError = true
-      }
-      if (getInputValue('cardExpiry') === '') {
-        addOrReplaceError({
-          name: 'cardExpiry',
-          message: `This field is required`,
-        })
-        hasError = true
-      }
-      if (getInputValue('cardCvv') === '') {
-        addOrReplaceError({
-          name: 'cardCvv',
+          name: 'paymentOption',
           message: `This field is required`,
         })
         hasError = true
@@ -368,17 +349,12 @@ export default function Booking() {
                 <p className='text-co-black font-bold text-base'>
                   Choose bed option
                 </p>
-                <Select
-                  id='bedOption'
-                  onChange={e =>
-                    handleInputChange({
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      value: e!.value,
-                      name: 'bedOption',
-                    })
-                  }
-                  placeholder={'Select bed option'}
+                <SelectWithError
+                  name={'bedOption'}
                   options={options}
+                  placeholder='Select bed option'
+                  error={checkIfInputHasError('bedOption')}
+                  onChange={e => handleInputChange(e)}
                 />
               </div>
 
@@ -460,30 +436,15 @@ export default function Booking() {
                 <p className='text-co-black font-bold text-base'>
                   How Do You Want To Pay.
                 </p>
-                <Select
-                  id='paymentOption'
-                  onChange={e => handleSelectPaymentOption(e?.value)}
-                  placeholder={'Payment option'}
+                <SelectWithError
+                  name={'paymentOption'}
                   options={paymentOptions}
+                  placeholder='Select payment option'
+                  error={checkIfInputHasError('paymentOption')}
+                  onChange={e => handleSelectPaymentOption(e?.value)}
                 />
               </div>
-              {selectedPaymentOption === 'visa' ? (
-                <div className='flex flex-col gap-2'>
-                  <p className='text-co-black font-bold text-base'>
-                    Card Number
-                  </p>
-                </div>
-              ) : selectedPaymentOption === 'mastercard' ? (
-                <div className='flex flex-col gap-2'>
-                  <p className='text-co-black font-bold text-base'>
-                    Card Number
-                  </p>
-                </div>
-              ) : selectedPaymentOption === 'paypal' ? (
-                <div className='flex flex-col gap-2'>
-                  <p className='text-co-black font-bold text-base'>Paypal</p>
-                </div>
-              ) : null}
+              {<PaymentCard paymentOption={selectedPaymentOption} />}
             </div>
           )}
           {current === 3 && (
@@ -533,7 +494,9 @@ export default function Booking() {
                 columns={[
                   {
                     name: 'Payment Type',
-                    value: selectedPaymentOption,
+                    value:
+                      selectedPaymentOption.charAt(0).toUpperCase() +
+                      selectedPaymentOption.slice(1),
                   },
                   {
                     name: 'Card Number',
@@ -651,5 +614,60 @@ function CustomCardData({
         Change personal info
       </Button>
     </div>
+  )
+}
+
+function PaymentCard({ paymentOption, name, error, ...rest }: any) {
+  return (
+    <>
+      {paymentOption === 'onsite' ? (
+        <>
+          <h1 className='capitalize font-bold text-co-blue text-lg'>
+            {paymentOption} payment (pay by cash)
+          </h1>
+          When you stay in a hotel, you have the option to pay for your stay in
+          cash at the location, this method is called onsite payment. Other
+          forms of payment such as credit card, debit card, or electronic
+          transfer are also accepted. This type of payment is can be through
+          point-of-sale systems or mobile payment apps.
+        </>
+      ) : (
+        <>
+          <h1 className='capitalize font-bold text-co-blue text-lg'>
+            {paymentOption} card payment
+          </h1>
+          <Input
+            name={name}
+            type='text'
+            label='Card Number'
+            error={error}
+            {...rest}
+          />
+          <div className='flex justify-between'>
+            <Input
+              name={name}
+              type='text'
+              label='Expiry date'
+              error={error}
+              {...rest}
+            />
+            <Input
+              name={name}
+              type='text'
+              label='CVC/CVV'
+              error={error}
+              {...rest}
+            />
+          </div>
+          <Input
+            name={name}
+            type='text'
+            label='Cardholder name'
+            error={error}
+            {...rest}
+          />
+        </>
+      )}
+    </>
   )
 }

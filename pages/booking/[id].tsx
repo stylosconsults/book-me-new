@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react'
 
 import { FaAccusoft } from 'react-icons/fa'
+import DatePicker from 'react-multi-date-picker'
 import Select from 'react-select'
 
 import Button from 'components/atoms/Button'
@@ -9,6 +10,7 @@ import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
 import RoomCard from 'components/molecules/RoomCard'
 import Steps from 'components/molecules/Steps'
+import { formatDate, getDaysBetweenDates } from 'utils/date'
 
 export default function Booking() {
   const [current, setCurrent] = useState<number>(1)
@@ -51,7 +53,8 @@ export default function Booking() {
   const paymentOptions = [
     { value: 'visa', label: 'Visa card' },
     { value: 'mastercard', label: 'Mastercard' },
-    { value: 'paypal', label: 'Paypal' },
+    { value: 'bank', label: 'Bank transfer' },
+    { value: 'onsite', label: 'Pay onsite (cash)' },
   ]
 
   const ProcessingBooking = () => {
@@ -62,6 +65,13 @@ export default function Booking() {
     setValidationErrors([])
     setdisableSubmit(false)
   }, [current])
+
+  const checkMine = (e: any) => {
+    if (e.length > 1) {
+      handleInputChange({ value: e[0], name: 'checkIn' })
+      handleInputChange({ value: e[1], name: 'checkOut' })
+    }
+  }
 
   const handleInputChange = ({
     value,
@@ -95,6 +105,9 @@ export default function Booking() {
       removeError(name)
     }
     if (name === 'checkOut') {
+      removeError(name)
+    }
+    if (name == 'bedOption') {
       removeError(name)
     }
     if (name === 'numberOfRooms') {
@@ -159,7 +172,10 @@ export default function Booking() {
   const removeError = (name: string) => {
     const index = validationErrors.findIndex(item => item.name === name)
     if (index !== -1) {
-      validationErrors.splice(index, 1)
+      setValidationErrors(prev => {
+        prev.splice(index, 1)
+        return [...prev]
+      })
     }
   }
 
@@ -287,6 +303,7 @@ export default function Booking() {
 
   //disable or enable button for next
   useEffect(() => {
+    console.log(validationErrors)
     if (validationErrors.length === 0) {
       setdisableSubmit(false)
     } else {
@@ -311,7 +328,7 @@ export default function Booking() {
       >
         <div className={`${current !== steps.length - 1 && 'max-w-md'} `}>
           {current === 0 && (
-            <div className='flex flex-col gap-5'>
+            <div className='flex flex-col'>
               <div className='flex flex-col gap-2'>
                 <p className='text-co-black font-bold text-base'>
                   Properties amenities
@@ -326,8 +343,28 @@ export default function Booking() {
                 </ul>
                 <p className='font-bold text-sm'>Breakfast included</p>
               </div>
-
-              <div className='flex flex-col gap-2'>
+              <DatePicker
+                numberOfMonths={2}
+                range
+                onChange={(dateObject: any) => {
+                  if (dateObject[0] && dateObject[1]) {
+                    handleInputChange({
+                      value: dateObject[0].format(),
+                      name: 'checkIn',
+                    })
+                    handleInputChange({
+                      value: dateObject[1].format(),
+                      name: 'checkOut',
+                    })
+                  }
+                }}
+                render={
+                  <RangeCustomInput
+                    checkIfInputHasError={checkIfInputHasError}
+                  />
+                }
+              />
+              <div className='flex flex-col gap-2 mt-3'>
                 <p className='text-co-black font-bold text-base'>
                   Choose bed option
                 </p>
@@ -335,7 +372,8 @@ export default function Booking() {
                   id='bedOption'
                   onChange={e =>
                     handleInputChange({
-                      value: e?.value || '',
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      value: e!.value,
                       name: 'bedOption',
                     })
                   }
@@ -343,10 +381,7 @@ export default function Booking() {
                   options={options}
                 />
               </div>
-              <div className='flex gap-2'>
-                <p className='text-co-black font-bold text-base'>Check-in</p>
-                <p className='text-co-black font-bold text-base'>Check-out</p>
-              </div>
+
               <Input
                 name='numberOfRooms'
                 type='number'
@@ -464,65 +499,56 @@ export default function Booking() {
                 roomSize={2}
                 hideBtn
               />
-              <div
-                className='bg-white flex flex-col justify-between rounded-2xl group mt-5 border p-2 shadow'
-                style={{
-                  width: 'calc(25% - 10px)',
-                }}
-              >
-                <div className='text-sm mt-2'>
-                  <h1 className='font-bold text-lg mb-5'>Personal Info</h1>
-                  <p>
-                    First Name:
-                    <span className='font-bold'>Felix Dusengimana</span>
-                  </p>
-                  <p>
-                    Last Name:{' '}
-                    <span className='font-bold'>Felix Dusengimana</span>
-                  </p>
-                  <p>
-                    Email: <span className='font-bold'>Felix Dusengimana</span>
-                  </p>
-                  <p>
-                    Arrival time:{' '}
-                    <span className='font-bold'>10/1/2023 44:00</span>
-                  </p>
-                </div>
-                <Button className='py-1 font-medium bg-co-blue text-white border-0 w-full mt-2'>
-                  Change personal info
-                </Button>
-              </div>
-
-              <div
-                className='bg-white flex flex-col justify-between rounded-2xl group mt-5 border p-2 shadow'
-                style={{
-                  width: 'calc(25% - 10px)',
-                }}
-              >
-                <div className='text-sm mt-2'>
-                  <h1 className='font-bold text-lg mb-5'>Payment Info</h1>
-                  <p>
-                    Payment type:{' '}
-                    <span className='font-bold capitalize'>
-                      {selectedPaymentOption}
-                    </span>
-                  </p>
-                  <p>
-                    Card No:{' '}
-                    <span className='font-bold'>Felix Dusengimana</span>
-                  </p>
-                  <p>
-                    Email: <span className='font-bold'>Felix Dusengimana</span>
-                  </p>
-                  <p>
-                    Amount to pay:
-                    <span className='font-bold'>$400</span>
-                  </p>
-                </div>
-                <Button className='py-1 font-medium bg-co-blue text-white border-0 w-full mt-2'>
-                  Change payment info
-                </Button>
-              </div>
+              <CustomCardData
+                title={'Personal'}
+                pageIndex={1}
+                changeState={(page: number) => setCurrent(page)}
+                columns={[
+                  {
+                    name: 'First Name',
+                    value: getInputValue('firstName')?.toString(),
+                  },
+                  {
+                    name: 'Last Name',
+                    value: getInputValue('lastName')?.toString(),
+                  },
+                  {
+                    name: 'Email',
+                    value: getInputValue('email')?.toString(),
+                  },
+                  {
+                    name: 'Phone Number',
+                    value: getInputValue('phoneNumber')?.toString(),
+                  },
+                  {
+                    name: 'Arrival Time',
+                    value: getInputValue('arrivalTime')?.toString(),
+                  },
+                ]}
+              />
+              <CustomCardData
+                title={'Payment'}
+                pageIndex={2}
+                changeState={(page: number) => setCurrent(page)}
+                columns={[
+                  {
+                    name: 'Payment Type',
+                    value: selectedPaymentOption,
+                  },
+                  {
+                    name: 'Card Number',
+                    value: getInputValue('cardNumber')?.toString(),
+                  },
+                  {
+                    name: 'Email',
+                    value: getInputValue('email')?.toString(),
+                  },
+                  {
+                    name: 'Amount To Pay',
+                    value: '$100',
+                  },
+                ]}
+              />
             </div>
           )}
           <div className='flex gap-3'>
@@ -552,5 +578,78 @@ export default function Booking() {
         </div>
       </div>
     </Container>
+  )
+}
+
+function RangeCustomInput({ openCalendar, value, checkIfInputHasError }: any) {
+  return (
+    <>
+      <div className='flex gap-2'>
+        <Input
+          name='checkIn'
+          type='text'
+          label='Check-in'
+          error={checkIfInputHasError('checkIn')}
+          value={value[0] && formatDate(new Date(value[0]))}
+          placeholder='Check-in'
+          onFocus={openCalendar}
+          readOnly
+        />
+        <Input
+          name='checkOut'
+          type='text'
+          label='Check-out'
+          error={checkIfInputHasError('checkOut')}
+          value={value[1] && formatDate(new Date(value[1]))}
+          placeholder='Check-out'
+          onFocus={openCalendar}
+          readOnly
+        />
+      </div>
+      {value[1] && (
+        <p className='font-bold text-co-blue text-sm mt-1'>
+          {getDaysBetweenDates(new Date(value[0]), new Date(value[1]))} nights
+        </p>
+      )}
+    </>
+  )
+}
+
+function CustomCardData({
+  changeState,
+  columns,
+  pageIndex,
+  title,
+}: {
+  title: string
+  pageIndex: number
+  changeState: (page: number) => void
+  columns: { name: string; value?: string }[]
+}) {
+  return (
+    <div
+      className='bg-white flex flex-col justify-between rounded-2xl group mt-5 border p-2 shadow'
+      style={{
+        width: 'calc(25% - 10px)',
+      }}
+    >
+      <div className='text-sm mt-2'>
+        <h1 className='font-bold text-lg mb-5 capitalize'>{title} Info</h1>
+        {columns.map(
+          (column, index) =>
+            column.value && (
+              <p key={index}>
+                {column.name}: <span className='font-bold'>{column.value}</span>
+              </p>
+            )
+        )}
+      </div>
+      <Button
+        onClick={() => changeState(pageIndex)}
+        className='py-1 font-medium bg-co-blue text-white border-0 w-full mt-2'
+      >
+        Change personal info
+      </Button>
+    </div>
   )
 }

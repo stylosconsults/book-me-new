@@ -22,7 +22,7 @@ export default function Input({
   ...props
 }: InputProps) {
   return (
-    <div className='max-h-9 my-5'>
+    <div className='h-full flex flex-col'>
       {label && (
         <label className='text-co-black font-bold text-base'>{label}</label>
       )}
@@ -33,7 +33,7 @@ export default function Input({
         value={value}
         name={name}
         onChange={onChange}
-        className={`'bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full h-full appearance-none leading-normal
+        className={`'bg-white focus:outline-none focus:shadow-outline border max-h-9 border-gray-300 rounded-lg py-2 px-4 block w-full h-full appearance-none leading-normal
         ${error ? 'border-red-500 border-2 ' : ''}`}
       />
       {error && <p className='text-red-500 text-xs'>{error}</p>}

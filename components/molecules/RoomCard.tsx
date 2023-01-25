@@ -13,6 +13,7 @@ interface RoomCardProps {
   bedType: string
   breakfast: boolean
   roomSize: number
+  hideBtn?: boolean
 }
 export default function RoomCard({
   id,
@@ -23,6 +24,7 @@ export default function RoomCard({
   price,
   refundable,
   roomSize,
+  hideBtn,
 }: RoomCardProps) {
   return (
     <div
@@ -43,22 +45,27 @@ export default function RoomCard({
       <p className='hover:text-co-blue text-sm py-2 font-medium duration-200 text-co-black'>
         {name}
       </p>
-      {roomSize && <p className='text-xs'>{roomSize} sqm</p>}
-      {noPeople && <p className='text-xs'>{noPeople} people</p>}
+      {roomSize > 0 && <p className='text-xs'>{roomSize} sqm</p>}
+      {noPeople > 0 && <p className='text-xs'>{noPeople} people</p>}
       {bedType && <p className='text-xs'>{bedType}</p>}
       <p className='text-gray-400 text-xs'>
-        {refundable ? <span>Refundable</span> : <span>Non-refundable</span>}
+        {refundable ? <span>Refundable, </span> : <span>Non-refundable, </span>}
         {breakfast ? (
           <span>Breackfast included</span>
         ) : (
           <span>Breackfast not included</span>
         )}
       </p>
-      <Link href={`/booking/${id}`}>
-        <Button className='py-1 font-medium bg-co-blue text-white border-0 w-full mt-2'>
-          Book now for ${price}
-        </Button>
-      </Link>
+      {!hideBtn && (
+        <Link href={`/booking/${id}`}>
+          <Button
+            disabled={price === 0}
+            className='py-1 font-medium bg-co-blue text-white border-0 w-full mt-2'
+          >
+            Book now for ${price}
+          </Button>
+        </Link>
+      )}
     </div>
   )
 }

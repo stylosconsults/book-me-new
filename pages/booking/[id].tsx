@@ -620,54 +620,58 @@ function CustomCardData({
 function PaymentCard({ paymentOption, name, error, ...rest }: any) {
   return (
     <>
-      {paymentOption === 'onsite' ? (
+      {paymentOption ? (
         <>
-          <h1 className='capitalize font-bold text-co-blue text-lg'>
-            {paymentOption} payment (pay by cash)
-          </h1>
-          When you stay in a hotel, you have the option to pay for your stay in
-          cash at the location, this method is called onsite payment. Other
-          forms of payment such as credit card, debit card, or electronic
-          transfer are also accepted. This type of payment is can be through
-          point-of-sale systems or mobile payment apps.
+          {paymentOption === 'onsite' ? (
+            <>
+              <h1 className='capitalize font-bold text-co-blue text-lg'>
+                {paymentOption} payment (pay by cash)
+              </h1>
+              When you stay in a hotel, you have the option to pay for your stay
+              in cash at the location, this method is called onsite payment.
+              Other forms of payment such as credit card, debit card, or
+              electronic transfer are also accepted. This type of payment is can
+              be through point-of-sale systems or mobile payment apps.
+            </>
+          ) : (
+            <>
+              <h1 className='capitalize font-bold text-co-blue text-lg'>
+                {paymentOption} card payment
+              </h1>
+              <Input
+                name={name}
+                type='text'
+                label='Card Number'
+                error={error}
+                {...rest}
+              />
+              <div className='flex justify-between'>
+                <Input
+                  name={name}
+                  type='text'
+                  label='Expiry date'
+                  error={error}
+                  {...rest}
+                />
+                <Input
+                  name={name}
+                  type='text'
+                  label='CVC/CVV'
+                  error={error}
+                  {...rest}
+                />
+              </div>
+              <Input
+                name={name}
+                type='text'
+                label='Cardholder name'
+                error={error}
+                {...rest}
+              />
+            </>
+          )}
         </>
-      ) : (
-        <>
-          <h1 className='capitalize font-bold text-co-blue text-lg'>
-            {paymentOption} card payment
-          </h1>
-          <Input
-            name={name}
-            type='text'
-            label='Card Number'
-            error={error}
-            {...rest}
-          />
-          <div className='flex justify-between'>
-            <Input
-              name={name}
-              type='text'
-              label='Expiry date'
-              error={error}
-              {...rest}
-            />
-            <Input
-              name={name}
-              type='text'
-              label='CVC/CVV'
-              error={error}
-              {...rest}
-            />
-          </div>
-          <Input
-            name={name}
-            type='text'
-            label='Cardholder name'
-            error={error}
-            {...rest}
-          />
-        </>
-      )}
+      ) : null}
     </>
   )
 }

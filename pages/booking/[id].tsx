@@ -12,17 +12,23 @@ import Input from 'components/atoms/Input'
 import SelectWithError from 'components/atoms/Select'
 import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
+import PaymentForm from 'components/molecules/PaymentForm'
 import RoomCard from 'components/molecules/RoomCard'
 import Steps from 'components/molecules/Steps'
+import SuccessBooking from 'components/molecules/SuccessBooking'
+import { bookingAction } from 'redux/actions/bookingAction'
 import { getRoomAction } from 'redux/actions/roomAction'
+import getBookingSelector from 'redux/selectors/bookingSelector'
 import getErrorsSelector from 'redux/selectors/errorSelector'
 import { getSingleRoomSelector } from 'redux/selectors/roomSelector'
 import { formatDate, getDaysBetweenDates } from 'utils/date'
 
-function Booking({ room, errors, getRoomAction }: any) {
+function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
+  // const { promiseInProgress } = usePromiseTracker()
   const [current, setCurrent] = useState<number>(3)
+  const [paymentToken, setPaymentToken] = useState<boolean>({})
   const [disableSubmit, setdisableSubmit] = useState<boolean>(true)
-  const [selectedPaymentOption, setselectedPaymentOption] = useState('')
+  const [selectedpaymentMethod, setselectedpaymentMethod] = useState('USE')
   const [amountToPay, setamountToPay] = useState(room?.amount)
   const [validationErrors, setValidationErrors] = useState<
     { name: string; message: string }[]
@@ -50,7 +56,7 @@ function Booking({ room, errors, getRoomAction }: any) {
     { name: 'firstName', value: 'Axel' },
     { name: 'lastName', value: 'Herrera' },
     { name: 'email', value: 'lenyru@mailinator.com' },
-    { name: 'phoneNumber', value: '+1 (289) 324-2712' },
+    { name: 'phone', value: '+1 (289) 324-2712' },
     { name: 'arrivalTime', value: '16:54' },
   ])
 
@@ -61,20 +67,32 @@ function Booking({ room, errors, getRoomAction }: any) {
     'Final',
   ]
 
-  const handleSelectPaymentOption = (value?: string) => {
-    setselectedPaymentOption(value || '')
-    removeError('paymentOption')
+  const handleSelectPaymentMethod = (value?: string) => {
+    setselectedpaymentMethod(value || '')
+    removeError('paymentMethod')
   }
 
-  const paymentOptions = [
+  const paymentMethods = [
     { value: 'visa', label: 'Visa card' },
-    { value: 'mastercard', label: 'Mastercard' },
+    { value: 'onsite', label: 'Mastercard' },
     { value: 'bank', label: 'Bank transfer' },
     { value: 'onsite', label: 'Pay onsite (cash)' },
   ]
 
-  const ProcessingBooking = () => {
-    return alert(JSON.stringify(inputData))
+  const processingBooking = () => {
+    bookingAction(
+      {
+        ...inputData.reduce((acc, { name: key, value }) => {
+          acc[key] = value
+          return acc
+        }, {}),
+        room: room?.id,
+        amount: amountToPay,
+        paymentMethod: selectedpaymentMethod,
+        token: paymentToken,
+      },
+      selectedpaymentMethod === 'onsite'
+    )
   }
 
   useEffect(() => {
@@ -152,7 +170,7 @@ function Booking({ room, errors, getRoomAction }: any) {
         removeError(name)
       }
     }
-    if (name === 'phoneNumber') {
+    if (name === 'phone') {
       if (value.toString().length < 10) {
         addOrReplaceError({
           name: name,
@@ -267,18 +285,18 @@ function Booking({ room, errors, getRoomAction }: any) {
         })
         hasError = true
       }
-      if (getInputValue('phoneNumber') === '') {
+      if (getInputValue('phone') === '') {
         addOrReplaceError({
-          name: 'phoneNumber',
+          name: 'phone',
           message: `This field is required`,
         })
         hasError = true
       }
     }
     if (current === 2) {
-      if (!selectedPaymentOption) {
+      if (!selectedpaymentMethod) {
         addOrReplaceError({
-          name: 'paymentOption',
+          name: 'paymentMethod',
           message: `This field is required`,
         })
         hasError = true
@@ -315,269 +333,294 @@ function Booking({ room, errors, getRoomAction }: any) {
       <div
         className={`mt-10 bg-co-search shadow-co-search bg-white border rounded p-10`}
       >
-        <p className={'font-bold mb-4'}>
-          You are booking for <span className='text-co-blue'>{room?.name}</span>{' '}
-          in <span className='text-co-blue'>{room?.hotel.name}</span>
-        </p>
-
         <div className={`${current !== steps.length - 1 && 'max-w-md'} `}>
-          {current === 0 && (
-            <div className='flex flex-col'>
-              <div className='flex flex-col gap-2'>
-                <p className='text-co-black font-bold text-base'>
-                  Properties amenities
-                </p>
-                <ul className='flex max-w-[600px] flex-wrap gap-2'>
-                  {room?.facilities.map((amenity: any, index: number) => (
-                    <li
-                      key={index}
-                      className='text-co-black flex items-center gap-1'
-                    >
-                      <IoMdCheckmark /> {amenity}
-                    </li>
-                  ))}
-                  {room?.facilities.length === 0 && (
-                    <li className='flex items-center gap-1 text-red-600'>
-                      <HiOutlineXMark /> No Amerities listed
-                    </li>
-                  )}
-                </ul>
-                {/* <p className='font-bold text-sm'>Breakfast included</p> */}
-              </div>
+          {bks?.bookings && !bks?.loading && !errors ? (
+            <SuccessBooking pay={processingBooking} bookings={bks.bookings} />
+          ) : (
+            <>
+              <p className={'font-bold mb-4'}>
+                You are booking for{' '}
+                <span className='text-co-blue'>{room?.name}</span> in{' '}
+                <span className='text-co-blue'>{room?.hotel.name}</span>
+              </p>
+              {current === 0 && (
+                <div className='flex flex-col'>
+                  <div className='flex flex-col gap-2'>
+                    <p className='text-co-black font-bold text-base'>
+                      Properties amenities
+                    </p>
+                    <ul className='flex max-w-[600px] flex-wrap gap-2'>
+                      {room?.facilities.map((amenity: any, index: number) => (
+                        <li
+                          key={index}
+                          className='text-co-black flex items-center gap-1'
+                        >
+                          <IoMdCheckmark /> {amenity}
+                        </li>
+                      ))}
+                      {room?.facilities.length === 0 && (
+                        <li className='flex items-center gap-1 text-red-600'>
+                          <HiOutlineXMark /> No Amerities listed
+                        </li>
+                      )}
+                    </ul>
+                    {/* <p className='font-bold text-sm'>Breakfast included</p> */}
+                  </div>
 
-              <DatePicker
-                numberOfMonths={2}
-                range
-                value={[
-                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                  new Date(getInputValue('checkIn')!),
-                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                  new Date(getInputValue('checkOut')!),
-                ]}
-                onChange={(dateObject: any) => {
-                  if (dateObject[0] && dateObject[1]) {
-                    handleInputChange({
-                      value: dateObject[0].format(),
-                      name: 'checkIn',
-                    })
-                    handleInputChange({
-                      value: dateObject[1].format(),
-                      name: 'checkOut',
-                    })
-                  }
-                }}
-                render={
-                  <RangeCustomInput
-                    checkIfInputHasError={checkIfInputHasError}
-                  />
-                }
-              />
-              <div className='mt-3'>
-                <Input
-                  name='numberOfRooms'
-                  type='number'
-                  label='Number of rooms'
-                  value={getInputValue('numberOfRooms')}
-                  min='1'
-                  error={checkIfInputHasError('numberOfRooms')}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setamountToPay(room?.price * parseFloat(e.target.value))
-                    handleInputChange(e.target)
-                  }}
-                />
-              </div>
-              <div className='flex items-center gap-2 mt-3'>
-                <p className='text-co-black font-bold text-base'>
-                  Amount to pay:
-                </p>
-                <p className='text-co-blue font-bold text-base'>
-                  ${amountToPay}
-                </p>
-              </div>
-            </div>
-          )}
-          {current === 1 && (
-            <div className='flex flex-col'>
-              <Input
-                name='firstName'
-                type='text'
-                label='First Name'
-                value={getInputValue('firstName')}
-                error={checkIfInputHasError('firstName')}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  handleInputChange(e.target)
-                }
-                placeholder='First name'
-              />
-              <Input
-                name='lastName'
-                label='Last Name'
-                type='text'
-                value={getInputValue('lastName')}
-                error={checkIfInputHasError('lastName')}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  handleInputChange(e.target)
-                }
-                placeholder='Last name'
-              />
-              <Input
-                name='email'
-                label='Email'
-                type='email'
-                value={getInputValue('email')}
-                error={checkIfInputHasError('email')}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  handleInputChange(e.target)
-                }
-                placeholder='Email'
-              />
-              <Input
-                name='phoneNumber'
-                type='text'
-                label='Phone number'
-                value={getInputValue('phoneNumber')}
-                error={checkIfInputHasError('phoneNumber')}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  handleInputChange(e.target)
-                }
-                placeholder='Phone number'
-              />
-              <div className='flex flex-col gap-2'>
-                <p className='text-co-black font-bold text-base'>
-                  Arrival time (optional):
-                </p>
-                <DatePicker
-                  disableDayPicker
-                  format='HH:mm'
-                  onChange={(dateObject: any) => {
-                    if (dateObject) {
-                      handleInputChange({
-                        value: dateObject,
-                        name: 'arrivalTime',
-                      })
+                  <DatePicker
+                    numberOfMonths={2}
+                    range
+                    value={[
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      new Date(getInputValue('checkIn')!),
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      new Date(getInputValue('checkOut')!),
+                    ]}
+                    onChange={(dateObject: any) => {
+                      if (dateObject[0] && dateObject[1]) {
+                        handleInputChange({
+                          value: dateObject[0].format(),
+                          name: 'checkIn',
+                        })
+                        handleInputChange({
+                          value: dateObject[1].format(),
+                          name: 'checkOut',
+                        })
+                      }
+                    }}
+                    render={
+                      <RangeCustomInput
+                        checkIfInputHasError={checkIfInputHasError}
+                      />
                     }
-                  }}
-                  plugins={[<TimePicker key={'arrivalTime'} hideSeconds />]}
-                  render={
-                    <TimeCustomInput
-                      checkIfInputHasError={checkIfInputHasError}
+                  />
+                  <div className='mt-3'>
+                    <Input
+                      name='numberOfRooms'
+                      type='number'
+                      label='Number of rooms'
+                      value={getInputValue('numberOfRooms')}
+                      min='1'
+                      error={checkIfInputHasError('numberOfRooms')}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setamountToPay(room?.price * parseFloat(e.target.value))
+                        handleInputChange(e.target)
+                      }}
+                    />
+                  </div>
+                  <div className='flex items-center gap-2 mt-3'>
+                    <p className='text-co-black font-bold text-base'>
+                      Amount to pay:
+                    </p>
+                    <p className='text-co-blue font-bold text-base'>
+                      ${amountToPay}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {current === 1 && (
+                <div className='flex flex-col'>
+                  <Input
+                    name='firstName'
+                    type='text'
+                    label='First Name'
+                    value={getInputValue('firstName')}
+                    error={checkIfInputHasError('firstName')}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      handleInputChange(e.target)
+                    }
+                    placeholder='First name'
+                  />
+                  <Input
+                    name='lastName'
+                    label='Last Name'
+                    type='text'
+                    value={getInputValue('lastName')}
+                    error={checkIfInputHasError('lastName')}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      handleInputChange(e.target)
+                    }
+                    placeholder='Last name'
+                  />
+                  <Input
+                    name='email'
+                    label='Email'
+                    type='email'
+                    value={getInputValue('email')}
+                    error={checkIfInputHasError('email')}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      handleInputChange(e.target)
+                    }
+                    placeholder='Email'
+                  />
+                  <Input
+                    name='phone'
+                    type='text'
+                    label='Phone number'
+                    value={getInputValue('phone')}
+                    error={checkIfInputHasError('phone')}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      handleInputChange(e.target)
+                    }
+                    placeholder='Phone number'
+                  />
+                  <div className='flex flex-col gap-2'>
+                    <p className='text-co-black font-bold text-base'>
+                      Arrival time (optional):
+                    </p>
+                    <DatePicker
+                      disableDayPicker
+                      format='HH:mm'
+                      onChange={(dateObject: any) => {
+                        if (dateObject) {
+                          handleInputChange({
+                            value: dateObject,
+                            name: 'arrivalTime',
+                          })
+                        }
+                      }}
+                      plugins={[<TimePicker key={'arrivalTime'} hideSeconds />]}
+                      render={
+                        <TimeCustomInput
+                          checkIfInputHasError={checkIfInputHasError}
+                        />
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+              {current === 2 && (
+                <div className='flex flex-col gap-4'>
+                  <div className='flex flex-col gap-2'>
+                    <p className='text-co-black font-bold text-base'>
+                      How Do You Want To Pay.
+                    </p>
+                    <SelectWithError
+                      name={'paymentMethod'}
+                      options={paymentMethods}
+                      placeholder='Select payment option'
+                      error={checkIfInputHasError('paymentMethod')}
+                      onChange={e => handleSelectPaymentMethod(e?.value)}
+                    />
+                  </div>
+                  {
+                    <PaymentForm
+                      paymentMethod={selectedpaymentMethod}
+                      setNextStep={setCurrent}
+                      current={current}
+                      checkPaymentInfo={token => {
+                        setPaymentToken(token)
+                      }}
                     />
                   }
-                />
-              </div>
-            </div>
-          )}
-          {current === 2 && (
-            <div className='flex flex-col gap-4'>
-              <div className='flex flex-col gap-2'>
-                <p className='text-co-black font-bold text-base'>
-                  How Do You Want To Pay.
-                </p>
-                <SelectWithError
-                  name={'paymentOption'}
-                  options={paymentOptions}
-                  placeholder='Select payment option'
-                  error={checkIfInputHasError('paymentOption')}
-                  onChange={e => handleSelectPaymentOption(e?.value)}
-                />
-              </div>
-              {<PaymentCard paymentOption={selectedPaymentOption} />}
-            </div>
-          )}
-          {current === 3 && (
-            <div className='flex gap-4'>
-              <RoomCard
-                id={'1'}
-                name={room?.name}
-                noAdults={room?.adults}
-                noChildren={room?.children}
-                image={room?.image}
-                price={room?.price}
-                discountedPrice={room?.discountedPrice}
-                refundable={true}
-                bedType={room?.bedType}
-                breakfast={true}
-                roomSize={room?.size}
-                hideBtn
-              />
-              <CustomCardData
-                title={'Personal'}
-                pageIndex={1}
-                changeState={(page: number) => setCurrent(page)}
-                columns={[
-                  {
-                    name: 'First Name',
-                    value: getInputValue('firstName')?.toString(),
-                  },
-                  {
-                    name: 'Last Name',
-                    value: getInputValue('lastName')?.toString(),
-                  },
-                  {
-                    name: 'Email',
-                    value: getInputValue('email')?.toString(),
-                  },
-                  {
-                    name: 'Phone Number',
-                    value: getInputValue('phoneNumber')?.toString(),
-                  },
-                  {
-                    name: 'Arrival Time',
-                    value: getInputValue('arrivalTime')?.toString(),
-                  },
-                ]}
-              />
-              <CustomCardData
-                title={'Payment'}
-                pageIndex={2}
-                changeState={(page: number) => setCurrent(page)}
-                columns={[
-                  {
-                    name: 'Payment Type',
-                    value:
-                      selectedPaymentOption.charAt(0).toUpperCase() +
-                      selectedPaymentOption.slice(1),
-                  },
-                  {
-                    name: 'Card Number',
-                    value: getInputValue('cardNumber')?.toString(),
-                  },
-                  {
-                    name: 'Email',
-                    value: getInputValue('email')?.toString(),
-                  },
-                  {
-                    name: 'Amount To Pay',
-                    value: room?.amount,
-                  },
-                ]}
-              />
-            </div>
-          )}
-          <div className='flex gap-3'>
-            <Button
-              disabled={disableSubmit}
-              onClick={
-                current === steps.length - 1
-                  ? () => ProcessingBooking()
-                  : () => {
-                      if (!checkAllErrors()) setCurrent(current + 1)
-                    }
-              }
-              className='mt-5 bg-co-blue text-white hover:bg-blue-700 border-0'
-            >
-              {current === steps.length - 1 ? (
-                <span>Book now</span>
-              ) : (
-                <span>Continue</span>
+                </div>
               )}
-            </Button>
-            {current > 0 && current != steps.length - 1 && (
-              <Button onClick={() => setCurrent(current - 1)} className='mt-5'>
-                Back
-              </Button>
-            )}
-          </div>
+              {current === 3 && (
+                <>
+                  <div className='flex gap-4'>
+                    <RoomCard
+                      id={'1'}
+                      name={room?.name}
+                      noAdults={room?.adults}
+                      noChildren={room?.children}
+                      image={room?.image}
+                      price={room?.price}
+                      discountedPrice={room?.discountedPrice}
+                      refundable={true}
+                      bedType={room?.bedType}
+                      breakfast={true}
+                      roomSize={room?.size}
+                      hideBtn
+                    />
+                    <CustomCardData
+                      title={'Personal'}
+                      pageIndex={1}
+                      changeState={(page: number) => setCurrent(page)}
+                      columns={[
+                        {
+                          name: 'First Name',
+                          value: getInputValue('firstName')?.toString(),
+                        },
+                        {
+                          name: 'Last Name',
+                          value: getInputValue('lastName')?.toString(),
+                        },
+                        {
+                          name: 'Email',
+                          value: getInputValue('email')?.toString(),
+                        },
+                        {
+                          name: 'Phone Number',
+                          value: getInputValue('phone')?.toString(),
+                        },
+                        {
+                          name: 'Arrival Time',
+                          value: getInputValue('arrivalTime')?.toString(),
+                        },
+                      ]}
+                    />
+                    <CustomCardData
+                      title={'Payment'}
+                      pageIndex={2}
+                      changeState={(page: number) => setCurrent(page)}
+                      columns={[
+                        {
+                          name: 'Payment Type',
+                          value:
+                            selectedpaymentMethod.charAt(0).toUpperCase() +
+                            selectedpaymentMethod.slice(1),
+                        },
+                        {
+                          name: 'Card Number',
+                          value: getInputValue('cardNumber')?.toString(),
+                        },
+                        {
+                          name: 'Email',
+                          value: getInputValue('email')?.toString(),
+                        },
+                        {
+                          name: 'Amount To Pay',
+                          value: room?.amount,
+                        },
+                      ]}
+                    />
+                  </div>
+                  <p className='text-red-500 text-sm'>{errors}</p>
+                </>
+              )}
+              {current !== 2 && (
+                <div className='flex gap-3'>
+                  <Button
+                    disabled={disableSubmit || bks?.loading}
+                    onClick={
+                      current === steps.length - 1
+                        ? () => processingBooking()
+                        : () => {
+                            if (!checkAllErrors()) setCurrent(current + 1)
+                          }
+                    }
+                    className='mt-5 bg-co-blue text-white hover:bg-blue-700 border-0'
+                  >
+                    {current === steps.length - 1 && !bks?.loading ? (
+                      <span>Book now</span>
+                    ) : bks?.loading ? (
+                      <span>Loading...</span>
+                    ) : (
+                      <span>Continue</span>
+                    )}
+                  </Button>
+                  {current > 0 && current != steps.length - 1 && (
+                    <Button
+                      onClick={() => setCurrent(current - 1)}
+                      className='mt-5'
+                    >
+                      Back
+                    </Button>
+                  )}
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </Container>
@@ -657,65 +700,6 @@ function CustomCardData({
   )
 }
 
-function PaymentCard({ paymentOption, name, error, ...rest }: any) {
-  return (
-    <>
-      {paymentOption ? (
-        <>
-          {paymentOption === 'onsite' ? (
-            <>
-              <h1 className='capitalize font-bold text-co-blue text-lg'>
-                {paymentOption} payment (pay by cash)
-              </h1>
-              When you stay in a hotel, you have the option to pay for your stay
-              in cash at the location, this method is called onsite payment.
-              Other forms of payment such as credit card, debit card, or
-              electronic transfer are also accepted. This type of payment is can
-              be through point-of-sale systems or mobile payment apps.
-            </>
-          ) : (
-            <>
-              <h1 className='capitalize font-bold text-co-blue text-lg'>
-                {paymentOption} card payment
-              </h1>
-              <Input
-                name={name}
-                type='text'
-                label='Card Number'
-                error={error}
-                {...rest}
-              />
-              <div className='flex justify-between'>
-                <Input
-                  name={name}
-                  type='text'
-                  label='Expiry date'
-                  error={error}
-                  {...rest}
-                />
-                <Input
-                  name={name}
-                  type='text'
-                  label='CVC/CVV'
-                  error={error}
-                  {...rest}
-                />
-              </div>
-              <Input
-                name={name}
-                type='text'
-                label='Cardholder name'
-                error={error}
-                {...rest}
-              />
-            </>
-          )}
-        </>
-      ) : null}
-    </>
-  )
-}
-
 function TimeCustomInput({ openCalendar, value }: any) {
   return (
     <div className='flex gap-2'>
@@ -734,7 +718,10 @@ function TimeCustomInput({ openCalendar, value }: any) {
 
 const mapStateToProps = (state: any) => ({
   room: getSingleRoomSelector(state),
+  bks: getBookingSelector(state),
   errors: getErrorsSelector(state),
 })
 
-export default connect(mapStateToProps, { getRoomAction })(Booking)
+export default connect(mapStateToProps, { getRoomAction, bookingAction })(
+  Booking
+)

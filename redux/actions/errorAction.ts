@@ -1,6 +1,6 @@
 import { GET_ERRORS } from './types'
 
-export const getError = (error: any) => ({
+export const getError = (error: string) => ({
   type: GET_ERRORS,
   payload: error,
 })

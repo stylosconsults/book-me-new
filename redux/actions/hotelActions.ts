@@ -15,7 +15,7 @@ export const getHotelsAction = () => async (dispatch: any) => {
     const { data } = await trackPromise(axios.get(`${API_URL}/hotels`))
     dispatch(getHotelSuccess(data))
   } catch (err) {
-    dispatch(getError(err?.toString() || ''))
+    dispatch(getError(err?.response.data.message?.toString() || ''))
   }
 }
 
@@ -24,6 +24,6 @@ export const getHotelAction = (id: string) => async (dispatch: any) => {
     const { data } = await trackPromise(axios.get(`${API_URL}/hotels/${id}`))
     dispatch(getHotelSuccess(data))
   } catch (err) {
-    dispatch(getError(err?.toString() || ''))
+    dispatch(getError(err?.response.data.message?.toString() || ''))
   }
 }

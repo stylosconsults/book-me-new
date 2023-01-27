@@ -23,7 +23,7 @@ export const getRoomsAction = (id: string) => async (dispatch: any) => {
     )
     dispatch(getRoomSuccess(data))
   } catch (err) {
-    dispatch(getError(err))
+    dispatch(getError(err?.response.data.message?.toString() || ''))
   }
 }
 
@@ -32,6 +32,6 @@ export const getRoomAction = (id: string) => async (dispatch: any) => {
     const { data } = await trackPromise(axios.get(`${API_URL}/rooms/${id}`))
     dispatch(getSingleRoomSuccess(data))
   } catch (err) {
-    dispatch(getError(err))
+    dispatch(getError(err?.response.data.message?.toString() || ''))
   }
 }

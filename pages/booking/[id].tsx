@@ -25,7 +25,7 @@ import { formatDate, getDaysBetweenDates } from 'utils/date'
 
 function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
   // const { promiseInProgress } = usePromiseTracker()
-  const [current, setCurrent] = useState<number>(3)
+  const [current, setCurrent] = useState<number>(0)
   const [paymentToken, setPaymentToken] = useState<boolean>({})
   const [disableSubmit, setdisableSubmit] = useState<boolean>(true)
   const [selectedpaymentMethod, setselectedpaymentMethod] = useState('USE')
@@ -50,14 +50,14 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
   const [inputData, setInputData] = useState<
     { name: string; value: string | number }[]
   >([
-    { name: 'checkIn', value: '2023/01/28' },
-    { name: 'checkOut', value: '2023/01/31' },
+    { name: 'checkIn', value: '' },
+    { name: 'checkOut', value: '' },
     { name: 'numberOfRooms', value: 1 },
-    { name: 'firstName', value: 'Axel' },
-    { name: 'lastName', value: 'Herrera' },
-    { name: 'email', value: 'lenyru@mailinator.com' },
-    { name: 'phone', value: '+1 (289) 324-2712' },
-    { name: 'arrivalTime', value: '16:54' },
+    { name: 'firstName', value: '' },
+    { name: 'lastName', value: '' },
+    { name: 'email', value: '' },
+    { name: 'phone', value: '' },
+    { name: 'arrivalTime', value: '' },
   ])
 
   const steps = [

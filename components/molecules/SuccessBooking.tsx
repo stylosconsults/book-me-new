@@ -21,11 +21,15 @@ export default function SuccessBooking({
       <ul className='flex flex-col gap-2'>
         <li className='flex items-center gap-1'>
           <IoMdCheckmark /> Check in date:{' '}
-          <span className='text-co-black'>{bookings?.checkIn}</span>
+          <span className='text-co-black'>
+            {new Date(bookings?.checkIn).toLocaleDateString()}
+          </span>
         </li>
         <li className='flex items-center gap-1'>
           <IoMdCheckmark /> Check out date:{' '}
-          <span className='text-co-black'>{bookings?.checkOut}</span>
+          <span className='text-co-black'>
+            {new Date(bookings?.checkOut).toLocaleDateString()}
+          </span>
         </li>
         <li className='flex items-center gap-1'>
           <IoMdCheckmark /> Number of rooms:{' '}
@@ -53,7 +57,7 @@ export default function SuccessBooking({
         </li>
         <li className='flex items-center gap-1'>
           <IoMdCheckmark /> Total price:{' '}
-          <span className='text-co-black'>{bookings?.amount}</span>
+          <span className='text-co-black'>${bookings?.amount}</span>
         </li>
         <li className='flex items-center'>
           <IoMdCheckmark /> Status:

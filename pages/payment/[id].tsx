@@ -27,7 +27,7 @@ function Payment({ bks, errors, getBooking }: any) {
           { name: 'Payment', link: '/payment' },
         ]}
       />
-      {!bks?.bookings.status ? (
+      {!bks?.bookings?.status ? (
         <div className='flex flex-col gap-2'>
           <p className='text-co-black font-bold text-base'>
             You have booked with this information

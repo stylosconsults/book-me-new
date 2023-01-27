@@ -41,6 +41,8 @@ export default function PaymentForm({
       s.type = 'text/javascript'
       s.src = 'https://js.stripe.com/v2/'
       s.onload = () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         window['Stripe'].setPublishableKey(
           process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY
         )
@@ -53,6 +55,8 @@ export default function PaymentForm({
     setloading(true)
     await sleep(300)
     try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       window.Stripe.card.createToken(
         {
           number: cardInformations.cardNumber,

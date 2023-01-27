@@ -26,7 +26,7 @@ import { formatDate, getDaysBetweenDates } from 'utils/date'
 function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
   // const { promiseInProgress } = usePromiseTracker()
   const [current, setCurrent] = useState<number>(0)
-  const [paymentToken, setPaymentToken] = useState<boolean>({})
+  const [paymentToken, setPaymentToken] = useState({})
   const [disableSubmit, setdisableSubmit] = useState<boolean>(true)
   const [selectedpaymentMethod, setselectedpaymentMethod] = useState('USE')
   const [amountToPay, setamountToPay] = useState(room?.amount)
@@ -83,6 +83,8 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
     bookingAction(
       {
         ...inputData.reduce((acc, { name: key, value }) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           acc[key] = value
           return acc
         }, {}),

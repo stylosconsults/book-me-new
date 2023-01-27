@@ -59,6 +59,8 @@ export const bookingAction =
         dispatch(bookingSuccess(data))
       }
     } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       dispatch(getError(err?.response?.data.message?.toString() || ''))
       dispatch(bookingLoading(false))
     }
@@ -69,6 +71,8 @@ export const getBooking = (id: string) => async (dispatch: any) => {
     const { data } = await trackPromise(axios.get(`${API_URL}/bookings/${id}`))
     dispatch(bookingSuccess(data))
   } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     dispatch(getError(err?.response?.data.message?.toString() || ''))
     dispatch(bookingLoading(false))
   }

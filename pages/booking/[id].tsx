@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { FaAccusoft } from 'react-icons/fa'
 import DatePicker from 'react-multi-date-picker'
-import Select from 'react-select'
 
 import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
@@ -14,7 +13,7 @@ import Steps from 'components/molecules/Steps'
 import { formatDate, getDaysBetweenDates } from 'utils/date'
 
 export default function Booking() {
-  const [current, setCurrent] = useState<number>(1)
+  const [current, setCurrent] = useState<number>(0)
   const [disableSubmit, setdisableSubmit] = useState<boolean>(true)
   const [selectedPaymentOption, setselectedPaymentOption] = useState('')
   const [validationErrors, setValidationErrors] = useState<
@@ -67,13 +66,6 @@ export default function Booking() {
     setValidationErrors([])
     setdisableSubmit(false)
   }, [current])
-
-  const checkMine = (e: any) => {
-    if (e.length > 1) {
-      handleInputChange({ value: e[0], name: 'checkIn' })
-      handleInputChange({ value: e[1], name: 'checkOut' })
-    }
-  }
 
   const handleInputChange = ({
     value,
@@ -284,7 +276,6 @@ export default function Booking() {
 
   //disable or enable button for next
   useEffect(() => {
-    console.log(validationErrors)
     if (validationErrors.length === 0) {
       setdisableSubmit(false)
     } else {

@@ -8,21 +8,21 @@ interface HotelCardProps {
   id: string
   name: string
   location: string
-  price: number
-  discountPrice?: number
+  state: string
   date: string
-  rating: number
+  rating?: number
+  image: string
 }
 import { BlurredDataImage, ImagePlaceholderOnError } from 'utils/blurredImage'
 
 export default function HotelCard({
   id,
   date,
-  discountPrice,
   name,
-  price,
+  state,
   rating,
   location,
+  image,
 }: HotelCardProps) {
   return (
     <div
@@ -34,7 +34,7 @@ export default function HotelCard({
       <Link href={`/hotel/${id}`}>
         <div className='relative overflow-hidden rounded-t-2xl w-full h-52'>
           <Image
-            src='https://ui8-fleet-html.herokuapp.com/img/content/catalog-pic-1.jpg'
+            src={image}
             alt=''
             className='w-full overflow-clip duration-1000 object-cover group-hover:scale-110'
             draggable='false'
@@ -53,8 +53,12 @@ export default function HotelCard({
               </p>
               <p className='text-xs'>{location}</p>
             </div>
-
             <div className='py-1 px-2 h-fit border-2 rounded border-co-green'>
+              <p className='text-co-green text-xs text-center font-bold uppercase'>
+                {state}
+              </p>
+            </div>
+            {/* <div className='py-1 px-2 h-fit border-2 rounded border-co-green'>
               {discountPrice && (
                 <p className='line-through text-[#B1B5C]  text-xs text-center font-bold uppercase'>
                   ${discountPrice}
@@ -63,7 +67,7 @@ export default function HotelCard({
               <p className='text-co-green text-xs text-center font-bold uppercase'>
                 ${price}
               </p>
-            </div>
+            </div> */}
           </div>
           <div className='w-full h-[1px] bg-co-gray'></div>
           <div className='flex justify-between py-3'>

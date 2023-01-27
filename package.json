@@ -13,15 +13,23 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.1",
+    "axios": "^1.2.5",
     "eslint-config-prettier": "^8.6.0",
+    "immutable": "^4.2.2",
     "next": "^13.1.1",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-multi-date-picker": "^3.3.4",
+    "react-promise-tracker": "^2.1.1",
+    "react-redux": "^8.0.5",
     "react-select": "^5.7.0",
-    "react-use": "^17.4.0"
+    "react-use": "^17.4.0",
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.2",
+    "reselect": "^4.1.7"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",

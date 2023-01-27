@@ -1,0 +1,2 @@
+export const GET_ERRORS = 'GET_ERRORS'
+export const GET_HOTEL_SUCCESS = 'GET_HOTEL_SUCCESS'

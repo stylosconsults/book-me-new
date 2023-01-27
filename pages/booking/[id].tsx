@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react'
 
-import { FaAccusoft } from 'react-icons/fa'
+import { useRouter } from 'next/router'
+import { HiOutlineXMark } from 'react-icons/hi2'
+import { IoMdCheckmark } from 'react-icons/io'
 import DatePicker from 'react-multi-date-picker'
+import TimePicker from 'react-multi-date-picker/plugins/time_picker'
+import { connect } from 'react-redux'
 
 import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
@@ -10,27 +14,44 @@ import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
 import RoomCard from 'components/molecules/RoomCard'
 import Steps from 'components/molecules/Steps'
+import { getRoomAction } from 'redux/actions/roomAction'
+import getErrorsSelector from 'redux/selectors/errorSelector'
+import { getSingleRoomSelector } from 'redux/selectors/roomSelector'
 import { formatDate, getDaysBetweenDates } from 'utils/date'
 
-export default function Booking() {
-  const [current, setCurrent] = useState<number>(0)
+function Booking({ room, errors, getRoomAction }: any) {
+  const [current, setCurrent] = useState<number>(3)
   const [disableSubmit, setdisableSubmit] = useState<boolean>(true)
   const [selectedPaymentOption, setselectedPaymentOption] = useState('')
+  const [amountToPay, setamountToPay] = useState(room?.amount)
   const [validationErrors, setValidationErrors] = useState<
     { name: string; message: string }[]
   >([])
 
+  const router = useRouter()
+
+  useEffect(() => {
+    if (router.isReady) {
+      getRoomAction(router.query.id)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady])
+
+  useEffect(() => {
+    setamountToPay(room?.price)
+  }, [room?.price])
+
   const [inputData, setInputData] = useState<
     { name: string; value: string | number }[]
   >([
-    { name: 'bedOption', value: '' },
-    { name: 'checkIn', value: '' },
-    { name: 'checkOut', value: '' },
+    { name: 'checkIn', value: '2023/01/28' },
+    { name: 'checkOut', value: '2023/01/31' },
     { name: 'numberOfRooms', value: 1 },
-    { name: 'firstName', value: '' },
-    { name: 'lastName', value: '' },
-    { name: 'email', value: '' },
-    { name: 'phoneNumber', value: '' },
+    { name: 'firstName', value: 'Axel' },
+    { name: 'lastName', value: 'Herrera' },
+    { name: 'email', value: 'lenyru@mailinator.com' },
+    { name: 'phoneNumber', value: '+1 (289) 324-2712' },
+    { name: 'arrivalTime', value: '16:54' },
   ])
 
   const steps = [
@@ -45,12 +66,6 @@ export default function Booking() {
     removeError('paymentOption')
   }
 
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ]
-
   const paymentOptions = [
     { value: 'visa', label: 'Visa card' },
     { value: 'mastercard', label: 'Mastercard' },
@@ -59,7 +74,7 @@ export default function Booking() {
   ]
 
   const ProcessingBooking = () => {
-    return alert('Booking')
+    return alert(JSON.stringify(inputData))
   }
 
   useEffect(() => {
@@ -91,17 +106,10 @@ export default function Booking() {
       })
       return
     }
-
-    if (name === 'bedOption') {
-      removeError(name)
-    }
     if (name === 'checkIn') {
       removeError(name)
     }
     if (name === 'checkOut') {
-      removeError(name)
-    }
-    if (name == 'bedOption') {
       removeError(name)
     }
     if (name === 'numberOfRooms') {
@@ -202,13 +210,6 @@ export default function Booking() {
   const checkAllErrors = () => {
     let hasError = false
     if (current === 0) {
-      if (getInputValue('bedOption') === '') {
-        addOrReplaceError({
-          name: 'bedOption',
-          message: `This field is required`,
-        })
-        hasError = true
-      }
       if (getInputValue('checkIn') === '') {
         addOrReplaceError({
           name: 'checkIn',
@@ -216,6 +217,19 @@ export default function Booking() {
         })
         hasError = true
       }
+      // check if checkin date is behind tomorrow
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const checkInDate = new Date(getInputValue('checkIn')!)
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 0)
+      if (checkInDate < tomorrow) {
+        addOrReplaceError({
+          name: 'checkIn',
+          message: `Check in date must be at least tomorrow`,
+        })
+        hasError = true
+      }
+
       if (getInputValue('checkOut') === '') {
         addOrReplaceError({
           name: 'checkOut',
@@ -287,8 +301,11 @@ export default function Booking() {
     <Container>
       <Breadcrumb
         fullLocation={[
-          { name: 'Hotel', link: '/hotel' },
-          { name: 'Hotel Name', link: '/hotel/[id]' },
+          {
+            name: room?.hotel.name + ' Hotel',
+            link: '/hotel/' + room?.hotel.id,
+          },
+          { name: room?.name + ' Room', link: '/room/' + room?.id },
         ]}
       />
       <div className='mt-10 w-full'>
@@ -298,6 +315,11 @@ export default function Booking() {
       <div
         className={`mt-10 bg-co-search shadow-co-search bg-white border rounded p-10`}
       >
+        <p className={'font-bold mb-4'}>
+          You are booking for <span className='text-co-blue'>{room?.name}</span>{' '}
+          in <span className='text-co-blue'>{room?.hotel.name}</span>
+        </p>
+
         <div className={`${current !== steps.length - 1 && 'max-w-md'} `}>
           {current === 0 && (
             <div className='flex flex-col'>
@@ -306,18 +328,32 @@ export default function Booking() {
                   Properties amenities
                 </p>
                 <ul className='flex max-w-[600px] flex-wrap gap-2'>
-                  <li className='text-co-black flex items-center gap-1'>
-                    <FaAccusoft /> Lorem ipsum dolor sit amet
-                  </li>
-                  <li className='text-co-black flex items-center gap-1'>
-                    <FaAccusoft /> Lorem ipsum dolor sit amet
-                  </li>
+                  {room?.facilities.map((amenity: any, index: number) => (
+                    <li
+                      key={index}
+                      className='text-co-black flex items-center gap-1'
+                    >
+                      <IoMdCheckmark /> {amenity}
+                    </li>
+                  ))}
+                  {room?.facilities.length === 0 && (
+                    <li className='flex items-center gap-1 text-red-600'>
+                      <HiOutlineXMark /> No Amerities listed
+                    </li>
+                  )}
                 </ul>
-                <p className='font-bold text-sm'>Breakfast included</p>
+                {/* <p className='font-bold text-sm'>Breakfast included</p> */}
               </div>
+
               <DatePicker
                 numberOfMonths={2}
                 range
+                value={[
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  new Date(getInputValue('checkIn')!),
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  new Date(getInputValue('checkOut')!),
+                ]}
                 onChange={(dateObject: any) => {
                   if (dateObject[0] && dateObject[1]) {
                     handleInputChange({
@@ -336,35 +372,27 @@ export default function Booking() {
                   />
                 }
               />
-              <div className='flex flex-col gap-2 mt-3'>
-                <p className='text-co-black font-bold text-base'>
-                  Choose bed option
-                </p>
-                <SelectWithError
-                  name={'bedOption'}
-                  options={options}
-                  placeholder='Select bed option'
-                  error={checkIfInputHasError('bedOption')}
-                  onChange={e => handleInputChange(e)}
+              <div className='mt-3'>
+                <Input
+                  name='numberOfRooms'
+                  type='number'
+                  label='Number of rooms'
+                  value={getInputValue('numberOfRooms')}
+                  min='1'
+                  error={checkIfInputHasError('numberOfRooms')}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setamountToPay(room?.price * parseFloat(e.target.value))
+                    handleInputChange(e.target)
+                  }}
                 />
               </div>
-
-              <Input
-                name='numberOfRooms'
-                type='number'
-                label='Number of rooms'
-                value={getInputValue('numberOfRooms')}
-                min='1'
-                error={checkIfInputHasError('numberOfRooms')}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  handleInputChange(e.target)
-                }
-              />
               <div className='flex items-center gap-2 mt-3'>
                 <p className='text-co-black font-bold text-base'>
-                  Amount to pay:{' '}
+                  Amount to pay:
                 </p>
-                <p className='text-co-blue font-bold text-base'>$100</p>
+                <p className='text-co-blue font-bold text-base'>
+                  ${amountToPay}
+                </p>
               </div>
             </div>
           )}
@@ -418,6 +446,24 @@ export default function Booking() {
                 <p className='text-co-black font-bold text-base'>
                   Arrival time (optional):
                 </p>
+                <DatePicker
+                  disableDayPicker
+                  format='HH:mm'
+                  onChange={(dateObject: any) => {
+                    if (dateObject) {
+                      handleInputChange({
+                        value: dateObject,
+                        name: 'arrivalTime',
+                      })
+                    }
+                  }}
+                  plugins={[<TimePicker key={'arrivalTime'} hideSeconds />]}
+                  render={
+                    <TimeCustomInput
+                      checkIfInputHasError={checkIfInputHasError}
+                    />
+                  }
+                />
               </div>
             </div>
           )}
@@ -442,13 +488,16 @@ export default function Booking() {
             <div className='flex gap-4'>
               <RoomCard
                 id={'1'}
-                name={'Millie Bob Brown'}
-                noPeople={2}
-                price={1}
+                name={room?.name}
+                noAdults={room?.adults}
+                noChildren={room?.children}
+                image={room?.image}
+                price={room?.price}
+                discountedPrice={room?.discountedPrice}
                 refundable={true}
-                bedType={'Double big bed'}
+                bedType={room?.bedType}
                 breakfast={true}
-                roomSize={2}
+                roomSize={room?.size}
                 hideBtn
               />
               <CustomCardData
@@ -499,7 +548,7 @@ export default function Booking() {
                   },
                   {
                     name: 'Amount To Pay',
-                    value: '$100',
+                    value: room?.amount,
                   },
                 ]}
               />
@@ -538,7 +587,7 @@ export default function Booking() {
 function RangeCustomInput({ openCalendar, value, checkIfInputHasError }: any) {
   return (
     <>
-      <div className='flex gap-2'>
+      <div className='flex gap-2 justify-between'>
         <Input
           name='checkIn'
           type='text'
@@ -666,3 +715,26 @@ function PaymentCard({ paymentOption, name, error, ...rest }: any) {
     </>
   )
 }
+
+function TimeCustomInput({ openCalendar, value }: any) {
+  return (
+    <div className='flex gap-2'>
+      <Input
+        name='checkIn'
+        type='text'
+        label='Check-in'
+        value={value[0]}
+        placeholder='Check-in'
+        onFocus={openCalendar}
+        readOnly
+      />
+    </div>
+  )
+}
+
+const mapStateToProps = (state: any) => ({
+  room: getSingleRoomSelector(state),
+  errors: getErrorsSelector(state),
+})
+
+export default connect(mapStateToProps, { getRoomAction })(Booking)

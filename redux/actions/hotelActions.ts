@@ -10,11 +10,6 @@ export const getHotelSuccess = (author: any) => ({
   payload: author,
 })
 
-export const clearRepos = () => async (dispatch: any) => {
-  dispatch(getError([]))
-  dispatch(getHotelSuccess([]))
-}
-
 export const getHotelsAction = () => async (dispatch: any) => {
   try {
     const { data } = await trackPromise(axios.get(`${API_URL}/hotels`))

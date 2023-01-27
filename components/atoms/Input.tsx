@@ -22,7 +22,7 @@ export default function Input({
   ...props
 }: InputProps) {
   return (
-    <div className='h-full flex flex-col'>
+    <div className='h-full w-full flex flex-col'>
       {label && (
         <label className='text-co-black font-bold text-base'>{label}</label>
       )}

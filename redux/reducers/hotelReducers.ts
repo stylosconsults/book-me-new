@@ -1,5 +1,3 @@
-import { Map } from 'immutable'
-
 import { GET_HOTEL_SUCCESS } from 'redux/actions/types'
 
 const initialState = {}

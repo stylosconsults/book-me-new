@@ -9,24 +9,30 @@ import { BlurredDataImage, ImagePlaceholderOnError } from 'utils/blurredImage'
 interface RoomCardProps {
   id: string
   name: string
-  noPeople: number
+  noAdults: number
+  noChildren: number
   price: number
   refundable: boolean
   bedType: string
   breakfast: boolean
   roomSize: number
   hideBtn?: boolean
+  image: string
+  discountedPrice?: number
 }
 export default function RoomCard({
   id,
   bedType,
   breakfast,
   name,
-  noPeople,
+  noAdults,
+  noChildren,
   price,
   refundable,
   roomSize,
   hideBtn,
+  image,
+  discountedPrice,
 }: RoomCardProps) {
   return (
     <div
@@ -37,7 +43,7 @@ export default function RoomCard({
     >
       <div className='relative overflow-hidden rounded-2xl w-full h-40'>
         <Image
-          src='https://ui8-fleet-html.herokuapp.com/img/content/catalog-pic-1.jpg'
+          src={image}
           alt=''
           className='w-full h-32 overflow-clip duration-1000 object-cover group-hover:scale-110'
           draggable='false'
@@ -48,11 +54,28 @@ export default function RoomCard({
           onError={ImagePlaceholderOnError}
         />
       </div>
-      <p className='hover:text-co-blue text-sm py-2 font-medium duration-200 text-co-black'>
-        {name}
-      </p>
+      <div className='flex justify-between my-2 group'>
+        <p className='group-hover:text-co-blue text-sm py-2 font-medium duration-200 text-co-black'>
+          {name}
+        </p>
+        <div className='py-1 px-2 h-fit border-2 rounded border-co-green'>
+          {discountedPrice && (
+            <p className='line-through text-[#B1B5C]  text-xs text-center font-bold uppercase'>
+              ${discountedPrice}
+            </p>
+          )}
+          <p className='text-co-green text-xs text-center font-bold uppercase'>
+            ${price}
+          </p>
+        </div>
+      </div>
       {roomSize > 0 && <p className='text-xs'>{roomSize} sqm</p>}
-      {noPeople > 0 && <p className='text-xs'>{noPeople} people</p>}
+      <p>
+        {noAdults > 0 && <span className='text-xs'>{noAdults} Adults</span>}
+        {noChildren > 0 && (
+          <span className='text-xs'>, {noChildren} Children </span>
+        )}
+      </p>
       {bedType && <p className='text-xs'>{bedType}</p>}
       <p className='text-gray-400 text-xs'>
         {refundable ? <span>Refundable, </span> : <span>Non-refundable, </span>}

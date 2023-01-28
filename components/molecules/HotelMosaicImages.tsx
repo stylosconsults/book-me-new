@@ -1,9 +1,5 @@
 import React from 'react'
 
-import Image from 'next/image'
-
-import { BlurredDataImage } from 'utils/blurredImage'
-
 interface HotelMosaicImages {
   images: string[]
 }

@@ -12,7 +12,7 @@ export default function HotelMosaicImages({ images }: HotelMosaicImages) {
   const imagesWithoutFirst = images?.slice(1)
   return (
     <section className='overflow-hidden text-gray-700'>
-      <div className='flex flex-wrap w-full'>
+      <div className='flex flex-wrap w-full min-h-[60vh]'>
         <div
           className={`flex flex-wrap ${
             images.length <= 1 ? 'w-full max-h-[60vh]' : 'w-1/2 md:py-2 md:pr-1'

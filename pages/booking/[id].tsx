@@ -9,7 +9,6 @@ import { connect } from 'react-redux'
 
 import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
-import SelectWithError from 'components/atoms/Select'
 import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
 import PaymentForm from 'components/molecules/PaymentForm'
@@ -67,34 +66,19 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
     'Final',
   ]
 
-  const handleSelectPaymentMethod = (value?: string) => {
-    setselectedpaymentMethod(value || '')
-    removeError('paymentMethod')
-  }
-
-  const paymentMethods = [
-    { value: 'visa', label: 'Visa card' },
-    { value: 'onsite', label: 'Mastercard' },
-    { value: 'bank', label: 'Bank transfer' },
-    { value: 'onsite', label: 'Pay onsite (cash)' },
-  ]
-
   const processingBooking = () => {
-    bookingAction(
-      {
-        ...inputData.reduce((acc, { name: key, value }) => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          acc[key] = value
-          return acc
-        }, {}),
-        room: room?.id,
-        amount: amountToPay,
-        paymentMethod: selectedpaymentMethod,
-        token: paymentToken,
-      },
-      selectedpaymentMethod === 'onsite'
-    )
+    bookingAction({
+      ...inputData.reduce((acc, { name: key, value }) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        acc[key] = value
+        return acc
+      }, {}),
+      room: room?.id,
+      amount: amountToPay,
+      paymentMethod: selectedpaymentMethod,
+      token: paymentToken,
+    })
   }
 
   useEffect(() => {
@@ -295,16 +279,6 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
         hasError = true
       }
     }
-    if (current === 2) {
-      if (!selectedpaymentMethod) {
-        addOrReplaceError({
-          name: 'paymentMethod',
-          message: `This field is required`,
-        })
-        hasError = true
-      }
-    }
-
     return hasError
   }
 
@@ -349,7 +323,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                 <div className='flex flex-col'>
                   <div className='flex flex-col gap-2'>
                     <p className='text-co-black font-bold text-base'>
-                      Properties amenities
+                      Room facilities
                     </p>
                     <ul className='flex max-w-[600px] flex-wrap gap-2'>
                       {room?.facilities.map((amenity: any, index: number) => (
@@ -467,9 +441,6 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                     placeholder='Phone number'
                   />
                   <div className='flex flex-col gap-2'>
-                    <p className='text-co-black font-bold text-base'>
-                      Arrival time (optional):
-                    </p>
                     <DatePicker
                       disableDayPicker
                       format='HH:mm'
@@ -493,25 +464,13 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
               )}
               {current === 2 && (
                 <div className='flex flex-col gap-4'>
-                  <div className='flex flex-col gap-2'>
-                    <p className='text-co-black font-bold text-base'>
-                      How Do You Want To Pay.
-                    </p>
-                    <SelectWithError
-                      name={'paymentMethod'}
-                      options={paymentMethods}
-                      placeholder='Select payment option'
-                      error={checkIfInputHasError('paymentMethod')}
-                      onChange={e => handleSelectPaymentMethod(e?.value)}
-                    />
-                  </div>
                   {
                     <PaymentForm
-                      paymentMethod={selectedpaymentMethod}
                       setNextStep={setCurrent}
                       current={current}
-                      checkPaymentInfo={token => {
-                        setPaymentToken(token)
+                      checkPaymentInfo={data => {
+                        setPaymentToken(data.token)
+                        setselectedpaymentMethod(data.paymentMethod)
                       }}
                     />
                   }
@@ -663,7 +622,7 @@ function RangeCustomInput({ openCalendar, value, checkIfInputHasError }: any) {
   )
 }
 
-function CustomCardData({
+export function CustomCardData({
   changeState,
   columns,
   pageIndex,
@@ -704,13 +663,13 @@ function CustomCardData({
 
 function TimeCustomInput({ openCalendar, value }: any) {
   return (
-    <div className='flex gap-2'>
+    <div className='flex gap-2 mt-2'>
       <Input
         name='checkIn'
         type='text'
-        label='Check-in'
+        label='Arrival time (optional):'
         value={value[0]}
-        placeholder='Check-in'
+        placeholder='Arrival time (optional):'
         onFocus={openCalendar}
         readOnly
       />

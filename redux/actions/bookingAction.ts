@@ -16,55 +16,53 @@ export const bookingLoading = (payload: boolean) => ({
   payload: payload,
 })
 
-export const bookingAction =
-  (bookingdata: any, autoPay = false) =>
-  async (dispatch: any) => {
-    dispatch(bookingLoading(true))
-    dispatch(getError(''))
-    try {
-      if (autoPay) {
-        const payment = await trackPromise(
-          axios.post(`${API_URL}/payments`, {
-            amount: bookingdata.amount,
-            name: bookingdata.firstName + ' ' + bookingdata.lastName,
-            email: bookingdata.email,
-            token: bookingdata.token,
-          })
-        )
+export const bookingAction = (bookingdata: any) => async (dispatch: any) => {
+  dispatch(bookingLoading(true))
+  dispatch(getError(''))
+  try {
+    if (bookingdata?.token) {
+      const payment = await trackPromise(
+        axios.post(`${API_URL}/payments`, {
+          amount: bookingdata.amount,
+          name: bookingdata.firstName + ' ' + bookingdata.lastName,
+          email: bookingdata.email,
+          token: bookingdata.token,
+        })
+      )
 
-        if (bookingdata.token) {
-          delete bookingdata.token
-        }
+      if (bookingdata.token) {
+        delete bookingdata.token
+      }
 
-        if (payment.data.status === 'success') {
-          const { data } = await trackPromise(
-            axios.post(`${API_URL}/bookings`, {
-              ...bookingdata,
-              status: 'payed',
-              payment: payment.data.id,
-            })
-          )
-          dispatch(bookingSuccess(data))
-        }
-      } else {
-        if (bookingdata.token) {
-          delete bookingdata.token
-        }
+      if (payment.data.status === 'success') {
         const { data } = await trackPromise(
           axios.post(`${API_URL}/bookings`, {
             ...bookingdata,
-            status: 'unpayed',
+            status: 'payed',
+            payment: payment.data.id,
           })
         )
         dispatch(bookingSuccess(data))
       }
-    } catch (err) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      dispatch(getError(err?.response?.data.message?.toString() || ''))
-      dispatch(bookingLoading(false))
+    } else {
+      if (bookingdata.token) {
+        delete bookingdata.token
+      }
+      const { data } = await trackPromise(
+        axios.post(`${API_URL}/bookings`, {
+          ...bookingdata,
+          status: 'unpayed',
+        })
+      )
+      dispatch(bookingSuccess(data))
     }
+  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    dispatch(getError(err?.response?.data.message?.toString() || ''))
+    dispatch(bookingLoading(false))
   }
+}
 
 export const getBooking = (id: string) => async (dispatch: any) => {
   try {
@@ -77,3 +75,34 @@ export const getBooking = (id: string) => async (dispatch: any) => {
     dispatch(bookingLoading(false))
   }
 }
+
+export const updateBooking =
+  (id: string, bookingdata: any) => async (dispatch: any) => {
+    dispatch(bookingLoading(true))
+    try {
+      const payment = await trackPromise(
+        axios.post(`${API_URL}/payments`, {
+          amount: bookingdata.amount,
+          name: bookingdata.name,
+          email: bookingdata.email,
+          token: bookingdata.token,
+        })
+      )
+
+      if (payment.data.status === 'success') {
+        const { data } = await trackPromise(
+          axios.patch(`${API_URL}/bookings/${id}`, {
+            status: 'payed',
+            payment: payment.data.id,
+            paymentMethod: bookingdata.paymentMethod,
+          })
+        )
+        dispatch(bookingSuccess(data))
+      }
+    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      dispatch(getError(err?.response?.data.message?.toString() || ''))
+      dispatch(bookingLoading(false))
+    }
+  }

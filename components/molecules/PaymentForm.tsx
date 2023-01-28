@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 
 import Button from 'components/atoms/Button'
+import SelectWithError from 'components/atoms/Select'
 
 import Input from '../atoms/Input'
 
 interface PaymentFormProps {
-  paymentMethod: string
   checkPaymentInfo: (token: any) => void
   setNextStep?: any
   current?: number
@@ -13,25 +13,123 @@ interface PaymentFormProps {
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 export default function PaymentForm({
-  paymentMethod,
   checkPaymentInfo,
   setNextStep,
   current,
 }: PaymentFormProps) {
-  const [error, setError] = useState('')
+  const [selectedpaymentMethod, setselectedpaymentMethod] = useState('')
   const [loading, setloading] = useState(false)
+  const [stripeError, setstripeError] = useState('')
+  const [validationErrors, setValidationErrors] = useState<
+    {
+      message: string
+      name: string
+    }[]
+  >([])
+  const [disableSubmit, setdisableSubmit] = useState(false)
+
+  const paymentMethods = [
+    { value: 'visa', label: 'Visa card' },
+    { value: 'mastercard', label: 'Mastercard' },
+    { value: 'bank', label: 'Bank transfer' },
+    { value: 'onsite', label: 'Pay onsite (cash)' },
+  ]
+
+  // 4242424242424242
+  // 11/32
+  // 333
 
   const [cardInformations, setcardInformations] = useState({
     cardNumber: '4242424242424242',
     expiryDate: '11/32',
     cvc: '333',
-    cardHolderName: 'Felix Dusengimana',
+    cardHolderName: 'Duuss',
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setcardInformations({ ...cardInformations, [name]: value })
-    setError('')
+    //check inputs
+    if (name === 'cardNumber') {
+      if (!value) {
+        addOrReplaceError({
+          name: 'cardNumber',
+          message: `This field is required`,
+        })
+      } else if (value.length < 16) {
+        addOrReplaceError({
+          name: 'cardNumber',
+          message: `Card number must be 16 digits`,
+        })
+      } else {
+        removeError('cardNumber')
+      }
+    } else if (name === 'expiryDate') {
+      if (!value) {
+        addOrReplaceError({
+          name: 'expiryDate',
+          message: `This field is required`,
+        })
+      } else if (value.split('/').length !== 2) {
+        addOrReplaceError({
+          name: 'expiryDate',
+          message: `Expiry date must be in the format MM/YY`,
+        })
+      } else {
+        removeError('expiryDate')
+      }
+    } else if (name === 'cvc') {
+      if (!value) {
+        addOrReplaceError({
+          name: 'cvc',
+          message: `This field is required`,
+        })
+      } else if (value.length < 3) {
+        addOrReplaceError({
+          name: 'cvc',
+          message: `CVC must be 3 digits`,
+        })
+      } else {
+        removeError('cvc')
+      }
+    } else if (name === 'cardHolderName') {
+      if (!value) {
+        addOrReplaceError({
+          name: 'cardHolderName',
+          message: `This field is required`,
+        })
+      } else {
+        removeError('cardHolderName')
+      }
+    }
+  }
+
+  const removeError = (name: string) => {
+    const index = validationErrors.findIndex(item => item.name === name)
+    if (index !== -1) {
+      setValidationErrors(prev => {
+        prev.splice(index, 1)
+        return [...prev]
+      })
+    }
+  }
+
+  const addOrReplaceError = ({
+    name,
+    message,
+  }: {
+    name: string
+    message: string
+  }) => {
+    setValidationErrors(prev => {
+      const index = prev.findIndex(item => item.name === name)
+      if (index !== -1) {
+        prev[index].message = message
+      } else {
+        prev.push({ name: name, message: message })
+      }
+      return [...prev]
+    })
   }
 
   useEffect(() => {
@@ -52,45 +150,131 @@ export default function PaymentForm({
   }, [])
 
   const onSubmit = async () => {
-    setloading(true)
-    await sleep(300)
-    try {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      window.Stripe.card.createToken(
-        {
-          number: cardInformations.cardNumber,
-          exp_month: cardInformations.expiryDate.split('/')[0],
-          exp_year: cardInformations.expiryDate.split('/')[1],
-          cvc: cardInformations.cvc,
-          name: cardInformations.cardHolderName,
-        },
-        (status: any, response: any) => {
-          if (status === 200) {
-            checkPaymentInfo(response)
-            setNextStep(current! + 1)
-          } else {
-            setError(
-              'Error generating your payment data, check your infor and try again'
-            )
+    if (!checkAllErrors()) {
+      setloading(true)
+      await sleep(300)
+      try {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        window.Stripe.card.createToken(
+          {
+            number: cardInformations.cardNumber,
+            exp_month: cardInformations.expiryDate.split('/')[0],
+            exp_year: cardInformations.expiryDate.split('/')[1],
+            cvc: cardInformations.cvc,
+            name: cardInformations.cardHolderName,
+          },
+          (status: any, response: any) => {
+            if (status === 200) {
+              checkPaymentInfo({
+                token: response,
+                paymentMethod: selectedpaymentMethod,
+              })
+              setNextStep(current! + 1)
+            } else {
+              setstripeError(
+                'Error generating your payment data, check your information and try again'
+              )
+            }
+            setloading(false)
           }
-          setloading(false)
-        }
-      )
-    } catch (error) {
-      setError('Unexpected error occured')
-      setloading(false)
+        )
+      } catch (error) {
+        console.log(error)
+        setstripeError(
+          'Unexpected error occured, if error persists refresh and try again!'
+        )
+        setloading(false)
+      }
     }
   }
 
+  const handleSelectPaymentMethod = (value?: string) => {
+    setselectedpaymentMethod(value || '')
+  }
+
+  function checkIfInputHasError(name: string) {
+    const index = validationErrors.findIndex(item => item.name === name)
+    if (index !== -1) {
+      return validationErrors[index].message
+    }
+  }
+
+  function checkAllErrors() {
+    let hasError = false
+    if (!selectedpaymentMethod) {
+      addOrReplaceError({
+        name: 'paymentMethod',
+        message: `This field is required`,
+      })
+      hasError = true
+    }
+    if (
+      selectedpaymentMethod === 'visa' ||
+      selectedpaymentMethod === 'mastercard'
+    ) {
+      if (!cardInformations.cardNumber) {
+        addOrReplaceError({
+          name: 'cardNumber',
+          message: `This field is required`,
+        })
+        hasError = true
+      }
+      if (!cardInformations.expiryDate) {
+        addOrReplaceError({
+          name: 'expiryDate',
+          message: `This field is required`,
+        })
+        hasError = true
+      }
+      if (!cardInformations.cvc) {
+        addOrReplaceError({
+          name: 'cvc',
+          message: `This field is required`,
+        })
+        hasError = true
+      }
+      if (!cardInformations.cardHolderName) {
+        addOrReplaceError({
+          name: 'cardHolderName',
+          message: `This field is required`,
+        })
+        hasError = true
+      }
+    }
+    return hasError
+  }
+
+  //disable or enable button for next
+  useEffect(() => {
+    if (validationErrors.length === 0) {
+      setdisableSubmit(false)
+    } else {
+      setdisableSubmit(true)
+    }
+  }, [validationErrors])
+
   return (
     <>
-      {paymentMethod ? (
+      <div className='flex flex-col gap-2'>
+        <p className='text-co-black font-bold text-base'>
+          How Do You Want To Pay.
+        </p>
+        <SelectWithError
+          name={'paymentMethod'}
+          options={paymentMethods}
+          placeholder='Select payment option'
+          error={checkIfInputHasError('paymentMethod')}
+          onChange={e => handleSelectPaymentMethod(e?.value)}
+        />
+      </div>
+
+      {selectedpaymentMethod ? (
         <>
-          {paymentMethod === 'onsite' ? (
+          {selectedpaymentMethod === 'onsite' ? (
             <>
               <h1 className='capitalize font-bold text-co-blue text-lg'>
-                {paymentMethod} payment (pay by cash)
+                {selectedpaymentMethod} payment (pay by cash)
               </h1>
               When you stay in a hotel, you have the option to pay for your stay
               in cash at the location, this method is called onsite payment.
@@ -117,7 +301,7 @@ export default function PaymentForm({
           ) : (
             <>
               <h1 className='capitalize font-bold text-co-blue text-lg'>
-                {paymentMethod} card payment
+                {selectedpaymentMethod} card payment
               </h1>
               <Input
                 name={'cardNumber'}
@@ -125,6 +309,8 @@ export default function PaymentForm({
                 label='Card Number'
                 value={cardInformations.cardNumber}
                 onChange={handleInputChange}
+                error={checkIfInputHasError('cardNumber')}
+                placeholder='ex: 4242424242424242'
               />
               <div className='flex justify-between'>
                 <Input
@@ -133,6 +319,8 @@ export default function PaymentForm({
                   label='Expiry date'
                   value={cardInformations.expiryDate}
                   onChange={handleInputChange}
+                  error={checkIfInputHasError('expiryDate')}
+                  placeholder='ex: 12/24'
                 />
                 <Input
                   name={'cvc'}
@@ -140,6 +328,8 @@ export default function PaymentForm({
                   label='CVC/CVV'
                   value={cardInformations.cvc}
                   onChange={handleInputChange}
+                  error={checkIfInputHasError('cvc')}
+                  placeholder='ex: 123'
                 />
               </div>
               <Input
@@ -148,14 +338,16 @@ export default function PaymentForm({
                 label='Cardholder name'
                 value={cardInformations.cardHolderName}
                 onChange={handleInputChange}
+                error={checkIfInputHasError('cardHolderName')}
+                placeholder='ex: John Doe'
               />
-              {error && (
-                <p className='text-red-500 text-sm font-bold'>{error}</p>
+              {stripeError && (
+                <p className='text-red-500 text-sm font-bold'>{stripeError}</p>
               )}
 
               <div className='flex gap-3'>
                 <Button
-                  disabled={loading}
+                  disabled={loading || disableSubmit}
                   onClick={() => onSubmit()}
                   className='mt-5 bg-co-blue text-white hover:bg-blue-700 border-0'
                 >

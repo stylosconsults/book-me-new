@@ -17,7 +17,6 @@ import getErrorsSelector from 'redux/selectors/errorSelector'
 import { getRoomsSelector } from 'redux/selectors/roomSelector'
 
 function HotelDetails({ rooms, errors, getRoomsAction }: any) {
-  const { promiseInProgress } = usePromiseTracker()
   const [activeTab, setactiveTab] = useState(0)
   const router = useRouter()
 
@@ -76,9 +75,9 @@ function HotelDetails({ rooms, errors, getRoomsAction }: any) {
           )}
         </p>
         <h3 className='my-4 font-semibold text-co-black text-2xl'>
-          Property overview
+          Amerities overview
         </h3>
-        <ul className='flex max-w-[600px] flex-wrap gap-2'>
+        <ul className='flex flex-col max-w-[600px] flex-wrap gap-2'>
           {rooms?.hotel.amenities.map((amenity: any, index: number) => (
             <li key={index} className='text-co-black flex items-center gap-1'>
               <IoMdCheckmark /> {amenity}

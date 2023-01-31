@@ -3,7 +3,7 @@ function errorCallback(error) {
 }
 
 function cancelCallback() {
-  alert('Payment cancelled')
+  confirm('Are you sure you want to cancel?');
 }
 function completeCallback(resultIndicator,sessionVersion) {
   console.log(sessionVersion);

@@ -7,18 +7,12 @@ import SelectWithError from 'components/atoms/Select'
 import Button from '../atoms/Button'
 
 interface PaymentFormProps {
-  checkPaymentInfo: (token: any) => void
   setNextStep?: any
   current?: number
   amountToPay: number
 }
 
-function PaymentForm({
-  checkPaymentInfo,
-  setNextStep,
-  current,
-  amountToPay,
-}: PaymentFormProps) {
+function PaymentForm({ setNextStep, current, amountToPay }: PaymentFormProps) {
   let Checkout: any
   if (typeof window !== 'undefined') {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -58,11 +52,6 @@ function PaymentForm({
           address: {
             line1: 'kicukiro',
           },
-        },
-      },
-      callbacks: {
-        formSessionUpdate: function (response) {
-          console.log('formSessionUpdate', response)
         },
       },
     })

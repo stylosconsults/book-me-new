@@ -24,10 +24,8 @@ import { formatDate, getDaysBetweenDates } from 'utils/date'
 
 function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
   // const { promiseInProgress } = usePromiseTracker()
-  const [current, setCurrent] = useState<number>(2)
-  const [paymentToken, setPaymentToken] = useState({})
+  const [current, setCurrent] = useState<number>(0)
   const [disableSubmit, setdisableSubmit] = useState<boolean>(true)
-  const [selectedpaymentMethod, setselectedpaymentMethod] = useState('USE')
   const [amountToPay, setamountToPay] = useState(room?.amount)
   const [validationErrors, setValidationErrors] = useState<
     { name: string; message: string }[]
@@ -66,8 +64,8 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
     'Final',
   ]
 
-  const processingBooking = () => {
-    bookingAction({
+  const processingBooking = async () => {
+    await bookingAction({
       ...inputData.reduce((acc, { name: key, value }) => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -76,9 +74,8 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
       }, {}),
       room: room?.id,
       amount: amountToPay,
-      paymentMethod: selectedpaymentMethod,
-      token: paymentToken,
     })
+    setCurrent(current + 1)
   }
 
   useEffect(() => {
@@ -309,279 +306,270 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
       <div
         className={`mt-10 bg-co-search shadow-co-search bg-white border rounded p-10`}
       >
-        <div className={`${current !== steps.length - 1 && 'max-w-md'} `}>
-          {bks?.bookings && !bks?.loading && !errors ? (
-            <SuccessBooking pay={processingBooking} bookings={bks.bookings} />
-          ) : (
-            <>
-              <p className={'font-bold mb-4'}>
-                You are booking for{' '}
-                <span className='text-co-blue'>{room?.name}</span> in{' '}
-                <span className='text-co-blue'>{room?.hotel.name}</span>
-              </p>
-              {current === 0 && (
-                <div className='flex flex-col'>
-                  <div className='flex flex-col gap-2'>
-                    <p className='text-co-black font-bold text-base'>
-                      Room facilities
-                    </p>
-                    <ul className='flex max-w-[600px] flex-wrap gap-2'>
-                      {room?.facilities.map((amenity: any, index: number) => (
-                        <li
-                          key={index}
-                          className='text-co-black flex items-center gap-1'
-                        >
-                          <IoMdCheckmark /> {amenity}
-                        </li>
-                      ))}
-                      {room?.facilities.length === 0 && (
-                        <li className='flex items-center gap-1 text-red-600'>
-                          <HiOutlineXMark /> No Amerities listed
-                        </li>
-                      )}
-                    </ul>
-                    {/* <p className='font-bold text-sm'>Breakfast included</p> */}
-                  </div>
+        <div className={`${current !== 2 && 'max-w-md'} `}>
+          <>
+            <p className={'font-bold mb-4'}>
+              You are booking for{' '}
+              <span className='text-co-blue'>{room?.name}</span> in{' '}
+              <span className='text-co-blue'>{room?.hotel.name}</span>
+            </p>
+            {current === 0 && (
+              <div className='flex flex-col'>
+                <div className='flex flex-col gap-2'>
+                  <p className='text-co-black font-bold text-base'>
+                    Room facilities
+                  </p>
+                  <ul className='flex max-w-[600px] flex-wrap gap-2'>
+                    {room?.facilities.map((amenity: any, index: number) => (
+                      <li
+                        key={index}
+                        className='text-co-black flex items-center gap-1'
+                      >
+                        <IoMdCheckmark /> {amenity}
+                      </li>
+                    ))}
+                    {room?.facilities.length === 0 && (
+                      <li className='flex items-center gap-1 text-red-600'>
+                        <HiOutlineXMark /> No Amerities listed
+                      </li>
+                    )}
+                  </ul>
+                  {/* <p className='font-bold text-sm'>Breakfast included</p> */}
+                </div>
 
+                <DatePicker
+                  numberOfMonths={2}
+                  range
+                  value={[
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    new Date(getInputValue('checkIn')!),
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    new Date(getInputValue('checkOut')!),
+                  ]}
+                  onChange={(dateObject: any) => {
+                    if (dateObject[0] && dateObject[1]) {
+                      handleInputChange({
+                        value: dateObject[0].format(),
+                        name: 'checkIn',
+                      })
+                      handleInputChange({
+                        value: dateObject[1].format(),
+                        name: 'checkOut',
+                      })
+                    }
+                  }}
+                  render={
+                    <RangeCustomInput
+                      checkIfInputHasError={checkIfInputHasError}
+                    />
+                  }
+                />
+                <div className='mt-3'>
+                  <Input
+                    name='numberOfRooms'
+                    type='number'
+                    label='Number of rooms'
+                    value={getInputValue('numberOfRooms')}
+                    min='1'
+                    error={checkIfInputHasError('numberOfRooms')}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setamountToPay(room?.price * parseFloat(e.target.value))
+                      handleInputChange(e.target)
+                    }}
+                  />
+                </div>
+                <div className='flex items-center gap-2 mt-3'>
+                  <p className='text-co-black font-bold text-base'>
+                    Amount to pay:
+                  </p>
+                  <p className='text-co-blue font-bold text-base'>
+                    ${amountToPay}
+                  </p>
+                </div>
+              </div>
+            )}
+            {current === 1 && (
+              <div className='flex flex-col'>
+                <Input
+                  name='firstName'
+                  type='text'
+                  label='First Name'
+                  value={getInputValue('firstName')}
+                  error={checkIfInputHasError('firstName')}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleInputChange(e.target)
+                  }
+                  placeholder='First name'
+                />
+                <Input
+                  name='lastName'
+                  label='Last Name'
+                  type='text'
+                  value={getInputValue('lastName')}
+                  error={checkIfInputHasError('lastName')}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleInputChange(e.target)
+                  }
+                  placeholder='Last name'
+                />
+                <Input
+                  name='email'
+                  label='Email'
+                  type='email'
+                  value={getInputValue('email')}
+                  error={checkIfInputHasError('email')}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleInputChange(e.target)
+                  }
+                  placeholder='Email'
+                />
+                <Input
+                  name='phone'
+                  type='text'
+                  label='Phone number'
+                  value={getInputValue('phone')}
+                  error={checkIfInputHasError('phone')}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleInputChange(e.target)
+                  }
+                  placeholder='Phone number'
+                />
+                <div className='flex flex-col gap-2'>
                   <DatePicker
-                    numberOfMonths={2}
-                    range
-                    value={[
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      new Date(getInputValue('checkIn')!),
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      new Date(getInputValue('checkOut')!),
-                    ]}
+                    disableDayPicker
+                    format='HH:mm'
                     onChange={(dateObject: any) => {
-                      if (dateObject[0] && dateObject[1]) {
+                      if (dateObject) {
                         handleInputChange({
-                          value: dateObject[0].format(),
-                          name: 'checkIn',
-                        })
-                        handleInputChange({
-                          value: dateObject[1].format(),
-                          name: 'checkOut',
+                          value: dateObject,
+                          name: 'arrivalTime',
                         })
                       }
                     }}
+                    plugins={[<TimePicker key={'arrivalTime'} hideSeconds />]}
                     render={
-                      <RangeCustomInput
+                      <TimeCustomInput
                         checkIfInputHasError={checkIfInputHasError}
                       />
                     }
                   />
-                  <div className='mt-3'>
-                    <Input
-                      name='numberOfRooms'
-                      type='number'
-                      label='Number of rooms'
-                      value={getInputValue('numberOfRooms')}
-                      min='1'
-                      error={checkIfInputHasError('numberOfRooms')}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setamountToPay(room?.price * parseFloat(e.target.value))
-                        handleInputChange(e.target)
-                      }}
-                    />
-                  </div>
-                  <div className='flex items-center gap-2 mt-3'>
-                    <p className='text-co-black font-bold text-base'>
-                      Amount to pay:
-                    </p>
-                    <p className='text-co-blue font-bold text-base'>
-                      ${amountToPay}
-                    </p>
-                  </div>
                 </div>
-              )}
-              {current === 1 && (
-                <div className='flex flex-col'>
-                  <Input
-                    name='firstName'
-                    type='text'
-                    label='First Name'
-                    value={getInputValue('firstName')}
-                    error={checkIfInputHasError('firstName')}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      handleInputChange(e.target)
-                    }
-                    placeholder='First name'
+              </div>
+            )}
+            {current === 2 && (
+              <>
+                <div className='flex gap-4'>
+                  <RoomCard
+                    id={'1'}
+                    name={room?.name}
+                    noAdults={room?.adults}
+                    noChildren={room?.children}
+                    image={room?.image}
+                    price={room?.price}
+                    discountedPrice={room?.discountedPrice}
+                    refundable={true}
+                    bedType={room?.bedType}
+                    breakfast={true}
+                    roomSize={room?.size}
+                    hideBtn
                   />
-                  <Input
-                    name='lastName'
-                    label='Last Name'
-                    type='text'
-                    value={getInputValue('lastName')}
-                    error={checkIfInputHasError('lastName')}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      handleInputChange(e.target)
-                    }
-                    placeholder='Last name'
+                  <CustomCardData
+                    title={'Personal'}
+                    pageIndex={1}
+                    changeState={(page: number) => setCurrent(page)}
+                    columns={[
+                      {
+                        name: 'First Name',
+                        value: getInputValue('firstName')?.toString(),
+                      },
+                      {
+                        name: 'Last Name',
+                        value: getInputValue('lastName')?.toString(),
+                      },
+                      {
+                        name: 'Email',
+                        value: getInputValue('email')?.toString(),
+                      },
+                      {
+                        name: 'Phone Number',
+                        value: getInputValue('phone')?.toString(),
+                      },
+                      {
+                        name: 'Arrival Time',
+                        value: getInputValue('arrivalTime')?.toString(),
+                      },
+                    ]}
                   />
-                  <Input
-                    name='email'
-                    label='Email'
-                    type='email'
-                    value={getInputValue('email')}
-                    error={checkIfInputHasError('email')}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      handleInputChange(e.target)
-                    }
-                    placeholder='Email'
+                  <CustomCardData
+                    title={'Room'}
+                    pageIndex={2}
+                    changeState={(page: number) => setCurrent(page)}
+                    columns={[
+                      {
+                        name: 'Hotel name',
+                        value: room?.hotel.name,
+                      },
+                      {
+                        name: 'Room name',
+                        value: room?.name,
+                      },
+                      {
+                        name: 'Number of room',
+                        value: amountToPay / room?.price,
+                      },
+                      {
+                        name: 'Amount To Pay',
+                        value: amountToPay,
+                      },
+                    ]}
                   />
-                  <Input
-                    name='phone'
-                    type='text'
-                    label='Phone number'
-                    value={getInputValue('phone')}
-                    error={checkIfInputHasError('phone')}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      handleInputChange(e.target)
-                    }
-                    placeholder='Phone number'
+                </div>
+                <p className='text-red-500 text-sm'>{errors}</p>
+              </>
+            )}
+            {current === 3 && (
+              <div className='flex flex-col gap-4'>
+                {
+                  <PaymentForm
+                    amountToPay={amountToPay}
+                    setNextStep={setCurrent}
+                    current={current}
                   />
-                  <div className='flex flex-col gap-2'>
-                    <DatePicker
-                      disableDayPicker
-                      format='HH:mm'
-                      onChange={(dateObject: any) => {
-                        if (dateObject) {
-                          handleInputChange({
-                            value: dateObject,
-                            name: 'arrivalTime',
-                          })
+                }
+              </div>
+            )}
+            {current !== 3 && (
+              <div className='flex gap-3'>
+                <Button
+                  disabled={disableSubmit || bks?.loading}
+                  onClick={
+                    current === 2
+                      ? () => processingBooking()
+                      : () => {
+                          if (!checkAllErrors()) setCurrent(current + 1)
                         }
-                      }}
-                      plugins={[<TimePicker key={'arrivalTime'} hideSeconds />]}
-                      render={
-                        <TimeCustomInput
-                          checkIfInputHasError={checkIfInputHasError}
-                        />
-                      }
-                    />
-                  </div>
-                </div>
-              )}
-              {current === 2 && (
-                <div className='flex flex-col gap-4'>
-                  {
-                    <PaymentForm
-                      amountToPay={100}
-                      setNextStep={setCurrent}
-                      current={current}
-                      checkPaymentInfo={data => {
-                        setselectedpaymentMethod(data.paymentMethod)
-                      }}
-                    />
                   }
-                </div>
-              )}
-              {current === 3 && (
-                <>
-                  <div className='flex gap-4'>
-                    <RoomCard
-                      id={'1'}
-                      name={room?.name}
-                      noAdults={room?.adults}
-                      noChildren={room?.children}
-                      image={room?.image}
-                      price={room?.price}
-                      discountedPrice={room?.discountedPrice}
-                      refundable={true}
-                      bedType={room?.bedType}
-                      breakfast={true}
-                      roomSize={room?.size}
-                      hideBtn
-                    />
-                    <CustomCardData
-                      title={'Personal'}
-                      pageIndex={1}
-                      changeState={(page: number) => setCurrent(page)}
-                      columns={[
-                        {
-                          name: 'First Name',
-                          value: getInputValue('firstName')?.toString(),
-                        },
-                        {
-                          name: 'Last Name',
-                          value: getInputValue('lastName')?.toString(),
-                        },
-                        {
-                          name: 'Email',
-                          value: getInputValue('email')?.toString(),
-                        },
-                        {
-                          name: 'Phone Number',
-                          value: getInputValue('phone')?.toString(),
-                        },
-                        {
-                          name: 'Arrival Time',
-                          value: getInputValue('arrivalTime')?.toString(),
-                        },
-                      ]}
-                    />
-                    <CustomCardData
-                      title={'Payment'}
-                      pageIndex={2}
-                      changeState={(page: number) => setCurrent(page)}
-                      columns={[
-                        {
-                          name: 'Payment Type',
-                          value:
-                            selectedpaymentMethod.charAt(0).toUpperCase() +
-                            selectedpaymentMethod.slice(1),
-                        },
-                        {
-                          name: 'Card Number',
-                          value: getInputValue('cardNumber')?.toString(),
-                        },
-                        {
-                          name: 'Email',
-                          value: getInputValue('email')?.toString(),
-                        },
-                        {
-                          name: 'Amount To Pay',
-                          value: room?.amount,
-                        },
-                      ]}
-                    />
-                  </div>
-                  <p className='text-red-500 text-sm'>{errors}</p>
-                </>
-              )}
-              {current !== 2 && (
-                <div className='flex gap-3'>
-                  <Button
-                    disabled={disableSubmit || bks?.loading}
-                    onClick={
-                      current === steps.length - 1
-                        ? () => processingBooking()
-                        : () => {
-                            if (!checkAllErrors()) setCurrent(current + 1)
-                          }
-                    }
-                    className='mt-5 bg-co-blue text-white hover:bg-blue-700 border-0'
-                  >
-                    {current === steps.length - 1 && !bks?.loading ? (
-                      <span>Book now</span>
-                    ) : bks?.loading ? (
-                      <span>Loading...</span>
-                    ) : (
-                      <span>Continue</span>
-                    )}
-                  </Button>
-                  {current > 0 && current != steps.length - 1 && (
-                    <Button
-                      onClick={() => setCurrent(current - 1)}
-                      className='mt-5'
-                    >
-                      Back
-                    </Button>
+                  className='mt-5 bg-co-blue text-white hover:bg-blue-700 border-0'
+                >
+                  {current === 2 && !bks?.loading ? (
+                    <span>Book now</span>
+                  ) : bks?.loading ? (
+                    <span>Loading...</span>
+                  ) : (
+                    <span>Continue</span>
                   )}
-                </div>
-              )}
-            </>
-          )}
+                </Button>
+                {current > 0 && current != steps.length - 1 && (
+                  <Button
+                    onClick={() => setCurrent(current - 1)}
+                    className='mt-5'
+                  >
+                    Back
+                  </Button>
+                )}
+              </div>
+            )}
+          </>
         </div>
       </div>
     </Container>
@@ -655,7 +643,7 @@ export function CustomCardData({
         onClick={() => changeState(pageIndex)}
         className='py-1 font-medium bg-co-blue text-white border-0 w-full mt-2'
       >
-        Change personal info
+        Change {title.toLowerCase()} info
       </Button>
     </div>
   )

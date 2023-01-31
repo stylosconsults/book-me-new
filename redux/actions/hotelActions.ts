@@ -17,7 +17,7 @@ export const getHotelsAction = () => async (dispatch: any) => {
   } catch (err) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    dispatch(getError(err?.response.data.message?.toString() || ''))
+    dispatch(getError(err?.response?.data.message?.toString() || ''))
   }
 }
 
@@ -28,6 +28,6 @@ export const getHotelAction = (id: string) => async (dispatch: any) => {
   } catch (err) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    dispatch(getError(err?.response.data.message?.toString() || ''))
+    dispatch(getError(err?.response?.data.message?.toString() || ''))
   }
 }

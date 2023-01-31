@@ -24,7 +24,7 @@ import { formatDate, getDaysBetweenDates } from 'utils/date'
 
 function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
   // const { promiseInProgress } = usePromiseTracker()
-  const [current, setCurrent] = useState<number>(0)
+  const [current, setCurrent] = useState<number>(2)
   const [paymentToken, setPaymentToken] = useState({})
   const [disableSubmit, setdisableSubmit] = useState<boolean>(true)
   const [selectedpaymentMethod, setselectedpaymentMethod] = useState('USE')
@@ -466,10 +466,10 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                 <div className='flex flex-col gap-4'>
                   {
                     <PaymentForm
+                      amountToPay={100}
                       setNextStep={setCurrent}
                       current={current}
                       checkPaymentInfo={data => {
-                        setPaymentToken(data.token)
                         setselectedpaymentMethod(data.paymentMethod)
                       }}
                     />

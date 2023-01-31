@@ -1,258 +1,91 @@
 import React, { useEffect, useState } from 'react'
 
-import Button from 'components/atoms/Button'
+import axios from 'axios'
+
 import SelectWithError from 'components/atoms/Select'
 
-import Input from '../atoms/Input'
+import Button from '../atoms/Button'
 
 interface PaymentFormProps {
   checkPaymentInfo: (token: any) => void
   setNextStep?: any
   current?: number
+  amountToPay: number
 }
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-export default function PaymentForm({
+function PaymentForm({
   checkPaymentInfo,
   setNextStep,
   current,
+  amountToPay,
 }: PaymentFormProps) {
+  let Checkout: any
+  if (typeof window !== 'undefined') {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    Checkout = window.Checkout
+  }
+  const [isLoading, setisLoading] = useState(false)
+  const [error, setError] = useState('')
   const [selectedpaymentMethod, setselectedpaymentMethod] = useState('')
-  const [loading, setloading] = useState(false)
-  const [stripeError, setstripeError] = useState('')
-  const [validationErrors, setValidationErrors] = useState<
-    {
-      message: string
-      name: string
-    }[]
-  >([])
-  const [disableSubmit, setdisableSubmit] = useState(false)
 
   const paymentMethods = [
     { value: 'visa', label: 'Visa card' },
     { value: 'mastercard', label: 'Mastercard' },
     { value: 'bank', label: 'Bank transfer' },
-    { value: 'onsite', label: 'Pay onsite (cash)' },
   ]
 
-  // 4242424242424242
-  // 11/32
-  // 333
-
-  const [cardInformations, setcardInformations] = useState({
-    cardNumber: '4242424242424242',
-    expiryDate: '11/32',
-    cvc: '333',
-    cardHolderName: 'Duuss',
-  })
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setcardInformations({ ...cardInformations, [name]: value })
-    //check inputs
-    if (name === 'cardNumber') {
-      if (!value) {
-        addOrReplaceError({
-          name: 'cardNumber',
-          message: `This field is required`,
-        })
-      } else if (value.length < 16) {
-        addOrReplaceError({
-          name: 'cardNumber',
-          message: `Card number must be 16 digits`,
-        })
-      } else {
-        removeError('cardNumber')
-      }
-    } else if (name === 'expiryDate') {
-      if (!value) {
-        addOrReplaceError({
-          name: 'expiryDate',
-          message: `This field is required`,
-        })
-      } else if (value.split('/').length !== 2) {
-        addOrReplaceError({
-          name: 'expiryDate',
-          message: `Expiry date must be in the format MM/YY`,
-        })
-      } else {
-        removeError('expiryDate')
-      }
-    } else if (name === 'cvc') {
-      if (!value) {
-        addOrReplaceError({
-          name: 'cvc',
-          message: `This field is required`,
-        })
-      } else if (value.length < 3) {
-        addOrReplaceError({
-          name: 'cvc',
-          message: `CVC must be 3 digits`,
-        })
-      } else {
-        removeError('cvc')
-      }
-    } else if (name === 'cardHolderName') {
-      if (!value) {
-        addOrReplaceError({
-          name: 'cardHolderName',
-          message: `This field is required`,
-        })
-      } else {
-        removeError('cardHolderName')
-      }
-    }
-  }
-
-  const removeError = (name: string) => {
-    const index = validationErrors.findIndex(item => item.name === name)
-    if (index !== -1) {
-      setValidationErrors(prev => {
-        prev.splice(index, 1)
-        return [...prev]
-      })
-    }
-  }
-
-  const addOrReplaceError = ({
-    name,
-    message,
-  }: {
-    name: string
-    message: string
-  }) => {
-    setValidationErrors(prev => {
-      const index = prev.findIndex(item => item.name === name)
-      if (index !== -1) {
-        prev[index].message = message
-      } else {
-        prev.push({ name: name, message: message })
-      }
-      return [...prev]
-    })
-  }
-
-  useEffect(() => {
-    if (!window.document.getElementById('stripe-script')) {
-      const s = window.document.createElement('script')
-      s.id = 'stripe-script'
-      s.type = 'text/javascript'
-      s.src = 'https://js.stripe.com/v2/'
-      s.onload = () => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        window['Stripe'].setPublishableKey(
-          process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY
-        )
-      }
-      window.document.body.appendChild(s)
-    }
-  }, [])
-
-  const onSubmit = async () => {
-    if (!checkAllErrors()) {
-      setloading(true)
-      await sleep(300)
-      try {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        window.Stripe.card.createToken(
-          {
-            number: cardInformations.cardNumber,
-            exp_month: cardInformations.expiryDate.split('/')[0],
-            exp_year: cardInformations.expiryDate.split('/')[1],
-            cvc: cardInformations.cvc,
-            name: cardInformations.cardHolderName,
+  const pay = (sessionId: string, uid: number) => {
+    Checkout.configure({
+      session: {
+        id: `${sessionId}`,
+      },
+      merchant: '8206000697',
+      order: {
+        amount: amountToPay,
+        currency: 'USD',
+        description: `Book`,
+        id: uid,
+        reference: uid,
+      },
+      transaction: {
+        reference: uid,
+      },
+      interaction: {
+        operation: 'PURCHASE',
+        merchant: {
+          name: 'GODISCOVER AFRICA LTD',
+          address: {
+            line1: 'kicukiro',
           },
-          (status: any, response: any) => {
-            if (status === 200) {
-              checkPaymentInfo({
-                token: response,
-                paymentMethod: selectedpaymentMethod,
-              })
-              setNextStep(current! + 1)
-            } else {
-              setstripeError(
-                'Error generating your payment data, check your information and try again'
-              )
-            }
-            setloading(false)
-          }
-        )
-      } catch (error) {
-        console.log(error)
-        setstripeError(
-          'Unexpected error occured, if error persists refresh and try again!'
-        )
-        setloading(false)
-      }
-    }
+        },
+      },
+      callbacks: {
+        formSessionUpdate: function (response) {
+          console.log('formSessionUpdate', response)
+        },
+      },
+    })
+    Checkout.showLightbox()
   }
 
-  const handleSelectPaymentMethod = (value?: string) => {
-    setselectedpaymentMethod(value || '')
-  }
-
-  function checkIfInputHasError(name: string) {
-    const index = validationErrors.findIndex(item => item.name === name)
-    if (index !== -1) {
-      return validationErrors[index].message
-    }
-  }
-
-  function checkAllErrors() {
-    let hasError = false
-    if (!selectedpaymentMethod) {
-      addOrReplaceError({
-        name: 'paymentMethod',
-        message: `This field is required`,
+  const handleSubmit = async () => {
+    setisLoading(true)
+    setError('')
+    const uid = Math.abs(new Date().valueOf())
+    await axios
+      .post(`${process.env.NEXT_PUBLIC_BACKEND_API}/payments/session`, {
+        amount: amountToPay,
       })
-      hasError = true
-    }
-    if (
-      selectedpaymentMethod === 'visa' ||
-      selectedpaymentMethod === 'mastercard'
-    ) {
-      if (!cardInformations.cardNumber) {
-        addOrReplaceError({
-          name: 'cardNumber',
-          message: `This field is required`,
-        })
-        hasError = true
-      }
-      if (!cardInformations.expiryDate) {
-        addOrReplaceError({
-          name: 'expiryDate',
-          message: `This field is required`,
-        })
-        hasError = true
-      }
-      if (!cardInformations.cvc) {
-        addOrReplaceError({
-          name: 'cvc',
-          message: `This field is required`,
-        })
-        hasError = true
-      }
-      if (!cardInformations.cardHolderName) {
-        addOrReplaceError({
-          name: 'cardHolderName',
-          message: `This field is required`,
-        })
-        hasError = true
-      }
-    }
-    return hasError
+      .then(res => {
+        pay(res.data.sessionId, uid)
+      })
+      .catch(function (error) {
+        console.log(error)
+        setError('Something went wrong')
+      })
+    setisLoading(false)
   }
-
-  //disable or enable button for next
-  useEffect(() => {
-    if (validationErrors.length === 0) {
-      setdisableSubmit(false)
-    } else {
-      setdisableSubmit(true)
-    }
-  }, [validationErrors])
 
   return (
     <>
@@ -264,108 +97,31 @@ export default function PaymentForm({
           name={'paymentMethod'}
           options={paymentMethods}
           placeholder='Select payment option'
-          error={checkIfInputHasError('paymentMethod')}
-          onChange={e => handleSelectPaymentMethod(e?.value)}
+          error={!selectedpaymentMethod ? 'Please select a payment method' : ''}
+          onChange={e => setselectedpaymentMethod(e?.value)}
         />
       </div>
+      {error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
 
-      {selectedpaymentMethod ? (
-        <>
-          {selectedpaymentMethod === 'onsite' ? (
-            <>
-              <h1 className='capitalize font-bold text-co-blue text-lg'>
-                {selectedpaymentMethod} payment (pay by cash)
-              </h1>
-              When you stay in a hotel, you have the option to pay for your stay
-              in cash at the location, this method is called onsite payment.
-              Other forms of payment such as credit card, debit card, or
-              electronic transfer are also accepted. This type of payment is can
-              be through point-of-sale systems or mobile payment apps.
-              <div className='flex gap-3'>
-                <Button
-                  onClick={() => setNextStep(current! + 1)}
-                  className='mt-5 bg-co-blue text-white hover:bg-blue-700 border-0'
-                >
-                  Continue
-                </Button>
-                <Button
-                  disabled={loading}
-                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                  onClick={() => setNextStep(current! - 1)}
-                  className='mt-5'
-                >
-                  Back
-                </Button>
-              </div>
-            </>
-          ) : (
-            <>
-              <h1 className='capitalize font-bold text-co-blue text-lg'>
-                {selectedpaymentMethod} card payment
-              </h1>
-              <Input
-                name={'cardNumber'}
-                type='text'
-                label='Card Number'
-                value={cardInformations.cardNumber}
-                onChange={handleInputChange}
-                error={checkIfInputHasError('cardNumber')}
-                placeholder='ex: 4242424242424242'
-              />
-              <div className='flex justify-between'>
-                <Input
-                  name={'expiryDate'}
-                  type='text'
-                  label='Expiry date'
-                  value={cardInformations.expiryDate}
-                  onChange={handleInputChange}
-                  error={checkIfInputHasError('expiryDate')}
-                  placeholder='ex: 12/24'
-                />
-                <Input
-                  name={'cvc'}
-                  type='text'
-                  label='CVC/CVV'
-                  value={cardInformations.cvc}
-                  onChange={handleInputChange}
-                  error={checkIfInputHasError('cvc')}
-                  placeholder='ex: 123'
-                />
-              </div>
-              <Input
-                name={'cardHolderName'}
-                type='text'
-                label='Cardholder name'
-                value={cardInformations.cardHolderName}
-                onChange={handleInputChange}
-                error={checkIfInputHasError('cardHolderName')}
-                placeholder='ex: John Doe'
-              />
-              {stripeError && (
-                <p className='text-red-500 text-sm font-bold'>{stripeError}</p>
-              )}
-
-              <div className='flex gap-3'>
-                <Button
-                  disabled={loading || disableSubmit}
-                  onClick={() => onSubmit()}
-                  className='mt-5 bg-co-blue text-white hover:bg-blue-700 border-0'
-                >
-                  {loading ? 'Loading...' : 'Continue'}
-                </Button>
-                <Button
-                  disabled={loading}
-                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                  onClick={() => setNextStep(current! - 1)}
-                  className='mt-5'
-                >
-                  Back
-                </Button>
-              </div>
-            </>
-          )}
-        </>
-      ) : null}
+      <div className='flex gap-3'>
+        <Button
+          disabled={isLoading || !selectedpaymentMethod}
+          onClick={handleSubmit}
+          className='mt-5 bg-co-blue text-white hover:bg-blue-700 border-0'
+        >
+          {isLoading ? 'Loading...' : 'Pay now'}
+        </Button>
+        <Button
+          disabled={isLoading}
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          onClick={() => setNextStep(current! - 1)}
+          className='mt-5'
+        >
+          Back
+        </Button>
+      </div>
     </>
   )
 }
+
+export default PaymentForm

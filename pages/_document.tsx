@@ -1,4 +1,5 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document'
+import Script from 'next/script'
 
 class MyDocument extends Document {
   render() {
@@ -60,6 +61,15 @@ class MyDocument extends Document {
             content='#171717'
             media='(prefers-color-scheme: dark)'
           />
+          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+          <script
+            src='https://ap-gateway.mastercard.com/checkout/version/61/checkout.js'
+            data-error='errorCallback'
+            data-cancel='cancelCallback'
+            data-complete='completeCallback'
+          ></script>
+          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+          <script src='/static/js/script.js'></script>
         </Head>
         <body className='bg-white dark:bg-gray-900'>
           <Main />

@@ -51,25 +51,13 @@ export const updateBooking =
   (id: string, bookingdata: any) => async (dispatch: any) => {
     dispatch(bookingLoading(true))
     try {
-      const payment = await trackPromise(
-        axios.post(`${API_URL}/payments`, {
-          amount: bookingdata.amount,
-          name: bookingdata.name,
-          email: bookingdata.email,
-          token: bookingdata.token,
+      const { data } = await trackPromise(
+        axios.patch(`${API_URL}/bookings/${id}`, {
+          status: 'payed',
+          ...bookingdata,
         })
       )
-
-      if (payment.data.status === 'success') {
-        const { data } = await trackPromise(
-          axios.patch(`${API_URL}/bookings/${id}`, {
-            status: 'payed',
-            payment: payment.data.id,
-            paymentMethod: bookingdata.paymentMethod,
-          })
-        )
-        dispatch(bookingSuccess(data))
-      }
+      dispatch(bookingSuccess(data))
     } catch (err) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore

@@ -17,9 +17,8 @@ import getErrorsSelector from 'redux/selectors/errorSelector'
 function Payment({ bks, errors, getBooking, updateBooking }: any) {
   const [current, setCurrent] = useState(0)
   const [id, setId] = useState('')
+  const [orderId, setorderId] = useState('')
   const [bookings, setbookings] = useState<any>({})
-  const [token, setToken] = useState({})
-  const [paymentMethod, setpaymentMethod] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -38,15 +37,6 @@ function Payment({ bks, errors, getBooking, updateBooking }: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bks?.bookings?.status, bks?.loading])
 
-  const onSubmit = () => {
-    updateBooking(id, {
-      paymentMethod,
-      token,
-      name: bookings?.firstName + ' ' + bookings?.lastName,
-      email: bookings?.email,
-      amount: bookings?.amount,
-    })
-  }
   return (
     <Container>
       <Breadcrumb
@@ -76,17 +66,6 @@ function Payment({ bks, errors, getBooking, updateBooking }: any) {
               bookings={bks?.bookings}
             />
           ) : current == 1 ? (
-            <div className='max-w-md mt-5'>
-              <PaymentForm
-                checkPaymentInfo={data => {
-                  setToken(data.token)
-                  setpaymentMethod(data.paymentMethod)
-                }}
-                current={current}
-                setNextStep={setCurrent}
-              />
-            </div>
-          ) : (
             <>
               <div className='flex gap-4'>
                 <RoomCard
@@ -136,14 +115,12 @@ function Payment({ bks, errors, getBooking, updateBooking }: any) {
                   changeState={(page: number) => setCurrent(page)}
                   columns={[
                     {
-                      name: 'Payment Type',
-                      value:
-                        paymentMethod.charAt(0).toUpperCase() +
-                        paymentMethod.slice(1),
+                      name: 'Room name',
+                      value: bookings?.room.name,
                     },
                     {
-                      name: 'Email',
-                      value: bookings?.email.toString(),
+                      name: 'Number of room',
+                      value: bookings?.amount / bookings?.room.price,
                     },
                     {
                       name: 'Amount To Pay',
@@ -156,12 +133,20 @@ function Payment({ bks, errors, getBooking, updateBooking }: any) {
 
               <Button
                 disabled={bks?.loading}
-                onClick={() => onSubmit()}
+                onClick={() => setCurrent(current + 1)}
                 className='mt-5 bg-co-blue text-white hover:bg-blue-700 border-0'
               >
                 {bks?.loading ? 'Loading...' : 'Proceed & Pay'}
               </Button>
             </>
+          ) : (
+            <div className='max-w-md mt-5'>
+              <PaymentForm
+                current={current}
+                setNextStep={setCurrent}
+                amountToPay={bks?.bookings.amount}
+              />
+            </div>
           )}
         </>
       )}

@@ -2,6 +2,7 @@ import React from 'react'
 
 import { AiOutlineUser } from 'react-icons/ai'
 import { BsCalendar2Week } from 'react-icons/bs'
+import { CiSearch } from 'react-icons/ci'
 import { TiLocationArrowOutline } from 'react-icons/ti'
 
 import SearchTextInput from 'components/molecules/SearchTextInput'
@@ -48,6 +49,13 @@ export default function SearchHotel() {
           subTitle={'Travelers'}
           icon={<AiOutlineUser size={18} />}
         />
+
+        <button
+          type='submit'
+          className='w-20 h-20 rounded-full bg-co-blue text-white flex items-center justify-center hover:scale-125 duration-500'
+        >
+          <CiSearch size={40} />
+        </button>
       </div>
     </div>
   )

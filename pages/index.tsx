@@ -1,28 +1,38 @@
 import Image from 'next/image'
+import { Zoom } from 'react-slideshow-image'
 
 import Container from 'components/Container'
 import Hotels from 'components/organisms/Hotels'
 import HowItWorks from 'components/organisms/HowItWorks'
 import SearchHotel from 'components/organisms/SearchHotel'
-import { BlurredDataImage, ImagePlaceholderOnError } from 'utils/blurredImage'
+import 'react-slideshow-image/dist/styles.css'
 
 export default function Home() {
+  const images = [
+    '/static/images/slide/1.png',
+    '/static/images/slide/2.png',
+    '/static/images/slide/3.png',
+  ]
+
   return (
     <Container>
-      <div className='relative flex flex-col items-center justify-between mb-40 h-96 w-full'>
+      <div className='relative flex flex-col justify-center mb-28 w-full h-fit'>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <Image
-          src='https://cdn.discordapp.com/attachments/797485737272541250/893912493255176192/UnicornVectorGradient_7.png'
-          alt='Bookme'
-          className='top-0 left-0 w-full object-cover rounded-md '
-          draggable='false'
-          loading='lazy'
-          placeholder='blur'
-          blurDataURL={BlurredDataImage}
-          onError={ImagePlaceholderOnError}
-          fill
-        />
-        <div className='-bottom-20 absolute w-full'>
+        <Zoom scale={1.4} indicators={true} arrows={false}>
+          {images.map((source: string, index: number) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={index}
+              src={source}
+              alt='Bookme'
+              className='top-0 left-0 w-full object-cover rounded-md h-96 border'
+              draggable='false'
+              loading='lazy'
+              placeholder='blur'
+            />
+          ))}
+        </Zoom>
+        <div className='-bottom-20 absolute w-full z-20'>
           <SearchHotel />
         </div>
       </div>

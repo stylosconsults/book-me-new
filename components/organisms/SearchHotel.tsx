@@ -17,7 +17,7 @@ export default function SearchHotel() {
       }}
     >
       {/* tab */}
-      <div className='flex flex-row justify-between items-center'>
+      <div className='flex flex-col lg:flex-row gap-1 lg:gap-0 justify-between items-start lg:items-center'>
         <SearchTextInput
           placeholder={'Location'}
           type={'text'}
@@ -52,9 +52,10 @@ export default function SearchHotel() {
 
         <button
           type='submit'
-          className='w-20 h-20 rounded-full bg-co-blue text-white flex items-center justify-center hover:scale-125 duration-500'
+          className='w-full lg:w-20 lg:h-20 mt-2 lg:mt-0 py-2 lg:py-0 rounded-md lg:rounded-full bg-co-blue text-white flex items-center justify-center hover:scale-125 duration-500'
         >
-          <CiSearch size={40} />
+          <CiSearch size={40} className='md:hidden lg:block' />
+          <p className='lg:hidden text-xl'>Search</p>
         </button>
       </div>
     </div>

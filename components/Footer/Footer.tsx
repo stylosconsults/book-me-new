@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <div className='mx-auto my-16 mb-3 text-center text-quaternary'>
+    <div className='mx-auto my-16 mb-3 text-center text-quaternary px-10 lg:px-0'>
       <div className='flex justify-between flex-wrap'>
         <div className='text-left'>
           <Link href='/' legacyBehavior>

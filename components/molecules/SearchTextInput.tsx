@@ -15,7 +15,7 @@ export default function SearchTextInput({
   type,
 }: SearchTextInputProps) {
   return (
-    <label className='flex flex-row gap-1 max-w-[200px]'>
+    <label className='flex flex-row gap-1 bg-black/10 lg:bg-transparent p-2 lg:p-0 w-full lg:max-w-[200px]'>
       <p className='text-gray-500 mt-2'>{icon}</p>
       <div className='text-sm text-co-primary'>
         <input

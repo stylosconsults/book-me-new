@@ -54,9 +54,10 @@ export default function Container(props: any) {
           {meta.date && (
             <meta property='article:published_time' content={meta.date} />
           )}
+          <title>bookme.rw - book hotels for your trip to rwanda</title>
         </Head>
 
-        <nav className='sticky w-full z-50 bg-gray-100/10 font-sans filter-blur dark:bg-gray-1000/40 top-2 md:top-4 max-w-6xl py-2 rounded-md mx-auto flex justify-between items-center'>
+        <nav className='md:sticky w-full z-50 bg-gray-100/10 font-sans filter-blur dark:bg-gray-1000/40 top-2 sm:px-3 md:top-4 max-w-6xl md:py-2 rounded-md mx-auto flex flex-col md:flex-row justify-between md:items-center items-start pl-5 py-5 md:pl-0'>
           <Navbar />
         </nav>
 

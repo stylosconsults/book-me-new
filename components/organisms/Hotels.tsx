@@ -39,6 +39,11 @@ function Hotels({ hotels, errors, getHotelsAction }: any) {
                 </Fragment>
               )
             )}
+            {hotels?.results?.length === 0 || hotels?.results === undefined ? (
+              <p className='text-center text-md mt-3 font-bold text-gray-500'>
+                Hotels will be loaded soon (come back later)
+              </p>
+            ) : null}
           </>
         ) : (
           <p>Loading ...</p>

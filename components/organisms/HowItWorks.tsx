@@ -7,19 +7,19 @@ export default function HowItWorks() {
     {
       title: 'Book & relax',
       description:
-        'We realize ideas from simple to complex, everything becomes easy to use.',
+        'Effortlessly book your dream hotel stay and relax while we take care of the rest.',
       image: '/static/images/works/1.png',
     },
     {
       title: 'Smart checklist',
       description:
-        'We realize ideas from simple to complex, everything becomes easy to use.',
+        'A smart hotel booking checklist to easily find the perfect hotel that meets your needs and budget.',
       image: '/static/images/works/2.png',
     },
     {
       title: 'Save more',
       description:
-        'We realize ideas from simple to complex, everything becomes easy to use.',
+        'Book now and save big on your next hotel stay with limited-time offers.',
       image: '/static/images/works/3.png',
     },
   ]

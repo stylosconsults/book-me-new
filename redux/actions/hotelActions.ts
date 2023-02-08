@@ -12,7 +12,7 @@ export const getHotelSuccess = (author: any) => ({
 
 export const getHotelsAction = () => async (dispatch: any) => {
   try {
-    const { data } = await trackPromise(axios.get(`${API_URL}/hotels`))
+    const { data } = await trackPromise(axios.get(`${API_URL}/hotels?limit=20`))
     dispatch(getHotelSuccess(data))
   } catch (err) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

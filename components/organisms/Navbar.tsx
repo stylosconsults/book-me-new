@@ -10,12 +10,6 @@ export default function Navbar() {
         <div className=''>
           <Link href='/' legacyBehavior>
             <div className='flex items-center'>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src='/static/images/logo/logo.jpg'
-                alt=''
-                className='backdrop-invert w-12 h-12'
-              />
               <a className='transition-all cursor-pointer text-primary font-bold text-xl block leading-3'>
                 Bookme
               </a>
@@ -32,7 +26,7 @@ export default function Navbar() {
         </div>
       </div>
       <div className='flex md:flex-row flex-col items-start md:items-center space-x-0 md:space-x-4'>
-        <Link href='/about' legacyBehavior>
+<!--         <Link href='/about' legacyBehavior>
           <a className='transition-all cursor-pointer text-primary hover:text-secondary'>
             Support
           </a>
@@ -41,7 +35,7 @@ export default function Navbar() {
           <a className='transition-all cursor-pointer text-primary hover:text-secondary'>
             Language
           </a>
-        </Link>
+        </Link> -->
         {/* <Button>Switch to experience</Button> */}
         {/* <div className='text-gray-600 relative cursor-pointer'>
           <AiOutlineBell size={18} />

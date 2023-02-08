@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import axios from 'axios'
 import { trackPromise } from 'react-promise-tracker'
 
@@ -10,16 +11,37 @@ export const getHotelSuccess = (author: any) => ({
   payload: author,
 })
 
-export const getHotelsAction = () => async (dispatch: any) => {
-  try {
-    const { data } = await trackPromise(axios.get(`${API_URL}/hotels`))
-    dispatch(getHotelSuccess(data))
-  } catch (err) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    dispatch(getError(err?.response?.data.message?.toString() || ''))
+export const getHotelsAction =
+  (
+    params = {
+      limit: 20,
+      name: '',
+      page: 1,
+    }
+  ) =>
+  async (dispatch: any) => {
+    const query = Object.keys(params)
+      .reduce((acc, key) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        if (params[key]) {
+          // @ts-ignore
+          acc.push(`${key}=${params[key]}`)
+        }
+        return acc
+      }, [])
+      .join('&')
+    try {
+      const { data } = await trackPromise(
+        axios.get(`${API_URL}/hotels?${query}`)
+      )
+      dispatch(getHotelSuccess(data))
+    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      dispatch(getError(err?.response?.data.message?.toString() || ''))
+    }
   }
-}
 
 export const getHotelAction = (id: string) => async (dispatch: any) => {
   try {

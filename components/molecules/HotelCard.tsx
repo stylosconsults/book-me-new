@@ -12,6 +12,7 @@ interface HotelCardProps {
   date: string
   rating?: number
   image: string
+  width?: string
 }
 import { BlurredDataImage, ImagePlaceholderOnError } from 'utils/blurredImage'
 
@@ -23,12 +24,13 @@ export default function HotelCard({
   rating,
   location,
   image,
+  width = 'calc(25% - 20px)',
 }: HotelCardProps) {
   return (
     <div
       className='bg-white rounded-2xl group mt-5'
       style={{
-        width: 'calc(25% - 20px)',
+        width: width,
       }}
     >
       <Link href={`/hotel/${id}`}>

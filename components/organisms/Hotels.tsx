@@ -6,10 +6,9 @@ import { connect } from 'react-redux'
 import Heading from 'components/atoms/Heading'
 import HotelCard from 'components/molecules/HotelCard'
 import { getHotelsAction } from 'redux/actions/hotelActions'
-import getErrorsSelector from 'redux/selectors/errorSelector'
 import getHotelsSelector from 'redux/selectors/hotelSelector'
 
-function Hotels({ hotels, errors, getHotelsAction }: any) {
+function Hotels({ hotels, getHotelsAction }: any) {
   const { promiseInProgress } = usePromiseTracker()
   useEffect(() => {
     getHotelsAction()
@@ -55,7 +54,6 @@ function Hotels({ hotels, errors, getHotelsAction }: any) {
 
 const mapStateToProps = (state: any) => ({
   hotels: getHotelsSelector(state),
-  errors: getErrorsSelector(state),
 })
 
 export default connect(mapStateToProps, { getHotelsAction })(Hotels)

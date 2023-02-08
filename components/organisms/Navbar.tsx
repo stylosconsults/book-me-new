@@ -26,7 +26,7 @@ export default function Navbar() {
         </div>
       </div>
       <div className='flex md:flex-row flex-col items-start md:items-center space-x-0 md:space-x-4'>
-<!--         <Link href='/about' legacyBehavior>
+        {/* <Link href='/about' legacyBehavior>
           <a className='transition-all cursor-pointer text-primary hover:text-secondary'>
             Support
           </a>
@@ -35,7 +35,7 @@ export default function Navbar() {
           <a className='transition-all cursor-pointer text-primary hover:text-secondary'>
             Language
           </a>
-        </Link> -->
+        </Link> */}
         {/* <Button>Switch to experience</Button> */}
         {/* <div className='text-gray-600 relative cursor-pointer'>
           <AiOutlineBell size={18} />

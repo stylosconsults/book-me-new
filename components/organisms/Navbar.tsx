@@ -9,9 +9,19 @@ export default function Navbar() {
       <div className='flex md:flex-row flex-col gap-1 text-tertiary'>
         <div className=''>
           <Link href='/' legacyBehavior>
-            <a className='transition-all cursor-pointer text-primary font-bold text-xl block leading-3'>
-              Bookme
-            </a>
+            <div className='flex items-center'>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src='/static/images/logo.jpg'
+                width={50}
+                height={50}
+                alt='Logo'
+                className='backdrop-invert'
+              />
+              <a className='transition-all cursor-pointer text-primary font-bold text-xl block leading-3'>
+                Bookme
+              </a>
+            </div>
           </Link>
           <a
             target='_blank'

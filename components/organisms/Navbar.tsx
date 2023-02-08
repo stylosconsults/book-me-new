@@ -13,10 +13,8 @@ export default function Navbar() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src='/static/images/logo/logo.jpg'
-                width={50}
-                height={50}
                 alt=''
-                className='backdrop-invert'
+                className='backdrop-invert w-12 h-12'
               />
               <a className='transition-all cursor-pointer text-primary font-bold text-xl block leading-3'>
                 Bookme

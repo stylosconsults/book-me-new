@@ -97,7 +97,7 @@ function HotelDetails({ rooms, errors, getRoomsAction }: any) {
               <RoomCard
                 id={room.id}
                 image={room.image}
-                name={'Double Standard Room'}
+                name={room?.name}
                 noAdults={room.adults}
                 noChildren={room.children}
                 roomSize={room?.size}

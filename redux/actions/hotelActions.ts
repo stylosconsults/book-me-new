@@ -2,6 +2,8 @@
 import axios from 'axios'
 import { trackPromise } from 'react-promise-tracker'
 
+import { createQueryParams } from 'utils/params'
+
 import { getError } from './errorAction'
 import { GET_HOTEL_SUCCESS } from './types'
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_API
@@ -20,17 +22,7 @@ export const getHotelsAction =
     }
   ) =>
   async (dispatch: any) => {
-    const query = Object.keys(params)
-      .reduce((acc, key) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (params[key]) {
-          // @ts-ignore
-          acc.push(`${key}=${params[key]}`)
-        }
-        return acc
-      }, [])
-      .join('&')
+    const query = createQueryParams(params)
     try {
       const { data } = await trackPromise(
         axios.get(`${API_URL}/hotels?${query}`)

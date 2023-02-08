@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
@@ -26,12 +27,17 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
   // const { promiseInProgress } = usePromiseTracker()
   const [current, setCurrent] = useState<number>(0)
   const [disableSubmit, setdisableSubmit] = useState<boolean>(true)
-  const [amountToPay, setamountToPay] = useState(room?.amount)
+  const [amountToPay, setamountToPay] = useState<number>(room?.amount)
+  const [nightsToStay, setnightsToStay] = useState(1)
   const [validationErrors, setValidationErrors] = useState<
     { name: string; message: string }[]
   >([])
 
   const router = useRouter()
+
+  const calculateAmountToPay = (rooms: number, nights: number) => {
+    setamountToPay(rooms * nights * parseFloat(room?.price))
+  }
 
   useEffect(() => {
     if (router.isReady) {
@@ -60,8 +66,8 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
   const steps = [
     'Hotel room info',
     'Personal Information',
-    'Payment Details',
-    'Final',
+    'Booking Details',
+    'Payment',
   ]
 
   const processingBooking = async () => {
@@ -348,6 +354,10 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                   ]}
                   onChange={(dateObject: any) => {
                     if (dateObject[0] && dateObject[1]) {
+                      const dayDiff = getDaysBetweenDates(
+                        new Date(dateObject[0].format()),
+                        new Date(dateObject[1].format())
+                      )
                       handleInputChange({
                         value: dateObject[0].format(),
                         name: 'checkIn',
@@ -356,6 +366,12 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                         value: dateObject[1].format(),
                         name: 'checkOut',
                       })
+                      setnightsToStay(dayDiff)
+                      calculateAmountToPay(
+                        // @ts-ignore
+                        parseInt(getInputValue('numberOfRooms')),
+                        dayDiff
+                      )
                     }
                   }}
                   render={
@@ -373,7 +389,10 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                     min='1'
                     error={checkIfInputHasError('numberOfRooms')}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      setamountToPay(room?.price * parseFloat(e.target.value))
+                      calculateAmountToPay(
+                        parseInt(e.target.value),
+                        nightsToStay
+                      )
                       handleInputChange(e.target)
                     }}
                   />
@@ -515,7 +534,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                       },
                       {
                         name: 'Number of room',
-                        value: amountToPay / room?.price,
+                        value: amountToPay / room?.price / nightsToStay,
                       },
                       {
                         name: 'Amount To Pay',

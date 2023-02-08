@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 
+import { useRouter } from 'next/router'
 import { AiOutlineUser } from 'react-icons/ai'
 import { BsCalendar2Week } from 'react-icons/bs'
 import { CiSearch } from 'react-icons/ci'
@@ -14,11 +15,13 @@ import { getHotelsAction } from 'redux/actions/hotelActions'
 import getErrorsSelector from 'redux/selectors/errorSelector'
 import getHotelsSelector from 'redux/selectors/hotelSelector'
 
-function SearchHotel({ hotels, error, getHotelsAction }: any) {
+function SearchHotel({ hotels, getHotelsAction }: any) {
   const { promiseInProgress } = usePromiseTracker()
+  const router = useRouter()
   const [timer, setTimer] = useState<any>(null)
 
-  const [params, setparams] = useState({
+  const [searchQuery, setsearchQuery] = useState({
+    limit: 10,
     city: '',
     checkin: '',
     checkout: '',
@@ -26,10 +29,10 @@ function SearchHotel({ hotels, error, getHotelsAction }: any) {
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setparams({ ...params, [e.target.name]: e.target.value })
+    setsearchQuery({ ...searchQuery, [e.target.name]: e.target.value })
     clearTimeout(timer)
     const newTimer = setTimeout(() => {
-      getHotelsAction({ ...params, [e.target.name]: e.target.value })
+      getHotelsAction({ ...searchQuery, [e.target.name]: e.target.value })
     }, 500)
 
     setTimer(newTimer)
@@ -37,12 +40,23 @@ function SearchHotel({ hotels, error, getHotelsAction }: any) {
 
   const handleSubmit = () => {
     clearTimeout(timer)
-    getHotelsAction(params)
+    getHotelsAction(searchQuery)
   }
 
   useEffect(() => {
-    getHotelsAction(params)
-  }, [])
+    if (router.isReady) {
+      const { city, checkin, checkout, travelers } = router.query
+      setsearchQuery({
+        ...searchQuery,
+        city: city as string,
+        checkin: checkin as string,
+        checkout: checkout as string,
+        travelers: travelers as string,
+      })
+    }
+    getHotelsAction(searchQuery)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady])
 
   return (
     <Container>
@@ -56,7 +70,7 @@ function SearchHotel({ hotels, error, getHotelsAction }: any) {
               subTitle={'Where are you going?'}
               icon={<TiLocationArrowOutline size={18} />}
               handleChange={e => handleChange(e)}
-              value={params.city}
+              value={searchQuery.city}
             />
 
             <SearchTextInput
@@ -86,9 +100,9 @@ function SearchHotel({ hotels, error, getHotelsAction }: any) {
             <button
               type='submit'
               onClick={() => handleSubmit()}
-              className='w-full rounded-sm  bg-co-blue text-white flex items-center justify-center'
+              className='w-full rounded-sm py-1  bg-co-blue text-white flex items-center justify-center'
             >
-              <CiSearch size={40} className='md:hidden lg:block' />
+              <CiSearch size={30} className='md:hidden lg:block' />
               <p className='lg:hidden text-xl'>Search</p>
             </button>
           </div>

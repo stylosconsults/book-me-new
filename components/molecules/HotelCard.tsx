@@ -50,13 +50,13 @@ export default function HotelCard({
         <div className='px-5 pb-5'>
           <div className='flex justify-between py-3'>
             <div className=''>
-              <p className='hover:text-[#3B71FE] text-base font-medium duration-200 text-co-black'>
+              <p className='hover:text-[#3B71FE] text-sm font-medium duration-200 text-co-black'>
                 {name}
               </p>
               <p className='text-xs'>{location}</p>
             </div>
             <div className='py-1 px-2 h-fit border-2 rounded border-co-green'>
-              <p className='text-co-green text-xs text-center font-bold uppercase'>
+              <p className='text-co-green text-[10px] text-center font-bold uppercase'>
                 {state}
               </p>
             </div>

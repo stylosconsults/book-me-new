@@ -1,13 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 
+import { useRouter } from 'next/router'
 import { AiOutlineUser } from 'react-icons/ai'
 import { BsCalendar2Week } from 'react-icons/bs'
 import { CiSearch } from 'react-icons/ci'
 import { TiLocationArrowOutline } from 'react-icons/ti'
 
 import SearchTextInput from 'components/molecules/SearchTextInput'
+import { createQueryParams } from 'utils/params'
 
 export default function SearchHotel() {
+  const router = useRouter()
+  const [params, setparams] = useState({
+    city: '',
+    checkin: '',
+    checkout: '',
+    travelers: '',
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setparams({ ...params, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault()
+    const query = createQueryParams(params)
+    if (query) {
+      router.push(`/search?${query}`)
+    }
+  }
+
   return (
     <div
       className='w-10/12 mx-auto p-10 rounded-3xl shadow-co-search bg-co-search border border-[#FCFCFD]'
@@ -17,12 +39,16 @@ export default function SearchHotel() {
       }}
     >
       {/* tab */}
-      <div className='flex flex-col lg:flex-row gap-1 lg:gap-0 justify-between items-start lg:items-center'>
+      <form
+        onSubmit={handleSubmit}
+        className='flex flex-col lg:flex-row gap-1 lg:gap-0 justify-between items-start lg:items-center'
+      >
         <SearchTextInput
           placeholder={'Location'}
           type={'text'}
-          name={'location'}
+          name={'city'}
           subTitle={'Where are you going?'}
+          handleChange={handleChange}
           icon={<TiLocationArrowOutline size={18} />}
         />
 
@@ -57,7 +83,7 @@ export default function SearchHotel() {
           <CiSearch size={40} className='md:hidden lg:block' />
           <p className='lg:hidden text-xl'>Search</p>
         </button>
-      </div>
+      </form>
     </div>
   )
 }

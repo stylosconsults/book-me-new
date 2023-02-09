@@ -11,7 +11,7 @@ export default function Navbar() {
     <Fragment>
       <div className='flex md:flex-row flex-col gap-1 text-tertiary'>
         <div className='flex items-center'>
-          <Image src={Logo} alt='Logo' width={50} height={50} />
+          <Image src={Logo} alt='Logo' fill />
           <div>
             <Link href='/' legacyBehavior passHref>
               <a className='transition-all cursor-pointer text-primary font-bold text-xl block leading-3'>

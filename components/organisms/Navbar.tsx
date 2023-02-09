@@ -9,12 +9,7 @@ export default function Navbar() {
     <Fragment>
       <div className='flex md:flex-row flex-col gap-1 text-tertiary'>
         <div className='flex items-center'>
-          <Image
-            src='/static/images/works/test.jpg'
-            alt='Logo'
-            width={50}
-            height={50}
-          />
+          <Image src='/logo.png' alt='Logo' width={50} height={50} />
           <div>
             <Link href='/' legacyBehavior passHref>
               <a className='transition-all cursor-pointer text-primary font-bold text-xl block leading-3'>

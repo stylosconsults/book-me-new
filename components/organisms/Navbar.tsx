@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { AiOutlineUser } from 'react-icons/ai'
 
@@ -8,8 +9,7 @@ export default function Navbar() {
     <Fragment>
       <div className='flex md:flex-row flex-col gap-1 text-tertiary'>
         <div className='flex items-center'>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src='/static/images/works/test.jpg'
             alt='Logo'
             width={50}

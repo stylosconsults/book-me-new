@@ -7,22 +7,26 @@ export default function Navbar() {
   return (
     <Fragment>
       <div className='flex md:flex-row flex-col gap-1 text-tertiary'>
-        <div className=''>
-          <Link href='/' legacyBehavior>
-            <div className='flex items-center'>
+        <div className='flex items-center'>
+          <Link href={'/'}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src='/logo.jpg' alt='Logo' width={50} height={50} />
+          </Link>
+          <div>
+            <Link href='/' legacyBehavior>
               <a className='transition-all cursor-pointer text-primary font-bold text-xl block leading-3'>
                 Bookme
               </a>
-            </div>
-          </Link>
-          <a
-            target='_blank'
-            href='https://GoDiscoverAfrica.rw'
-            rel='noreferrer'
-            className='leading-3 text-secondary hover:underline text-xs'
-          >
-            power by GoDiscoverAfrica
-          </a>
+            </Link>
+            <a
+              target='_blank'
+              href='https://GoDiscoverAfrica.rw'
+              rel='noreferrer'
+              className='leading-3 text-secondary hover:underline text-xs'
+            >
+              power by GoDiscoverAfrica
+            </a>
+          </div>
         </div>
       </div>
       <div className='flex md:flex-row flex-col items-start md:items-center space-x-0 md:space-x-4'>

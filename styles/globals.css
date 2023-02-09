@@ -191,3 +191,7 @@
     -webkit-animation: blink-animation 1.5s steps(2, start) infinite;
   }
 }
+
+body:has(.disable-scroll){
+  overflow: hidden;
+}

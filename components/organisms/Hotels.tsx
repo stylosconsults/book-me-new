@@ -4,6 +4,7 @@ import { usePromiseTracker } from 'react-promise-tracker'
 import { connect } from 'react-redux'
 
 import Heading from 'components/atoms/Heading'
+import Spinner from 'components/atoms/Spinner'
 import HotelCard from 'components/molecules/HotelCard'
 import { getHotelsAction } from 'redux/actions/hotelActions'
 import getHotelsSelector from 'redux/selectors/hotelSelector'
@@ -45,7 +46,9 @@ function Hotels({ hotels, getHotelsAction }: any) {
             ) : null}
           </>
         ) : (
-          <p>Loading ...</p>
+          <div className='mt-3'>
+            <Spinner />
+          </div>
         )}
       </div>
     </div>

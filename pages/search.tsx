@@ -8,6 +8,7 @@ import { TiLocationArrowOutline } from 'react-icons/ti'
 import { usePromiseTracker } from 'react-promise-tracker'
 import { connect } from 'react-redux'
 
+import Spinner from 'components/atoms/Spinner'
 import Container from 'components/Container'
 import HotelCard from 'components/molecules/HotelCard'
 import SearchTextInput from 'components/molecules/SearchTextInput'
@@ -138,7 +139,9 @@ function SearchHotel({ hotels, getHotelsAction }: any) {
                 ) : null}
               </>
             ) : (
-              <p>Loading ...</p>
+              <div className='mt-3'>
+                <Spinner />
+              </div>
             )}
           </div>
         </div>

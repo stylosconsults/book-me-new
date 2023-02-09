@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
+import Spinner from 'components/atoms/Spinner'
+
 export default function Loading() {
   const router = useRouter()
 
@@ -14,7 +16,7 @@ export default function Loading() {
       url === router.asPath &&
       setTimeout(() => {
         setLoading(false)
-      }, 2000)
+      }, 1000)
 
     router.events.on('routeChangeStart', handleStart)
     router.events.on('routeChangeComplete', handleComplete)
@@ -31,7 +33,7 @@ export default function Loading() {
     <>
       {loading && (
         <div className='overflow-hidden h-screen w-full fixed bg-white z-50 disable-scroll flex items-center justify-center'>
-          <div className='animate-spin w-10 h-10 border-2 rounded-full border-l-co-blue'></div>
+          <Spinner />
         </div>
       )}
     </>

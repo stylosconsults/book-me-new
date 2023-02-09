@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 
 import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
+import Spinner from 'components/atoms/Spinner'
 import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
 import PaymentForm from 'components/molecules/PaymentForm'

@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { connect } from 'react-redux'
 
-import Spinner from 'components/atoms/Spinner'
-import { updateBooking } from 'redux/actions/bookingAction'
-import getBookingsSelector from 'redux/selectors/bookingSelector'
+import Spinner from '../components/atoms/Spinner'
+import { updateBooking } from '../redux/actions/bookingAction'
+import getBookingsSelector from '../redux/selectors/bookingSelector'
 
 function BookingStatus({ bks, updateBooking }: any) {
   const router = useRouter()

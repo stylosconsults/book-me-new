@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { useRouter } from 'next/router'
 import { HiOutlineXMark } from 'react-icons/hi2'
@@ -10,13 +10,10 @@ import { connect } from 'react-redux'
 
 import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
-import Spinner from 'components/atoms/Spinner'
 import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
-import PaymentForm from 'components/molecules/PaymentForm'
 import RoomCard from 'components/molecules/RoomCard'
 import Steps from 'components/molecules/Steps'
-import SuccessBooking from 'components/molecules/SuccessBooking'
 import { bookingAction } from 'redux/actions/bookingAction'
 import { getRoomAction } from 'redux/actions/roomAction'
 import getBookingSelector from 'redux/selectors/bookingSelector'
@@ -29,6 +26,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
   const [current, setCurrent] = useState<number>(0)
   const [disableSubmit, setdisableSubmit] = useState<boolean>(true)
   const [amountToPay, setamountToPay] = useState<number>(room?.amount)
+  const [submited, setsubmited] = useState<boolean>(false)
   const [nightsToStay, setnightsToStay] = useState(1)
   const [validationErrors, setValidationErrors] = useState<
     { name: string; message: string }[]
@@ -46,6 +44,13 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady])
+
+  useEffect(() => {
+    if (submited && bks?.bookings?.id && !bks.loading) {
+      setCurrent(current + 1)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submited])
 
   useEffect(() => {
     setamountToPay(room?.price)
@@ -68,7 +73,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
     'Hotel room info',
     'Personal Information',
     'Booking Details',
-    'Payment',
+    'Final',
   ]
 
   const processingBooking = async () => {
@@ -82,7 +87,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
       room: room?.id,
       amount: amountToPay,
     })
-    setCurrent(current + 1)
+    setsubmited(true)
   }
 
   useEffect(() => {
@@ -315,11 +320,13 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
       >
         <div className={`${current !== 2 && 'max-w-md'} `}>
           <>
-            <p className={'font-bold mb-4'}>
-              You are booking for{' '}
-              <span className='text-co-blue'>{room?.name}</span> in{' '}
-              <span className='text-co-blue'>{room?.hotel.name}</span>
-            </p>
+            {current != 3 && (
+              <p className={'font-bold mb-4'}>
+                You are booking for{' '}
+                <span className='text-co-blue'>{room?.name}</span> in{' '}
+                <span className='text-co-blue'>{room?.hotel.name}</span>
+              </p>
+            )}
             {current === 0 && (
               <div className='flex flex-col'>
                 <div className='flex flex-col gap-2'>
@@ -549,13 +556,34 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
             )}
             {current === 3 && (
               <div className='flex flex-col gap-4'>
-                {
+                {/* {
                   <PaymentForm
                     amountToPay={amountToPay}
                     setNextStep={setCurrent}
                     current={current}
+                    bookingID={bks?.bookings.id}
                   />
-                }
+                } */}
+                <h1 className='font-bold'>
+                  Thank you for booking with
+                  <span className='text-co-blue hover:underline cursor-pointer'>
+                    {' '}
+                    bookme.rw
+                  </span>{' '}
+                  powered by GoDiscoverAfrica
+                </h1>
+                <p>
+                  We have sent you an email containing information about your
+                  booking. We will notify you with an email if your booking was
+                  approved and a link for payment.
+                </p>
+                <Button
+                  onClick={() => {
+                    router.push('/')
+                  }}
+                >
+                  Go Back Home
+                </Button>
               </div>
             )}
             {current !== 3 && (
@@ -581,6 +609,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                 </Button>
                 {current > 0 && current != steps.length - 1 && (
                   <Button
+                    disabled={bks?.loading}
                     onClick={() => setCurrent(current - 1)}
                     className='mt-5'
                   >

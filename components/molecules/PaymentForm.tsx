@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import axios from 'axios'
 
@@ -10,9 +10,15 @@ interface PaymentFormProps {
   setNextStep?: any
   current?: number
   amountToPay: number
+  bookingID: string
 }
 
-function PaymentForm({ setNextStep, current, amountToPay }: PaymentFormProps) {
+function PaymentForm({
+  setNextStep,
+  current,
+  amountToPay,
+  bookingID,
+}: PaymentFormProps) {
   let Checkout: any
   if (typeof window !== 'undefined') {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -36,9 +42,9 @@ function PaymentForm({ setNextStep, current, amountToPay }: PaymentFormProps) {
       },
       merchant: '8206000697',
       order: {
-        amount: amountToPay,
+        amount: 0.1,
         currency: 'USD',
-        description: `Book`,
+        description: `Payment testing for booking with GoDiscoverAfrica via bookme.rw for amount ${0.1}`,
         id: uid,
         reference: uid,
       },
@@ -64,13 +70,13 @@ function PaymentForm({ setNextStep, current, amountToPay }: PaymentFormProps) {
     const uid = Math.abs(new Date().valueOf())
     await axios
       .post(`${process.env.NEXT_PUBLIC_BACKEND_API}/payments/session`, {
-        amount: amountToPay,
+        amount: 0.1,
       })
       .then(res => {
+        localStorage.setItem('bookingID', bookingID)
         pay(res.data.sessionId, uid)
       })
       .catch(function (error) {
-        console.log(error)
         setError('Something went wrong')
       })
     setisLoading(false)

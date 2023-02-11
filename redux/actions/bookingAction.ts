@@ -23,7 +23,6 @@ export const bookingAction = (bookingdata: any) => async (dispatch: any) => {
     const { data } = await trackPromise(
       axios.post(`${API_URL}/bookings`, {
         ...bookingdata,
-        status: 'unpayed',
       })
     )
     dispatch(bookingSuccess(data))
@@ -53,15 +52,14 @@ export const updateBooking =
     try {
       const { data } = await trackPromise(
         axios.patch(`${API_URL}/bookings/${id}`, {
-          status: 'payed',
           ...bookingdata,
         })
       )
       dispatch(bookingSuccess(data))
     } catch (err) {
+      dispatch(bookingLoading(false))
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       dispatch(getError(err?.response?.data.message?.toString() || ''))
-      dispatch(bookingLoading(false))
     }
   }

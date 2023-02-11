@@ -52,10 +52,6 @@ export default function SuccessBooking({
           <span className='text-co-black'>{bookings?.phone}</span>
         </li>
         <li className='flex items-center gap-1'>
-          <IoMdCheckmark /> Payment method:{' '}
-          <span className='text-co-black'>{bookings?.paymentMethod}</span>
-        </li>
-        <li className='flex items-center gap-1'>
           <IoMdCheckmark /> Total price:{' '}
           <span className='text-co-black'>${bookings?.amount}</span>
         </li>
@@ -63,16 +59,16 @@ export default function SuccessBooking({
           <IoMdCheckmark /> Status:
           <span
             className={`text-co-black capitalize font-bold ml-1 ${
-              bookings?.status === 'unpayed' ? 'text-red-600' : 'text-co-green'
+              bookings?.status === 'approved' ? 'text-red-600' : 'text-co-green'
             }`}
           >
-            {bookings?.status}
+            {bookings?.status == 'approved' ? 'Not paid' : bookings?.status}
           </span>
         </li>
       </ul>
       {
         // if status is unpayed, show button to pay
-        bookings?.status === 'unpayed' && (
+        bookings?.status === 'approved' && (
           <>
             <p className='flex gap-1 items-center'>
               <HiLink />{' '}

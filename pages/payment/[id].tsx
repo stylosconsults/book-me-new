@@ -10,21 +10,20 @@ import PaymentForm from 'components/molecules/PaymentForm'
 import RoomCard from 'components/molecules/RoomCard'
 import SuccessBooking from 'components/molecules/SuccessBooking'
 import { CustomCardData } from 'pages/booking/[id]'
-import { getBooking, updateBooking } from 'redux/actions/bookingAction'
+import { getBooking } from 'redux/actions/bookingAction'
 import getBookingSelector from 'redux/selectors/bookingSelector'
 import getErrorsSelector from 'redux/selectors/errorSelector'
 
-function Payment({ bks, errors, getBooking, updateBooking }: any) {
+function Payment({ bks, errors, getBooking }: any) {
   const [current, setCurrent] = useState(0)
-  const [id, setId] = useState('')
-  const [orderId, setorderId] = useState('')
+  const [bookingId, setBookingId] = useState('')
   const [bookings, setbookings] = useState<any>({})
   const router = useRouter()
 
   useEffect(() => {
     if (router.isReady) {
       getBooking(router.query.id)
-      setId(router.query.id?.toString() || '')
+      setBookingId(router.query.id?.toString() || '')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady])
@@ -41,7 +40,7 @@ function Payment({ bks, errors, getBooking, updateBooking }: any) {
     <Container>
       <Breadcrumb
         fullLocation={[
-          { name: 'Booking', link: `/booking/` },
+          { name: 'Booking', link: `/booking/${bks?.bookings?.room.id}` },
           { name: 'Payment', link: '/payment' },
         ]}
       />
@@ -145,6 +144,7 @@ function Payment({ bks, errors, getBooking, updateBooking }: any) {
                 current={current}
                 setNextStep={setCurrent}
                 amountToPay={bks?.bookings.amount}
+                bookingID={bookingId}
               />
             </div>
           )}
@@ -159,4 +159,4 @@ const mapStateToProps = (state: any) => ({
   errors: getErrorsSelector(state),
 })
 
-export default connect(mapStateToProps, { getBooking, updateBooking })(Payment)
+export default connect(mapStateToProps, { getBooking })(Payment)

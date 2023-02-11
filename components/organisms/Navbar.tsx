@@ -27,7 +27,7 @@ export default function Navbar() {
               rel='noreferrer'
               className='leading-3 text-secondary hover:underline text-xs'
             >
-              power by GoDiscoverAfrica
+              powered by GoDiscoverAfrica
             </a>
           </div>
         </div>

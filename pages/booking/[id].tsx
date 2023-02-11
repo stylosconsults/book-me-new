@@ -308,7 +308,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
             name: room?.hotel.name ?? '' + ' Hotel',
             link: '/hotel/' + room?.hotel.id,
           },
-          { name: room?.name ?? '' + ' Room', link: '/room/' + room?.id },
+          { name: room?.name ?? '' + ' Room', link: '/room/' + room?.id ?? '' },
         ]}
       />
       <div className='mt-10 w-full'>

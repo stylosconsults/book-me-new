@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 import { HiOutlineXMark } from 'react-icons/hi2'
@@ -12,6 +12,7 @@ import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
 import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
+import PaymentForm from 'components/molecules/PaymentForm'
 import RoomCard from 'components/molecules/RoomCard'
 import Steps from 'components/molecules/Steps'
 import { bookingAction } from 'redux/actions/bookingAction'
@@ -47,7 +48,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
 
   useEffect(() => {
     if (submited && bks?.bookings?.id && !bks.loading) {
-      setCurrent(current + 1)
+      setCurrent(3)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submited])
@@ -66,14 +67,14 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
     { name: 'lastName', value: '' },
     { name: 'email', value: '' },
     { name: 'phone', value: '' },
-    { name: 'arrivalTime', value: '' },
+    { name: 'arrivalTime', value: '00:00' },
   ])
 
   const steps = [
     'Hotel room info',
     'Personal Information',
     'Booking Details',
-    'Final',
+    'Payment Final',
   ]
 
   const processingBooking = async () => {
@@ -574,34 +575,24 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                 )}
                 {current === 3 && (
                   <div className='flex flex-col gap-4'>
-                    {/* {
-                  <PaymentForm
-                    amountToPay={amountToPay}
-                    setNextStep={setCurrent}
-                    current={current}
-                    bookingID={bks?.bookings.id}
-                  />
-                } */}
                     <h1 className='font-bold'>
-                      Thank you for booking with
-                      <span className='text-co-blue hover:underline cursor-pointer'>
-                        {' '}
-                        bookme.rw
-                      </span>{' '}
-                      powered by GoDiscoverAfrica
+                      You have now booked it is time to pay
                     </h1>
-                    <p>
-                      We have sent you an email containing information about
-                      your booking. We will notify you with an email if your
-                      booking was approved and a link for payment.
-                    </p>
-                    <Button
+                    {
+                      <PaymentForm
+                        amountToPay={amountToPay}
+                        setNextStep={setCurrent}
+                        current={current}
+                        bookingID={bks?.bookings.id}
+                      />
+                    }
+                    {/* <Button
                       onClick={() => {
                         router.push('/')
                       }}
                     >
                       Go Back Home
-                    </Button>
+                    </Button> */}
                   </div>
                 )}
                 {current !== 3 && (

@@ -7,6 +7,9 @@ function errorCallback(error) {
 
 function cancelCallback() {
   confirm('Are you sure you want to cancel?');
+  if(localStorage.getItem('bookingID')){
+    localStorage.removeItem('bookingID')
+  }
 }
 
 function completeCallback(resultIndicator,sessionVersion) {

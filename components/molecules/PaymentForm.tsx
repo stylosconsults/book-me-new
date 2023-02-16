@@ -42,9 +42,9 @@ function PaymentForm({
       },
       merchant: '8206000697',
       order: {
-        amount: 0.1,
+        amount: amountToPay,
         currency: 'USD',
-        description: `Payment testing for booking with GoDiscoverAfrica via bookme.rw for amount ${0.1}`,
+        description: `Payment for booking with GoDiscoverAfrica via bookme.rw for amount ${amountToPay}`,
         id: uid,
         reference: uid,
       },
@@ -70,7 +70,7 @@ function PaymentForm({
     const uid = Math.abs(new Date().valueOf())
     await axios
       .post(`${process.env.NEXT_PUBLIC_BACKEND_API}/payments/session`, {
-        amount: 0.1,
+        amount: amountToPay,
       })
       .then(res => {
         localStorage.setItem('bookingID', bookingID)

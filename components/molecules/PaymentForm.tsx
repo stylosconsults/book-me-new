@@ -106,14 +106,14 @@ function PaymentForm({
         >
           {isLoading ? 'Loading...' : 'Pay now'}
         </Button>
-        <Button
+        {/* <Button
           disabled={isLoading}
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           onClick={() => setNextStep(current! - 1)}
           className='mt-5'
         >
           Back
-        </Button>
+        </Button> */}
       </div>
     </>
   )

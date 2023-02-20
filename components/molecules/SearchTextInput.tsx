@@ -7,7 +7,9 @@ interface SearchTextInputProps {
   subTitle: string
   icon: JSX.Element
   value?: string
+  readonly?: boolean
   handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  [x: string | number | symbol]: unknown
 }
 export default function SearchTextInput({
   placeholder,
@@ -15,8 +17,10 @@ export default function SearchTextInput({
   name,
   subTitle,
   type,
+  readonly,
   value,
   handleChange,
+  ...props
 }: SearchTextInputProps) {
   return (
     <label className='flex flex-row gap-1 bg-black/10 lg:bg-transparent p-2 lg:p-0 w-full lg:max-w-[200px]'>
@@ -28,7 +32,9 @@ export default function SearchTextInput({
           type={'text'}
           defaultValue={value}
           name={name}
+          readOnly={readonly}
           onChange={e => handleChange && handleChange(e)}
+          {...props}
         />
         <p className='text-gray-500 font-light text-sm'>{subTitle}</p>
       </div>

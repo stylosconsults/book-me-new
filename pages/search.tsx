@@ -26,7 +26,7 @@ function SearchHotel({ hotels, getHotelsAction }: any) {
     city: '',
     checkin: '',
     checkout: '',
-    travelers: '',
+    name: '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,13 +46,13 @@ function SearchHotel({ hotels, getHotelsAction }: any) {
 
   useEffect(() => {
     if (router.isReady) {
-      const { city, checkin, checkout, travelers } = router.query
+      const { city, checkin, checkout, name } = router.query
       setsearchQuery({
         ...searchQuery,
         city: city as string,
         checkin: checkin as string,
         checkout: checkout as string,
-        travelers: travelers as string,
+        name: name as string,
       })
     }
     getHotelsAction(searchQuery)
@@ -64,6 +64,15 @@ function SearchHotel({ hotels, getHotelsAction }: any) {
       <div className='w-full flex'>
         <div className='max-w-xs w-[320px] border shadow-co-search py-3 px-2 h-fit sticky top-32'>
           <div className='flex flex-col gap-3 pl-2'>
+            <SearchTextInput
+              placeholder={'Name'}
+              type={'text'}
+              name={'name'}
+              subTitle={'Hotel name'}
+              handleChange={e => handleChange(e)}
+              icon={<AiOutlineUser size={18} />}
+            />
+
             <SearchTextInput
               placeholder={'Location'}
               type={'text'}
@@ -88,14 +97,6 @@ function SearchHotel({ hotels, getHotelsAction }: any) {
               name={'location'}
               subTitle={'Add date'}
               icon={<BsCalendar2Week size={18} />}
-            />
-
-            <SearchTextInput
-              placeholder={'Travelers'}
-              type={'number'}
-              name={'location'}
-              subTitle={'Travelers'}
-              icon={<AiOutlineUser size={18} />}
             />
 
             <button

@@ -10,5 +10,6 @@ export function createQueryParams(params: any) {
       return acc
     }, [])
     .join('&')
+  console.log(query)
   return query
 }

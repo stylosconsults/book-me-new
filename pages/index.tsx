@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { Zoom } from 'react-slideshow-image'
 
 import Container from 'components/Container'

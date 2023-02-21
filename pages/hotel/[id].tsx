@@ -17,7 +17,7 @@ import { getRoomsAction } from 'redux/actions/roomAction'
 import getErrorsSelector from 'redux/selectors/errorSelector'
 import { getRoomsSelector } from 'redux/selectors/roomSelector'
 
-function HotelDetails({ rooms, errors, getRoomsAction }: any) {
+function HotelDetails({ rooms, getRoomsAction }: any) {
   const [activeTab, setactiveTab] = useState(0)
   const { promiseInProgress } = usePromiseTracker()
   const router = useRouter()
@@ -30,7 +30,12 @@ function HotelDetails({ rooms, errors, getRoomsAction }: any) {
   }, [router.isReady])
 
   return (
-    <Container>
+    <Container
+      title={rooms?.hotel?.name}
+      description={rooms?.hotel?.description}
+      image={rooms?.hotel?.images[0]}
+      hotelName={rooms?.hotel?.name}
+    >
       <Breadcrumb
         fullLocation={[
           {
@@ -74,7 +79,10 @@ function HotelDetails({ rooms, errors, getRoomsAction }: any) {
             <h3 className='mb-4 font-semibold text-co-black text-2xl'>
               Description
             </h3>
-            <p className='text-co-black w-10/12'>
+            <p
+              className='text-co-black w-10/12'
+              style={{ whiteSpace: 'pre-wrap' }}
+            >
               {rooms?.hotel.description}
               {rooms?.hotel.description.length === 0 && (
                 <span>

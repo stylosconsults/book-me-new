@@ -9,14 +9,16 @@ import cn from 'lib/classNames'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Container(props: any) {
-  const { children, ...customMeta } = props
+  const { children, title, description, image, hotelName, ...customMeta } =
+    props
   const router = useRouter()
 
   const meta = {
-    title: 'Bookme',
-    description: 'Booking Platform for african restaurents',
+    title: title ?? 'Bookme',
+    description: description ?? 'Booking Platform for african restaurents',
     image:
-      'https://cdn.discordapp.com/attachments/797485737272541250/893912493255176192/UnicornVectorGradient_7.png',
+      image ??
+      'https://res.cloudinary.com/igitego-hotels/image/upload/v1675936956/Logos/logo_m85oyx.png',
     type: 'website',
     ...customMeta,
   }
@@ -42,19 +44,21 @@ export default function Container(props: any) {
             href={`https://template.cretu.dev/${router.asPath}`}
           />
           <meta property='og:type' content={meta.type} />
-          <meta property='og:site_name' content='Cristian Crețu' />
+          <meta property='og:site_name' content='Bookme' />
           <meta property='og:description' content={meta.description} />
           <meta property='og:title' content={meta.title} />
           <meta property='og:image' content={meta.image} />
           <meta name='twitter:card' content='summary_large_image' />
-          <meta name='twitter:site' content='@cristicrtu' />
+          <meta name='twitter:site' content='@GodiscoverA' />
           <meta name='twitter:title' content={meta.title} />
           <meta name='twitter:description' content={meta.description} />
           <meta name='twitter:image' content={meta.image} />
           {meta.date && (
             <meta property='article:published_time' content={meta.date} />
           )}
-          <title>bookme.rw - book hotels for your trip to rwanda</title>
+          <title>
+            Bookme.rw - book {hotelName ?? ''} hotels for your trip to rwanda
+          </title>
         </Head>
 
         <nav className='md:sticky w-full z-50 bg-gray-100/10 font-sans filter-blur dark:bg-gray-1000/40 top-2 sm:px-3 md:top-4 max-w-6xl md:py-2 rounded-md mx-auto flex flex-col md:flex-row justify-between md:items-center items-start pl-5 py-5 md:pl-0'>

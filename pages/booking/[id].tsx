@@ -548,7 +548,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                       />
                       <CustomCardData
                         title={'Room'}
-                        pageIndex={2}
+                        pageIndex={0}
                         changeState={(page: number) => setCurrent(page)}
                         columns={[
                           {

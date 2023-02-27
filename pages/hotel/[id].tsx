@@ -72,7 +72,7 @@ function HotelDetails({ rooms, getRoomsAction }: any) {
             <Tabs
               activeTab={activeTab}
               setactiveTab={index => setactiveTab(index)}
-              tabs={['Overview', 'Room', 'Amerities', 'Policies']}
+              tabs={['Overview', 'Room', 'Amenities', 'Policies']}
             />
           </div>
 
@@ -153,7 +153,7 @@ function HotelDetails({ rooms, getRoomsAction }: any) {
               </p>
             )}
             {(activeTab === 0 || activeTab === 4) && (
-              <div className='rounded-md overflow-hidden'>
+              <div className='rounded-md overflow-hidden hidden'>
                 <h3 className='my-4 font-semibold text-co-black text-2xl'>
                   Hotel Location
                 </h3>

@@ -56,7 +56,7 @@ export default function HotelCard({
               <p className='text-xs'>{location}</p>
             </div>
             <div className='py-1 px-2 h-fit border-2 rounded border-co-green'>
-              <p className='text-co-green text-[10px] text-center font-bold uppercase'>
+              <p className='text-co-green text-[8px] text-center font-bold uppercase'>
                 {state}
               </p>
             </div>

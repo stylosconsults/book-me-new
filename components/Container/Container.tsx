@@ -37,11 +37,11 @@ export default function Container(props: any) {
           <meta name='robots' content='follow, index' />
           <meta
             property='og:url'
-            content={`https://template.cretu.dev/${router.asPath}`}
+            content={`https://admin.bookme.rw/${router.asPath}`}
           />
           <link
             rel='canonical'
-            href={`https://template.cretu.dev/${router.asPath}`}
+            href={`https://admin.bookme.rw/${router.asPath}`}
           />
           <meta property='og:type' content={meta.type} />
           <meta property='og:site_name' content='Bookme' />

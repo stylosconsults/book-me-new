@@ -19,6 +19,7 @@
     "eslint-config-prettier": "^8.6.0",
     "immutable": "^4.2.2",
     "next": "^13.1.1",
+    "next-seo": "^5.15.0",
     "next-themes": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -62,15 +63,12 @@
     }
   },
   "author": {
-    "email": "crisemcr@gmail.com",
-    "name": "Cristian Crețu",
-    "url": "https://cretu.dev"
+    "email": "phelixdusengimana@gmail.com",
+    "name": "Felix Dusengimana",
+    "url": "https://feldux.com"
   },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cristicretu/ts-next-tailwind-template/issues"
-  },
-  "homepage": "https://template.cretu.dev",
+  "homepage": "https://admin.bookme.rw",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -84,10 +82,10 @@
     ]
   },
   "keywords": [
-    "tailwindcss",
-    "template",
-    "radix",
-    "react",
-    "nextjs"
+    "booking",
+    "hotel",
+    "website",
+    "room",
+    "hotels in africa"
   ]
 }

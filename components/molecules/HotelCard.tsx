@@ -2,28 +2,28 @@ import React from 'react'
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { AiFillStar } from 'react-icons/ai'
+import { MdOutlineLocalHotel } from 'react-icons/md'
 
 interface HotelCardProps {
   id: string
   name: string
-  location: string
+  city: string
   state: string
-  date: string
-  rating?: number
+  address: string
   image: string
   width?: string
+  RoomNumbers: number
 }
 import { BlurredDataImage, ImagePlaceholderOnError } from 'utils/blurredImage'
 
 export default function HotelCard({
   id,
-  date,
+  address,
   name,
   state,
-  rating,
-  location,
+  city,
   image,
+  RoomNumbers,
   width = 'calc(25% - 20px)',
 }: HotelCardProps) {
   return (
@@ -53,7 +53,7 @@ export default function HotelCard({
               <p className='hover:text-[#3B71FE] text-sm font-medium duration-200 text-co-black'>
                 {name}
               </p>
-              <p className='text-xs'>{location}</p>
+              <p className='text-xs'>{city}</p>
             </div>
             <div className='py-1 px-2 h-fit border-2 rounded border-co-green'>
               <p className='text-co-green text-[8px] text-center font-bold uppercase'>
@@ -73,11 +73,13 @@ export default function HotelCard({
           </div>
           <div className='w-full h-[1px] bg-co-gray'></div>
           <div className='flex justify-between py-3'>
-            <p className='text-[#777E90] text-xs'>{date}</p>
-            <div className='flex items-center text-xs font-semibold'>
-              <AiFillStar size='14' color='#FFD166' />
-              <p>{rating}</p>
-            </div>
+            <p className='text-[#777E90] text-xs'>{address}</p>
+            {/* {RoomNumbers > 0 && (
+              <div className='flex items-center'>
+                <MdOutlineLocalHotel className='text-[#FFC107] text-xs' />
+                <p className='text-[#777E90] text-xs ml-1'> {RoomNumbers}</p>
+              </div>
+            )} */}
           </div>
         </div>
       </Link>

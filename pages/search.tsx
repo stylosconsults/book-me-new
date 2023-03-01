@@ -115,7 +115,7 @@ function SearchHotel({ hotels, getHotelsAction }: any) {
               <>
                 {hotels?.results?.map(
                   (
-                    { images, id, name, city, state, address }: any,
+                    { images, id, name, city, state, amenities, address }: any,
                     index: number
                   ) => (
                     <Fragment key={index}>
@@ -123,10 +123,10 @@ function SearchHotel({ hotels, getHotelsAction }: any) {
                         id={id}
                         image={images[0]}
                         name={name}
-                        location={city}
                         state={state}
-                        date={address}
-                        rating={5}
+                        address={address}
+                        city={city}
+                        RoomNumbers={amenities.length || 0}
                         width='calc(33.3% - 20px)'
                       />
                     </Fragment>

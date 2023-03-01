@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import { HiOutlineXMark } from 'react-icons/hi2'
 import { IoMdCheckmark } from 'react-icons/io'
 import DatePicker from 'react-multi-date-picker'
@@ -304,6 +305,9 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
 
   return (
     <Container>
+      <NextSeo
+        title={`Book Room in ${room?.hotel?.name || 'hotel'} | BookMe`}
+      />
       <Breadcrumb
         fullLocation={[
           {

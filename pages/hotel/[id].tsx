@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import { HiOutlineXMark } from 'react-icons/hi2'
 import { IoMdCheckmark } from 'react-icons/io'
 import { usePromiseTracker } from 'react-promise-tracker'
@@ -31,12 +32,23 @@ function HotelDetails({ rooms, getRoomsAction }: any) {
   }, [router.isReady])
 
   return (
-    <Container
-      title={rooms?.hotel?.name}
-      description={rooms?.hotel?.description}
-      image={rooms?.hotel?.images[0]}
-      hotelName={rooms?.hotel?.name}
-    >
+    <Container>
+      <NextSeo
+        title={`${rooms?.hotel?.name || ''} | BookMe`}
+        description={rooms?.hotel?.description}
+        openGraph={{
+          title: rooms?.hotel?.name,
+          description: rooms?.hotel?.description,
+          images: [
+            {
+              url: rooms?.hotel?.images[0],
+              width: 800,
+              height: 600,
+              alt: rooms?.hotel?.name,
+            },
+          ],
+        }}
+      />
       <Breadcrumb
         fullLocation={[
           {

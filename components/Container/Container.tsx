@@ -9,8 +9,7 @@ import cn from 'lib/classNames'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Container(props: any) {
-  const { children, title, description, image, hotelName, ...customMeta } =
-    props
+  const { children, title, description, image, ...customMeta } = props
   const router = useRouter()
 
   const meta = {
@@ -37,12 +36,9 @@ export default function Container(props: any) {
           <meta name='robots' content='follow, index' />
           <meta
             property='og:url'
-            content={`https://admin.bookme.rw/${router.asPath}`}
+            content={`https://bookme.rw/${router.asPath}`}
           />
-          <link
-            rel='canonical'
-            href={`https://admin.bookme.rw/${router.asPath}`}
-          />
+          <link rel='canonical' href={`https://bookme.rw/${router.asPath}`} />
           <meta property='og:type' content={meta.type} />
           <meta property='og:site_name' content='Bookme' />
           <meta property='og:description' content={meta.description} />

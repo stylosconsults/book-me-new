@@ -19,7 +19,7 @@ export const getHotelsAction =
       limit: 20,
       name: '',
       page: 1,
-      status: 'Inactive',
+      status: '',
     }
   ) =>
   async (dispatch: any) => {

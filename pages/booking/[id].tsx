@@ -67,6 +67,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
     { name: 'lastName', value: '' },
     { name: 'email', value: '' },
     { name: 'phone', value: '' },
+    { name: 'guests', value: 1 },
     { name: 'arrivalTime', value: '00:00' },
   ])
 
@@ -409,7 +410,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                       <Input
                         name='numberOfRooms'
                         type='number'
-                        label='Number of rooms'
+                        label='Number of Rooms'
                         value={getInputValue('numberOfRooms')}
                         min='1'
                         error={checkIfInputHasError('numberOfRooms')}
@@ -420,6 +421,19 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                           )
                           handleInputChange(e.target)
                         }}
+                      />
+                    </div>
+                    <div className='mt-3'>
+                      <Input
+                        name='guests'
+                        type='number'
+                        label='Number of Guests'
+                        value={getInputValue('guests')}
+                        min='1'
+                        error={checkIfInputHasError('guests')}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleInputChange(e.target)
+                        }
                       />
                     </div>
                     <div className='flex items-center gap-2 mt-3'>

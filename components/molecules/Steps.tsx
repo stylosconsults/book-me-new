@@ -19,7 +19,7 @@ export default function Steps({ current, setCurrent, steps }: StepsProps) {
             }
               ${index == current && 'text-co-black'}`}
             onClick={() => {
-              if (index < current) {
+              if (index < current && current != steps.length - 1) {
                 setCurrent !== undefined ? setCurrent(index) : {}
               }
             }}

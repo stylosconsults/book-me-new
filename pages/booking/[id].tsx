@@ -48,9 +48,10 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
   }, [router.isReady])
 
   useEffect(() => {
-    if (submited && bks?.bookings?.id && !bks.loading) {
+    if (submited && Object.keys(bks.bookings).length > 0 && !bks.loading) {
       setCurrent(3)
     }
+    setsubmited(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submited])
 
@@ -305,9 +306,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
 
   return (
     <Container>
-      <NextSeo
-        title={`Book Room in ${room?.hotel?.name || 'hotel'} | BookMe`}
-      />
+      <NextSeo title={`Book Room in ${room?.hotel?.name || 'hotel'}`} />
       <Breadcrumb
         fullLocation={[
           {

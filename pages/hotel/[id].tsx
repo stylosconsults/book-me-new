@@ -66,11 +66,7 @@ function HotelDetails({ rooms, getRoomsAction }: any) {
         <>
           <div className='mt-3'>
             <HotelMosaicImages
-              images={
-                rooms?.hotel.images.length > 0
-                  ? rooms.hotel.images
-                  : ['/static/images/other/hotel-placeholder.jpg']
-              }
+              slides={rooms?.hotel.images.length > 0 ? rooms.hotel.images : []}
             />
           </div>
           <div>

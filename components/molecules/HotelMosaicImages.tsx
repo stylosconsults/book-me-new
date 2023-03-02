@@ -1,48 +1,91 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
-interface HotelMosaicImages {
-  images: string[]
+import useEmblaCarousel, { EmblaOptionsType } from 'embla-carousel-react'
+import Image from 'next/image'
+
+import { BlurredDataImage } from 'utils/blurredImage'
+
+import { Thumb } from './ThumbCoursel'
+
+type PropType = {
+  slides: number[]
+  options?: EmblaOptionsType
 }
 
-export default function HotelMosaicImages({ images }: HotelMosaicImages) {
-  const imagesWithoutFirst = images?.slice(1)
+const EmblaCarousel: React.FC<PropType> = props => {
+  const { slides, options } = props
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [emblaMainRef, emblaMainApi] = useEmblaCarousel(options)
+  const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
+    containScroll: 'keepSnaps',
+    dragFree: true,
+  })
+
+  const onThumbClick = useCallback(
+    (index: number) => {
+      if (!emblaMainApi || !emblaThumbsApi) return
+      if (emblaThumbsApi.clickAllowed()) emblaMainApi.scrollTo(index)
+    },
+    [emblaMainApi, emblaThumbsApi]
+  )
+
+  const onSelect = useCallback(() => {
+    if (!emblaMainApi || !emblaThumbsApi) return
+    setSelectedIndex(emblaMainApi.selectedScrollSnap())
+    emblaThumbsApi.scrollTo(emblaMainApi.selectedScrollSnap())
+  }, [emblaMainApi, emblaThumbsApi, setSelectedIndex])
+
+  useEffect(() => {
+    if (!emblaMainApi) return
+    onSelect()
+    emblaMainApi.on('select', onSelect)
+    emblaMainApi.on('reInit', onSelect)
+  }, [emblaMainApi, onSelect])
+
   return (
-    <section className='overflow-hidden text-gray-700'>
-      <div className='flex flex-wrap w-full min-h-[60vh]'>
-        <div
-          className={`flex flex-wrap ${
-            images.length <= 1 ? 'w-full max-h-[90vh]' : 'w-1/2 md:py-2 md:pr-1'
-          }`}
-        >
-          <div className='w-full  rounded-lg overflow-hidden'>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              alt='gallery'
-              className='block object-fill object-center w-full h-full'
-              src={images[0]}
-            />
-          </div>
-        </div>
-        <div
-          className={`flex flex-wrap w-1/2 ${images.length <= 1 && 'hidden'}`}
-        >
-          {imagesWithoutFirst.map((src, index) => (
+    <div className=''>
+      <div className='overflow-hidden' ref={emblaMainRef}>
+        <div className='flex flex-row h-auto -ml-4'>
+          {slides.map((src, index) => (
             <div
+              className='flex-shrink-0 flex-grow-0 basis-full min-w-0 pl-4 relative'
               key={index}
-              className={`${
-                imagesWithoutFirst.length == 1 ? 'w-full' : 'w-1/2'
-              } md:py-2 md:px-1`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt='gallery'
-                className='block object-cover object-center w-full h-auto min-h-[40vh] rounded-lg'
-                src={src}
-              />
+              <div className='w-10 h-10 z-10 absolute top-2 right-2 rounded-full bg-black/10 font-bold text-center pointer-events-none flex items-center justify-center text-white'>
+                <span>{index + 1}</span>
+              </div>
+              <div className='relative h-[80vh] w-full'>
+                <Image
+                  className='block object-cover'
+                  src={src.toString()}
+                  alt='Your alt text'
+                  placeholder='blur'
+                  blurDataURL={BlurredDataImage}
+                  fill
+                />
+              </div>
             </div>
           ))}
         </div>
       </div>
-    </section>
+
+      <div className='mt-4'>
+        <div className='overflow-hidden' ref={emblaThumbsRef}>
+          <div className='flex flex-row -ml-4'>
+            {slides.map((src, index) => (
+              <Thumb
+                onClick={() => onThumbClick(index)}
+                selected={index === selectedIndex}
+                index={index}
+                imgSrc={src.toString()}
+                key={index}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
+
+export default EmblaCarousel

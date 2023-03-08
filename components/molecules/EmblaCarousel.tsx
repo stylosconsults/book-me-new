@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react'
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 
+import Autoplay from 'embla-carousel-autoplay'
 import useEmblaCarousel, { EmblaOptionsType } from 'embla-carousel-react'
 import Image from 'next/image'
 
@@ -13,13 +15,28 @@ type PropType = {
 }
 
 const EmblaCarousel: React.FC<PropType> = props => {
-  const { slides, options } = props
+  const { slides } = props
+  const options: EmblaOptionsType = {
+    dragFree: true,
+    containScroll: 'trimSnaps',
+  }
+  const autoplayOptions = useRef(
+    Autoplay(
+      { delay: 1000, stopOnInteraction: false },
+      // @ts-ignore
+      emblaRoot => emblaRoot.parentElement
+    )
+  )
+
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel(options)
-  const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
-    containScroll: 'keepSnaps',
-    dragFree: true,
-  })
+  const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel(
+    {
+      containScroll: 'keepSnaps',
+      dragFree: true,
+    },
+    [autoplayOptions.current]
+  )
 
   const onThumbClick = useCallback(
     (index: number) => {

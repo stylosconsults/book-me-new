@@ -59,16 +59,16 @@ export default function SuccessBooking({
           <IoMdCheckmark /> Status:
           <span
             className={`text-co-black capitalize font-bold ml-1 ${
-              bookings?.status === 'approved' ? 'text-red-600' : 'text-co-green'
+              bookings?.status != 'payed' ? 'text-red-600' : 'text-co-green'
             }`}
           >
-            {bookings?.status == 'approved' ? 'Not paid' : bookings?.status}
+            {bookings?.status != 'payed' ? 'Not paid' : bookings?.status}
           </span>
         </li>
       </ul>
       {
         // if status is unpayed, show button to pay
-        bookings?.status === 'approved' && (
+        bookings?.status !== 'payed' && (
           <>
             <p className='flex gap-1 items-center'>
               <HiLink />{' '}

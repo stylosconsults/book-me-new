@@ -48,7 +48,10 @@ function Payment({ bks, errors, getBooking }: any) {
           <>
             <Breadcrumb
               fullLocation={[
-                { name: 'Booking', link: `/booking/${bks?.bookings?.room.id}` },
+                {
+                  name: 'Booking',
+                  link: `/booking/${bks?.bookings?.room?.id ?? ''}`,
+                },
                 { name: 'Payment', link: '/payment' },
               ]}
             />
@@ -61,8 +64,11 @@ function Payment({ bks, errors, getBooking }: any) {
                   If you have booked with us and you do not see your information
                   on the link provided via your email here consider contacting
                   us visa
-                  <a href='' className='text-blue-600 ml-1'>
-                    support@booking.rw
+                  <a
+                    href='mailto:godiscoverafrica20@gmail.com'
+                    className='text-blue-600 ml-1'
+                  >
+                    godiscoverafrica20@gmail.com
                   </a>
                 </p>
               </div>

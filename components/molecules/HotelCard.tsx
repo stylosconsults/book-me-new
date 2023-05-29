@@ -27,12 +27,7 @@ export default function HotelCard({
   width = 'calc(25% - 20px)',
 }: HotelCardProps) {
   return (
-    <div
-      className='bg-white rounded-2xl group mt-5'
-      style={{
-        width: width,
-      }}
-    >
+    <div className='bg-white rounded-2xl group mt-5 w-1/4'>
       <Link href={`/hotel/${id}`}>
         <div className='relative overflow-hidden rounded-t-2xl w-full h-52'>
           <Image

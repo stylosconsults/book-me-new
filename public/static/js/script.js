@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000/api/v1"
+const BASE_URL = "https://api.bookme.rw/api/v1"
 const successData = {status: "paid"};
 
 function errorCallback(error) {

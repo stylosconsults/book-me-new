@@ -18,7 +18,7 @@ function Hotels({ hotels, getHotelsAction }: any) {
   return (
     <div className='bg-[#F4F5F6] w-full h-fit p-10 py-20 rounded-3xl'>
       <Heading subTitle="Let's go on an adventure">Go somewhere</Heading>
-      <div className='flex flex-wrap gap-5'>
+      <div className='flex flex-wrap gap-[2px] md:gap-5 items-center md:items-start'>
         {!promiseInProgress ? (
           <>
             {hotels?.results?.map(

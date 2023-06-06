@@ -31,6 +31,7 @@ export default function HotelCard({
       className='bg-white rounded-2xl group mt-5 min-w-[200px]'
       style={{
         width: width,
+        minWidth: '200px',
       }}
     >
       <Link href={`/hotel/${id}`}>

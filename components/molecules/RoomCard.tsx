@@ -39,6 +39,7 @@ export default function RoomCard({
       className='bg-white rounded-2xl group mt-5 border p-2 shadow'
       style={{
         width: 'calc(25% - 10px)',
+        minWidth: '200px',
       }}
     >
       <div className='relative overflow-hidden rounded-2xl w-full h-40'>

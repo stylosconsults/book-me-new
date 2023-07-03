@@ -9,7 +9,6 @@ import { usePromiseTracker } from 'react-promise-tracker'
 import { connect } from 'react-redux'
 
 import Spinner from 'components/atoms/Spinner'
-import Container from 'components/Container'
 import HotelCard from 'components/molecules/HotelCard'
 import SearchTextInput from 'components/molecules/SearchTextInput'
 import { getHotelsAction } from 'redux/actions/hotelActions'
@@ -60,7 +59,7 @@ function SearchHotel({ hotels, getHotelsAction }: any) {
   }, [router.isReady])
 
   return (
-    <Container>
+    <>
       <div className='w-full flex'>
         <div className='max-w-xs w-[320px] border shadow-co-search py-3 px-2 h-fit sticky top-32'>
           <div className='flex flex-col gap-3 pl-2'>
@@ -147,7 +146,7 @@ function SearchHotel({ hotels, getHotelsAction }: any) {
           </div>
         </div>
       </div>
-    </Container>
+    </>
   )
 }
 

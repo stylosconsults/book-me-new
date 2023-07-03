@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import { HiOutlineXMark } from 'react-icons/hi2'
 import { IoMdCheckmark } from 'react-icons/io'
-import DatePicker from 'react-multi-date-picker'
+import DatePicker, { DateObject } from 'react-multi-date-picker'
 import TimePicker from 'react-multi-date-picker/plugins/time_picker'
 import { connect } from 'react-redux'
 
@@ -375,6 +375,20 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                     <DatePicker
                       numberOfMonths={2}
                       range
+                      minDate={new Date().setDate(new Date().getDate() + 1)}
+                      mapDays={({ date }) => {
+                        const isDisabled =
+                          new Date(date as any) > new Date(2023, 7, 14) &&
+                          new Date(date as any) < new Date(2023, 7, 25)
+
+                        return {
+                          style: {
+                            backgroundColor: isDisabled ? 'brown' : '',
+                            color: isDisabled ? 'white' : '',
+                          },
+                          disabled: isDisabled,
+                        }
+                      }}
                       value={[
                         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                         new Date(getInputValue('checkIn')!),
@@ -408,7 +422,19 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                           checkIfInputHasError={checkIfInputHasError}
                         />
                       }
-                    />
+                    >
+                      <div className='w-full flex justify-end items-center gap-3 px-3 py-3'>
+                        <div className='flex gap-1 items-center'>
+                          <div className='w-4 h-4 bg-red-500 rounded-full'></div>
+                          <p className='text-sm'>Reserved days</p>
+                        </div>
+
+                        <div className='flex gap-1 items-center'>
+                          <div className='w-4 h-4 bg-yellow-500 rounded-full'></div>
+                          <p className='text-sm'>Out of service</p>
+                        </div>
+                      </div>
+                    </DatePicker>
                     <div className='mt-3'>
                       <Input
                         name='numberOfRooms'

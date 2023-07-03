@@ -27,7 +27,6 @@ export default function SearchHotel() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    console.log(params)
     const query = createQueryParams(params)
     if (query) {
       router.push(`/search?${query}`)

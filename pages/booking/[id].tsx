@@ -5,13 +5,12 @@ import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import { HiOutlineXMark } from 'react-icons/hi2'
 import { IoMdCheckmark } from 'react-icons/io'
-import DatePicker, { DateObject } from 'react-multi-date-picker'
+import DatePicker from 'react-multi-date-picker'
 import TimePicker from 'react-multi-date-picker/plugins/time_picker'
 import { connect } from 'react-redux'
 
 import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
-import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
 import PaymentForm from 'components/molecules/PaymentForm'
 import RoomCard from 'components/molecules/RoomCard'
@@ -305,7 +304,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
   }, [validationErrors])
 
   return (
-    <Container>
+    <>
       <NextSeo title={`Book Room in ${room?.hotel?.name || 'hotel'}`} />
       <Breadcrumb
         fullLocation={[
@@ -316,7 +315,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
           { name: room?.name ?? '' + ' Room', link: '/room/' + room?.id ?? '' },
         ]}
       />
-      <div className='mt-10 w-full'>
+      <div className='mt-10 w-full bg-white px-4 py-2 rounded-md'>
         <Steps steps={steps} setCurrent={setCurrent} current={current} />
       </div>
 
@@ -675,7 +674,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
           )}
         </>
       </div>
-    </Container>
+    </>
   )
 }
 

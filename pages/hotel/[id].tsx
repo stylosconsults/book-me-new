@@ -9,7 +9,6 @@ import { connect } from 'react-redux'
 
 import Heading from 'components/atoms/Heading'
 import Spinner from 'components/atoms/Spinner'
-import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
 import HotelMosaicImages from 'components/molecules/EmblaCarousel'
 import RoomCard from 'components/molecules/RoomCard'
@@ -32,7 +31,7 @@ function HotelDetails({ rooms, getRoomsAction }: any) {
   }, [router.isReady])
 
   return (
-    <Container>
+    <>
       <NextSeo
         title={`${rooms?.hotel?.name || ''} | BookMe`}
         description={rooms?.hotel?.description}
@@ -171,7 +170,7 @@ function HotelDetails({ rooms, getRoomsAction }: any) {
           </div>
         </>
       )}
-    </Container>
+    </>
   )
 }
 

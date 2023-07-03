@@ -1,6 +1,5 @@
 import { Zoom } from 'react-slideshow-image'
 
-import Container from 'components/Container'
 import Hotels from 'components/organisms/Hotels'
 import HowItWorks from 'components/organisms/HowItWorks'
 import SearchHotel from 'components/organisms/SearchHotel'
@@ -14,8 +13,8 @@ export default function Home() {
   ]
 
   return (
-    <Container>
-      <div className='relative flex flex-col justify-center mb-28 w-full h-fit'>
+    <>
+      <div className='relative flex flex-col  justify-center mb-28 w-full h-fit'>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <Zoom scale={1.4} indicators={true} arrows={false}>
           {images.map((source: string, index: number) => (
@@ -24,7 +23,7 @@ export default function Home() {
               key={index}
               src={source}
               alt='Bookme'
-              className='top-0 left-0 w-full object-cover rounded-md h-96 border'
+              className='top-0 left-0 w-full object-cover rounded-md h-[550px] border'
               draggable='false'
               loading='lazy'
               placeholder='blur'
@@ -37,6 +36,6 @@ export default function Home() {
       </div>
       <Hotels />
       <HowItWorks />
-    </Container>
+    </>
   )
 }

@@ -1,10 +1,12 @@
+import Head from 'next/head'
 import Link from 'next/link'
-
-import Container from 'components/Container'
 
 export default function NotFound() {
   return (
-    <Container title='404 - Not found'>
+    <>
+      <Head>
+        <title>404 - Not found</title>
+      </Head>
       <div className='flex flex-col items-start justify-center max-w-2xl mx-auto my-2 mb-16 sm:my-4 md:my-8'>
         <h1 className='mb-4 text-3xl font-bold tracking-tight text-black md:text-5xl dark:text-white'>
           404 - Not Found
@@ -21,6 +23,6 @@ export default function NotFound() {
           </Link>
         </div>
       </div>
-    </Container>
+    </>
   )
 }

@@ -32,7 +32,7 @@ export default function Loading() {
   return (
     <>
       {loading && (
-        <div className='overflow-hidden h-screen w-full fixed bg-white z-50 disable-scroll flex items-center justify-center'>
+        <div className='overflow-hidden h-fit w-fit left-1/2 translate-x-1/2 translate-y-1/2 fixed bg-transparent z-50 disable-scroll flex items-center justify-center'>
           <Spinner />
         </div>
       )}

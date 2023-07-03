@@ -1,27 +1,24 @@
-import React from 'react'
-
 import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
 
-import Footer from 'components/Footer/Footer'
-import Navbar from 'components/organisms/Navbar'
+import Footer from 'components/organisms/footer'
+import Navbar from 'components/organisms/navbar'
+import Sidebar from 'components/organisms/sidebar'
 import cn from 'lib/classNames'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Container(props: any) {
-  const { children, title, description, image, ...customMeta } = props
+  const { children, withSidebar = false, ...customMeta } = props
   const router = useRouter()
 
   const meta = {
-    title: title ?? 'Bookme',
-    description: description ?? 'Booking Platform for african restaurents',
+    title: 'Template name',
+    description: 'Template description',
     image:
-      image ??
-      'https://res.cloudinary.com/igitego-hotels/image/upload/v1675936956/Logos/logo_m85oyx.png',
+      'https://cdn.discordapp.com/attachments/797485737272541250/893912493255176192/UnicornVectorGradient_7.png',
     type: 'website',
     ...customMeta,
   }
-
   return (
     <>
       <div
@@ -36,44 +33,56 @@ export default function Container(props: any) {
           <meta name='robots' content='follow, index' />
           <meta
             property='og:url'
-            content={`https://bookme.rw/${router.asPath}`}
+            content={`https://template.cretu.dev/${router.asPath}`}
           />
-          <link rel='canonical' href={`https://bookme.rw/${router.asPath}`} />
+          <link
+            rel='canonical'
+            href={`https://template.cretu.dev/${router.asPath}`}
+          />
           <meta property='og:type' content={meta.type} />
-          <meta property='og:site_name' content='Bookme' />
+          <meta property='og:site_name' content='Bookme Rwanda' />
           <meta property='og:description' content={meta.description} />
           <meta property='og:title' content={meta.title} />
           <meta property='og:image' content={meta.image} />
           <meta name='twitter:card' content='summary_large_image' />
-          <meta name='twitter:site' content='@GodiscoverA' />
+          <meta name='twitter:site' content='@bookme' />
           <meta name='twitter:title' content={meta.title} />
           <meta name='twitter:description' content={meta.description} />
           <meta name='twitter:image' content={meta.image} />
           {meta.date && (
             <meta property='article:published_time' content={meta.date} />
           )}
-          <title>Bookme.rw - book hotels for your trip to rwanda</title>
         </Head>
 
-        <nav className='md:sticky w-full z-50 bg-gray-100/10 font-sans filter-blur dark:bg-gray-1000/40 top-2 sm:px-3 md:top-4 max-w-6xl md:py-2 rounded-md mx-auto flex flex-col md:flex-row justify-between md:items-center items-start pl-5 py-5 md:pl-0'>
+        <nav
+          className='sticky w-full bg-white z-[9999] filter-blur dark:bg-black top-0 px-4 md:px-10 py-5
+         rounded-md mx-auto flex justify-between items-center shadow-sm'
+        >
           <Navbar />
         </nav>
 
         <main
           className={cn(
-            'mt-12',
-            'max-w-6xl w-full',
+            'w-full flex-grow relative px-4 md:px-10 py-4',
             'mx-auto my-auto',
-            'flex flex-col justify-center gap-12',
-            'divide-y divide-gray-200 dark:divide-gray-900',
-            'rounded-lg'
+            'flex gap-12',
+            withSidebar ? 'flex-row' : 'flex-col',
+            'bg-[#F6F7F9]',
+            'divide-y divide-gray-200 dark:divide-gray-900'
           )}
         >
+          {withSidebar && (
+            <div className='bg-white shadow-sm min-w-[300px] hidden md:block'>
+              <div className='overflow-auto sticky top-[82px] '>
+                <Sidebar />
+              </div>
+            </div>
+          )}
           <div>{children}</div>
-          <footer>
-            <Footer />
-          </footer>
         </main>
+        <footer className='px-4 md:px-10 bg-white'>
+          <Footer />
+        </footer>
       </div>
     </>
   )

@@ -1,23 +1,21 @@
 import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
 
+import Container from 'components/layout/container'
 import Loading from 'components/molecules/Loading'
 
 import { store } from '../redux/store'
-// import { ThemeProvider } from 'next-themes'
 
 import 'styles/globals.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
-      <Loading />
-      <Provider store={store}>
-        {/* <ThemeProvider attribute='class' disableTransitionOnChange> */}
+    <Provider store={store}>
+      <Container>
+        <Loading />
         <Component {...pageProps} />
-        {/* </ThemeProvider> */}
-      </Provider>
-    </>
+      </Container>
+    </Provider>
   )
 }
 

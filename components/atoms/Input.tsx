@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { ComponentProps } from 'react'
 
-interface InputProps {
+interface InputProps extends ComponentProps<'input'> {
   type: string
   placeholder?: string
   value?: string | number

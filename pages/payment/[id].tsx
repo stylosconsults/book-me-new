@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 
 import Button from 'components/atoms/Button'
 import Spinner from 'components/atoms/Spinner'
-import Container from 'components/Container'
 import Breadcrumb from 'components/molecules/Breadcrumb'
 import PaymentForm from 'components/molecules/PaymentForm'
 import RoomCard from 'components/molecules/RoomCard'
@@ -40,7 +39,7 @@ function Payment({ bks, errors, getBooking }: any) {
   }, [bks?.bookings?.status, bks?.loading])
 
   return (
-    <Container>
+    <>
       <>
         {promiseInProgress ? (
           <Spinner />
@@ -168,7 +167,7 @@ function Payment({ bks, errors, getBooking }: any) {
           </>
         )}
       </>
-    </Container>
+    </>
   )
 }
 

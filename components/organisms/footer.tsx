@@ -16,12 +16,13 @@ export default function Footer() {
         </div>
         <div className='text-left'>
           <h1 className='mb-2 font-bold text-base'>Company</h1>
-          <a
+          <Link
+            href={'/contact-us'}
             className='transition-all mb-3 cursor-pointer text-primary text-sm block leading-3'
             rel='noreferrer'
           >
             Help
-          </a>
+          </Link>
           <a
             href='#'
             className='transition-all mb-3 cursor-pointer text-primary text-sm block leading-3'
@@ -44,7 +45,7 @@ export default function Footer() {
             Customer Service
           </a>
           <Link
-            href='/contact'
+            href='/contact-us'
             className='transition-all mb-3 cursor-pointer text-primary text-sm block leading-3'
             rel='noreferrer'
           >

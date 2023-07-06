@@ -9,8 +9,7 @@
     "start": "next start",
     "lint": "eslint --ext=jsx,ts,tsx .",
     "lint:fix": "eslint --ext=jsx,ts,tsx . --fix",
-    "format": "prettier --write \"./**/*.{js,jsx,ts,tsx}\"",
-    "prepare": "husky install"
+    "format": "prettier --write \"./**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
     "@react-google-maps/api": "^2.18.1",
@@ -47,7 +46,6 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.11",
-    "husky": "^8.0.3",
     "lint-staged": "^13.1.0",
     "postcss": "^8.4.21",
     "prettier": "^2.8.2",
@@ -58,11 +56,6 @@
     "*.tsx,*.ts,*.mdx": [
       "eslint --fix"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "author": {
     "email": "phelixdusengimana@gmail.com",

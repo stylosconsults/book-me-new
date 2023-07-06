@@ -1,15 +1,19 @@
 import React, { useState } from 'react'
 
 import axios from 'axios'
+import { connect } from 'react-redux'
 
 import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
+import getBookingsSelector from 'redux/selectors/bookingSelector'
 
-function ContactUs() {
+function ContactUs({ bks }: any) {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     website: 'Bookme',
   })
+
+  console.log({ bks })
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -90,4 +94,8 @@ function ContactUs() {
   )
 }
 
-export default ContactUs
+const mapStateToProps = (state: any) => ({
+  bks: getBookingsSelector(state),
+})
+
+export default connect(mapStateToProps, {})(ContactUs)

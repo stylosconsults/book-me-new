@@ -5,7 +5,7 @@ import axios from 'axios'
 import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
 
-export default function ContactUs() {
+function ContactUs() {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     website: 'Bookme',
@@ -89,3 +89,5 @@ export default function ContactUs() {
     </form>
   )
 }
+
+export default ContactUs

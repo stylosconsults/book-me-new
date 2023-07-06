@@ -18,7 +18,7 @@ export default function Navbar() {
           pathname?.includes('contact') ? 'text-blue-500' : ''
         )}
       >
-        <Link href='/contact'>Contact us</Link>
+        <Link href='/contact-us'>Contact us</Link>
       </div>
     </>
   )

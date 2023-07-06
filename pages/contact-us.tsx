@@ -5,7 +5,7 @@ import axios from 'axios'
 import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
 
-export default function Contact() {
+export default function ContactUs() {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     website: 'Bookme',
@@ -34,7 +34,6 @@ export default function Contact() {
         alert('Message sent!')
       })
       .catch(error => {
-        console.log({ error })
         alert('Error sending message')
       })
       .finally(() => {

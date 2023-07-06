@@ -1,61 +1,91 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { connect } from 'react-redux'
+import axios from 'axios'
 
-import Spinner from '../components/atoms/Spinner'
-import { updateBooking } from '../redux/actions/bookingAction'
-import getBookingsSelector from '../redux/selectors/bookingSelector'
+import Button from 'components/atoms/Button'
+import Input from 'components/atoms/Input'
 
-function BookingStatus({ bks, updateBooking }: any) {
-  const router = useRouter()
-  const [error, setError] = useState<boolean>(false)
-  useEffect(() => {
-    if (router.isReady && router.query.bookingID && router.query.status) {
-      if (
-        router.query.status != 'approved' &&
-        router.query.status != 'rejected'
-      ) {
-        setError(true)
-      } else {
-        updateBooking(router.query.bookingID.toString(), {
-          status: router.query.status,
-        })
-      }
-    }
-  }, [router.isReady])
+export default function Contact() {
+  const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    website: 'Bookme',
+  })
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    })
+  }
+
+  const handleTextAreaChange = (event: any) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    })
+  }
+  const handleSubmit = (e: any) => {
+    setLoading(true)
+    e.preventDefault()
+
+    axios
+      .post(`${process.env.NEXT_PUBLIC_BACKEND_API}/contact-us`, formData)
+      .then(() => {
+        alert('Message sent!')
+      })
+      .catch(error => {
+        alert('Error sending message')
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
   return (
-    <div className='h-screen flex items-center justify-center'>
-      {!router.query.bookingID || !router.query.status || error ? (
-        <p className='max-w-md'>
-          We cannot update booking at this time. If you are admin,{' '}
-          <a href='https://admin.bookme.rw' className='text-co-blue'>
-            Login Here
-          </a>{' '}
-          and change status in admin panel.
+    <form
+      onSubmit={handleSubmit}
+      className='bg-white w-fit mx-auto p-5 min-w-[400px] rounded-lg flex flex-col gap-2'
+    >
+      <div>
+        <h1 className='text-2xl font-bold'>Contact us</h1>
+        <p className='text-[#777E90]'>
+          Have any question? Ask us, we will answer
         </p>
-      ) : (
-        <>
-          {bks?.loading ? (
-            <Spinner />
-          ) : (
-            <div className='flex flex-col text-center'>
-              <p className='max-w-md'>Action Completed</p>
-              <Link href='/' className='text-co-blue hover:underline'>
-                Go Back Home
-              </Link>
-            </div>
-          )}
-        </>
-      )}
-    </div>
+      </div>
+
+      <Input
+        label='Names'
+        type={'text'}
+        name='name'
+        required
+        onChange={handleChange}
+      />
+      <Input
+        label='Email Address'
+        type={'email'}
+        name='email'
+        required
+        onChange={handleChange}
+      />
+      <Input
+        label='Phone Number'
+        type={'text'}
+        name='phone'
+        required
+        onChange={handleChange}
+      />
+      <div className='flex flex-col'>
+        <label className='text-co-black font-bold text-base'>Message</label>
+        <textarea
+          onChange={handleTextAreaChange}
+          required
+          className='bg-white focus:outline-none focus:shadow-outline border resize-y border-gray-300 rounded-lg py-2 px-4 block w-full h-full appearance-none leading-normal'
+          name='message'
+          placeholder='Message or Question'
+        ></textarea>
+      </div>
+      <Button className='bg-blue-600 text-white'>
+        {loading ? 'Sending message...' : 'Send Message'}
+      </Button>
+    </form>
   )
 }
-
-const mapStateToProps = (state: any) => ({
-  bks: getBookingsSelector(state),
-})
-
-export default connect(mapStateToProps, { updateBooking })(BookingStatus)

@@ -73,7 +73,7 @@ function PaymentForm({
         amount: amountToPay,
       })
       .then(res => {
-        localStorage.setItem('bookingID', bookingID)
+        sessionStorage.setItem('bookingID', bookingID)
         pay(res.data.sessionId, uid)
       })
       .catch(function (error) {

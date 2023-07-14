@@ -110,7 +110,7 @@ export default function HowItWorks() {
           </svg>
         </div>
 
-        <div className='flex justify-between mt-16 bg-transparent'>
+        <div className='flex justify-between gap-10 mt-16 bg-transparent'>
           {steps.map((step, index) => (
             <div key={index} className='flex flex-col items-center  z-40'>
               <div className='flex flex-col items-center max-w-[430px]'>

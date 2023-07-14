@@ -625,7 +625,7 @@ function Booking({ room, errors, bks, getRoomAction, bookingAction }: any) {
                         amountToPay={amountToPay}
                         setNextStep={setCurrent}
                         current={current}
-                        bookingID={bks?.bookings.id}
+                        bookingID={bks?.bookings._id}
                       />
                     }
                     {/* <Button

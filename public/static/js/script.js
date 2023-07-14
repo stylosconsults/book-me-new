@@ -19,11 +19,7 @@ function completeCallback(resultIndicator,sessionVersion) {
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(successData)
   }).then((res)=> {
-    if(res.ok){
     alert("Payment completed! Thank you for booking with GoDiscoverAfrica.");
-  }else{
-    alert("Payment failed! Try again")
-  }
   }).catch((_)=>{
     alert("Payment failed! Try again")
   });

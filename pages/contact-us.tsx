@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import axios from 'axios'
-import { useRouter } from 'next/router'
 
 import Button from 'components/atoms/Button'
 import Input from 'components/atoms/Input'
@@ -11,14 +10,6 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     website: 'Bookme',
   })
-
-  const router = useRouter()
-
-  useEffect(() => {
-    if (router.isReady) {
-      alert('hi')
-    }
-  }, [router.isReady])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function faq() {
+export default function Faq() {
   return (
     <div className='max-w-[1000px] pb-3'>
       <h1 className='my-3 font-bold text-xl'>

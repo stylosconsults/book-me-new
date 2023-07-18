@@ -12,13 +12,19 @@ export default function Navbar() {
       <div className='flex flex-row gap-1 text-tertiary'>
         <Logo />
       </div>
-      <div
-        className={cn(
-          'flex flex-row items-center font-bold space-x-4',
-          pathname?.includes('contact') ? 'text-blue-500' : ''
-        )}
-      >
-        <Link href='/contact-us'>Contact us</Link>
+      <div className={cn('flex flex-row items-center font-bold space-x-4')}>
+        <Link
+          className={pathname?.includes('about') ? 'text-blue-500' : ''}
+          href='/about-us'
+        >
+          About us
+        </Link>
+        <Link
+          className={pathname?.includes('contact') ? 'text-blue-500' : ''}
+          href='/contact-us'
+        >
+          Contact us
+        </Link>
       </div>
     </>
   )

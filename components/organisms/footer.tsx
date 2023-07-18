@@ -23,27 +23,27 @@ export default function Footer() {
           >
             Help
           </Link>
-          <a
-            href='#'
+          <Link
+            href='/faq'
             className='transition-all mb-3 cursor-pointer text-primary text-sm block leading-3'
             rel='noreferrer'
           >
             FAQ
-          </a>
-          <a
-            href='#'
+          </Link>
+          <Link
+            href='/about-us'
             className='transition-all mb-3 cursor-pointer text-primary text-sm block leading-3'
             rel='noreferrer'
           >
             About
-          </a>
-          <a
-            href='#'
+          </Link>
+          <Link
+            href='/customer-services'
             className='transition-all mb-3 cursor-pointer text-primary text-sm block leading-3'
             rel='noreferrer'
           >
             Customer Service
-          </a>
+          </Link>
           <Link
             href='/contact-us'
             className='transition-all mb-3 cursor-pointer text-primary text-sm block leading-3'

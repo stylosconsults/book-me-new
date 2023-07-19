@@ -17,66 +17,66 @@ export default function CustomerServices() {
         your travel dreams a reality.
       </p>
       <h1 className='my-3 font-bold text-xl'>How Can We Assist You?</h1>
-      <ol className='list-inside list-decimal last:font-bold'>
+      <ol className='list-inside list-decimal lastfont-bold'>
         <li>
-          <b>Hotel Recommendations:</b>
-          <span className='ml-2'>
+          <b>Hotel Recommendations</b>
+          <p className='ml-2 my-2'>
             Unsure which hotel is the best fit for your trip? Our knowledgeable
             customer service representatives are ready to provide personalized
             hotel recommendations based on your preferences, budget, and travel
             needs.
-          </span>
+          </p>
         </li>
         <li>
-          <b>Booking Assistance:</b>
-          <span className='ml-2'>
+          <b>Booking Assistance</b>
+          <p className='ml-2 my-2'>
             Need help with navigating our website or making a reservation? Our
             team is just a phone call or live chat away, guiding you through the
             booking process and ensuring you secure the best deals.
-          </span>
+          </p>
         </li>
         <li>
-          <b> Special Requests:</b>
-          <span className='ml-2'>
+          <b> Special Requests</b>
+          <p className='ml-2 my-2'>
             If you have specific requirements or special requests, such as room
             preferences, accessibility needs, or extra amenities, our team will
             liaise with the hotels to accommodate your needs.
-          </span>
+          </p>
         </li>
         <li>
-          <b>Cancellation and Modification:</b>
-          <span className='ml-2'>
+          <b>Cancellation and Modification</b>
+          <p className='ml-2 my-2'>
             Life can be unpredictable, and plans may change. Our customer
             service agents are here to assist you with cancellations or
             modifications to your booking, all in accordance with the
             hotel&apos;res policies.
-          </span>
+          </p>
         </li>
         <li>
-          <b>Group Bookings:</b>
-          <span className='ml-2'>
+          <b>Group Bookings</b>
+          <p className='ml-2 my-2'>
             Organizing a group trip can be complex. Allow our team to handle the
             logistics and secure multiple rooms for your group, ensuring
             everyone enjoys a seamless booking experience.
-          </span>
+          </p>
         </li>
         <li>
-          <b>Travel Advice and Tips:</b>
-          <span className='ml-2'>
+          <b>Travel Advice and Tips</b>
+          <p className='ml-2 my-2'>
             Want insider tips on the best attractions, local eateries, or hidden
             gems at your destination? Our travel-savvy representatives are eager
             to share their expertise and help you create an unforgettable
             itinerary.
-          </span>
+          </p>
         </li>
         <li>
-          <b> Problem Resolution:</b>
-          <span className='ml-2'>
+          <b> Problem Resolution</b>
+          <p className='ml-2 my-2'>
             Should any issues arise during your stay, rest assured that we will
             be your advocate in resolving them promptly and efficiently. Our
             team will work diligently to ensure your satisfaction. 24/7
             Availability
-          </span>
+          </p>
         </li>
       </ol>
 
@@ -89,26 +89,26 @@ export default function CustomerServices() {
       </p>
       <p className='my-3'>
         Feel free to reach out to our customer service team through any of the
-        following channels:
+        following channels
       </p>
       <p className='my-3'>
-        <b>Phone:</b> +250791349744{' '}
+        <b>Phone</b> +250791349744{' '}
       </p>
       <p className='my-3'>
-        <b>Email:</b> <span>info@godiscoverafrica.com</span>
+        <b>Email</b> <span>info@godiscoverafrica.com</span>
       </p>
       <p className='my-3'>
-        <b>Social Media: </b> Find us on [
+        <b>Social Media </b> Find us on [
         <a className='text-co-blue' href=''>
           Facebook
         </a>
         ,{' '}
         <a className='text-co-blue' href=''>
-          Twitter:
+          Twitter
         </a>
         ,{' '}
         <a className='text-co-blue' href=''>
-          Instagram: Go Discover Africa Rw
+          Instagram Go Discover Africa Rw
         </a>{' '}
         ] for updates, travel tips, and quick assistance.
       </p>

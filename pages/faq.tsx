@@ -108,7 +108,7 @@ export default function Faq() {
   return (
     <div className='max-w-[1000px] pb-3'>
       <h1 className='my-3 font-bold text-xl'>
-        FAQ (Frequently Asked Questions) for booking hotels on our website:
+        FAQ (Frequently Asked Questions):
       </h1>
       <ol className='list-none'>
         {questions.map((q, key) => (

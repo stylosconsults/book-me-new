@@ -87,7 +87,7 @@ export default function CustomerServices() {
         needs. Your convenience is paramount, and we are just a call or message
         away. Contact Us
       </p>
-      <p className='my-3'>
+{/*       <p className='my-3'>
         Feel free to reach out to our customer service team through any of the
         following channels
       </p>
@@ -112,7 +112,7 @@ export default function CustomerServices() {
         </a>{' '}
         ] for updates, travel tips, and quick assistance.
       </p>
-
+ */}
       <h1 className='my-3 font-bold text-xl'>Your Feedback Matters</h1>
       <p className='my-3'>
         We continuously strive to improve our services, and your feedback plays

@@ -32,6 +32,7 @@ export default function CategoriesList() {
               <CategoryCard
                 key={key}
                 image={category.image}
+                id={category.id}
                 name={category.name}
                 size={category.hotelsCount}
               />

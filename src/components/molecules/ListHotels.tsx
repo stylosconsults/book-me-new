@@ -1,13 +1,16 @@
 import React, { Fragment } from "react";
 import HotelCard from "./HotelCard";
 import Spinner from "../atoms/Spinner";
+import { IHotel } from "@/types/schemas";
 
 interface ListHotelsProps {
   isHotelsLoading: boolean;
-  hotels: any;
+  hotels: IHotel[];
+  notFoundMessage?: string;
 }
 export default function ListHotels({
   isHotelsLoading,
+  notFoundMessage,
   hotels = [],
 }: ListHotelsProps) {
   return (
@@ -34,7 +37,8 @@ export default function ListHotels({
           )}
           {!isHotelsLoading && hotels?.length === 0 ? (
             <p className="text-center text-md mt-3 font-bold text-gray-500">
-              Hotels will be loaded soon (come back later)
+              {notFoundMessage ??
+                "Hotels will be loaded soon (come back later)"}
             </p>
           ) : null}
         </>

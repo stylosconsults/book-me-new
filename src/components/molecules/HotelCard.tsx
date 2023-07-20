@@ -33,7 +33,7 @@ export default function HotelCard({
         minWidth: "200px",
       }}
     >
-      <Link href={`/hotel/${id}`}>
+      <Link href={`/h/${id}`}>
         <div className="relative overflow-hidden rounded-t-2xl w-full h-52">
           <Image
             src={image}

@@ -3,6 +3,7 @@ import cn from "@/lib/classNames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "../atoms/Logo";
+import Button from "../atoms/Button";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -24,6 +25,18 @@ export default function Navbar() {
           href="/contact-us"
         >
           Contact us
+        </Link>
+        <Link
+          className={pathname?.includes("join") ? "text-blue-500" : ""}
+          href={"/join"}
+        >
+          Open account
+        </Link>
+        <Link href={"/login"}>
+          <Button>Login</Button>
+        </Link>
+        <Link href={"/register"}>
+          <Button className="bg-co-blue">Register property</Button>
         </Link>
       </div>
     </>

@@ -1,7 +1,8 @@
-import React, { ReactNode, useState } from "react";
+"use client";
+import { ReactNode, useState } from "react";
 
 import { MdArrowUpward, MdArrowDownward } from "react-icons/md";
-import Button from "react-multi-date-picker/components/button";
+import Button from "../atoms/Button";
 
 interface StepProps {
   image: string;
@@ -25,7 +26,7 @@ export default function Step({ image, title, description, more }: StepProps) {
         />
 
         <h1 className="font-bold text-co-black text-2xl mb-2">{title}</h1>
-        <p>{description}</p>
+        {description}
         {moreShown && <p>{more}</p>}
         <Button
           className="mt-3 w-full"

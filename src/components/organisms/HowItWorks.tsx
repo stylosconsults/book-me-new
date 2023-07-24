@@ -1,16 +1,12 @@
-import React from 'react'
-
-import Button from 'components/atoms/Button'
-import Heading from 'components/atoms/Heading'
-
-import Step from './Step'
+import Heading from "../atoms/Heading";
+import Step from "./Step";
 
 export default function HowItWorks() {
   const steps = [
     {
-      title: 'Book & relax',
+      title: "Book & relax",
       description: (
-        <div className='text-left'>
+        <div className="text-left">
           <p>
             Discover a world of comfort, luxury, and tranquility at our hotel.
             Whether you&apos;re traveling for business or leisure, our goal is
@@ -21,15 +17,15 @@ export default function HowItWorks() {
         </div>
       ),
       more: (
-        <div className='text-left'>
-          <p className='mt-3'>
+        <div className="text-left">
+          <p className="mt-3">
             Once you&apos;ve selected your room, our attentive staff will ensure
             a seamless check-in process. You&apos;ll be greeted with warm
             hospitality and guided to your well-appointed room, where comfort
             and relaxation await you. Sink into plush bedding, indulge in modern
             amenities, and take advantage of our exceptional services.
           </p>
-          <p className='mt-3'>
+          <p className="mt-3">
             During your stay, we offer a range of facilities to help you unwind
             and recharge. Dive into our sparkling swimming pool, where you can
             take a refreshing swim or lounge poolside with a tropical drink in
@@ -40,12 +36,12 @@ export default function HowItWorks() {
           </p>
         </div>
       ),
-      image: '/static/images/works/1.png',
+      image: "/static/images/works/1.png",
     },
     {
-      title: 'Smart checklist',
+      title: "Smart checklist",
       description: (
-        <div className='text-left'>
+        <div className="text-left">
           <p>
             Planning your next trip and searching for the perfect hotel? Look no
             further! Our smart checklist is here to help you make informed
@@ -57,10 +53,10 @@ export default function HowItWorks() {
         </div>
       ),
       more: (
-        <div className='text-left'>
-          <ol className='text-left list-decimal mt-3 list-inside'>
-            <li className='mt-2'>
-              <b>Location:</b>{' '}
+        <div className="text-left">
+          <ol className="text-left list-decimal mt-3 list-inside">
+            <li className="mt-2">
+              <b>Location:</b>{" "}
               <span>
                 Consider the hotel&apos;s location in relation to your travel
                 plans. Is it conveniently located near attractions, restaurants,
@@ -69,8 +65,8 @@ export default function HowItWorks() {
                 to explore.
               </span>
             </li>
-            <li className='mt-2'>
-              <b>Budget:</b>{' '}
+            <li className="mt-2">
+              <b>Budget:</b>{" "}
               <span>
                 Determine your budget range for accommodation. Our website
                 allows you to filter hotels based on your desired price range,
@@ -78,8 +74,8 @@ export default function HowItWorks() {
                 compromising on quality and comfort.
               </span>
             </li>
-            <li className='mt-2'>
-              <b>Amenities and Facilities:</b>{' '}
+            <li className="mt-2">
+              <b>Amenities and Facilities:</b>{" "}
               <span>
                 Make a list of amenities and facilities that are important to
                 you. Whether it&apos;s a fitness center, swimming pool, free
@@ -88,8 +84,8 @@ export default function HowItWorks() {
                 easy for you to find the perfect match.
               </span>
             </li>
-            <li className='mt-2'>
-              <b>Reviews and Ratings:</b>{' '}
+            <li className="mt-2">
+              <b>Reviews and Ratings:</b>{" "}
               <span>
                 Read reviews from previous guests to get an idea of their
                 experiences at the hotel. Our website includes genuine guest
@@ -97,8 +93,8 @@ export default function HowItWorks() {
                 based on the experiences of others.
               </span>
             </li>
-            <li className='mt-2'>
-              <b>Booking Policies and Flexibility:</b>{' '}
+            <li className="mt-2">
+              <b>Booking Policies and Flexibility:</b>{" "}
               <span>
                 Pay attention to the hotel&apos;s booking policies, including
                 cancellation policies, check-in and check-out times, and any
@@ -107,8 +103,8 @@ export default function HowItWorks() {
                 surprises.
               </span>
             </li>
-            <li className='mt-2'>
-              <b>Room Types and Sizes:</b>{' '}
+            <li className="mt-2">
+              <b>Room Types and Sizes:</b>{" "}
               <span>
                 Consider the room types and sizes available. Do you prefer a
                 standard room, a suite, or a family room? Check the descriptions
@@ -116,8 +112,8 @@ export default function HowItWorks() {
                 your specific needs and preferences.
               </span>
             </li>
-            <li className='mt-2'>
-              <b>Safety and Security:</b>{' '}
+            <li className="mt-2">
+              <b>Safety and Security:</b>{" "}
               <span>
                 Your safety is our priority. Ensure that the hotel has adequate
                 security measures in place, such as 24-hour reception,
@@ -126,8 +122,8 @@ export default function HowItWorks() {
                 each hotel.
               </span>
             </li>
-            <li className='mt-2'>
-              <b>Accessibility:</b>{' '}
+            <li className="mt-2">
+              <b>Accessibility:</b>{" "}
               <span>
                 If you have specific accessibility requirements, such as
                 wheelchair accessibility or special assistance, verify that the
@@ -136,8 +132,8 @@ export default function HowItWorks() {
                 a comfortable stay for all guests.
               </span>
             </li>
-            <li className='mt-2'>
-              <b>Special Offers and Discounts:</b>{' '}
+            <li className="mt-2">
+              <b>Special Offers and Discounts:</b>{" "}
               <span>
                 Keep an eye out for special offers, discounts, and packages
                 available for your travel dates. Our website highlights any
@@ -145,15 +141,15 @@ export default function HowItWorks() {
                 money.
               </span>
             </li>
-            <li className='mt-2'>
-              <b>Booking and Confirmation:</b>{' '}
+            <li className="mt-2">
+              <b>Booking and Confirmation:</b>{" "}
               <p>
                 Once you&apos;ve found the perfect hotel, our website offers a
                 seamless booking process. Enter your travel dates, select your
                 preferred room type, and securely make your reservation.
                 You&apos;ll receive an instant confirmation with all the
                 necessary details.
-                <span className='mt-2'>
+                <span className="mt-2">
                   we aim to simplify the hotel booking process and provide you
                   with the information you need to make informed decisions. With
                   our smart checklist, finding the ideal hotel for your next
@@ -165,12 +161,12 @@ export default function HowItWorks() {
           </ol>
         </div>
       ),
-      image: '/static/images/works/2.png',
+      image: "/static/images/works/2.png",
     },
     {
-      title: 'Save more',
+      title: "Save more",
       description: (
-        <div className='text-left'>
+        <div className="text-left">
           <p>
             Looking to maximize your savings on hotel bookings? You&apos;ve come
             to the right place! Our platform not only offers a wide selection of
@@ -182,8 +178,8 @@ export default function HowItWorks() {
         </div>
       ),
       more: (
-        <div className='text-left'>
-          <p className='mt-3'>
+        <div className="text-left">
+          <p className="mt-3">
             At our platform, we believe that saving shouldn&apos;t stop after
             you&apos;ve booked your hotel. With our commitment to offering the
             best prices, exclusive deals, loyalty rewards, and flexible options,
@@ -194,33 +190,33 @@ export default function HowItWorks() {
           </p>
         </div>
       ),
-      image: '/static/images/works/3.png',
+      image: "/static/images/works/3.png",
     },
-  ]
+  ];
   return (
-    <div className='w-full h-fit p-10 py-20 rounded-3xl text-center'>
-      <Heading subTitle='Keep calm & travel on'>How it work</Heading>
-      <div className='max-w-full mx-auto relative'>
-        <div className='absolute top-[66px] left-1/2 -translate-x-1/2 -z-0  hidden lg:block'>
+    <div className="w-full h-fit p-10 py-20 rounded-3xl text-center">
+      <Heading subTitle="Keep calm & travel on">How it work</Heading>
+      <div className="max-w-full mx-auto relative">
+        <div className="absolute top-[66px] left-1/2 -translate-x-1/2 -z-0  hidden lg:block">
           <svg
-            width='1025'
-            height='137'
-            viewBox='0 0 839 137'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
+            width="1025"
+            height="137"
+            viewBox="0 0 839 137"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d='M838 4.83887C823.237 25.0088 713.617 137.14 601.48 135.889C497.352 134.728 454.07 -36.7167 262.536 60.1723C94.2489 145.302 53.9174 52.5844 1.07634 1.99272'
-              stroke='#E6E8EC'
-              strokeWidth='2'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeDasharray='4 12'
+              d="M838 4.83887C823.237 25.0088 713.617 137.14 601.48 135.889C497.352 134.728 454.07 -36.7167 262.536 60.1723C94.2489 145.302 53.9174 52.5844 1.07634 1.99272"
+              stroke="#E6E8EC"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="4 12"
             ></path>
           </svg>
         </div>
 
-        <div className='flex justify-between gap-10 mt-16 bg-transparent'>
+        <div className="flex justify-between gap-10 mt-16 bg-transparent">
           {steps.map((step, index) => (
             <Step
               key={index}
@@ -233,5 +229,5 @@ export default function HowItWorks() {
         </div>
       </div>
     </div>
-  )
+  );
 }

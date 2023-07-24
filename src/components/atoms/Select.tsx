@@ -1,52 +1,37 @@
-import React from 'react'
-
-import Select from 'react-select'
+"use client";
+import { ChangeEvent } from "react";
+import Select, { GroupBase, OnChangeValue, Props } from "react-select";
 
 interface SelectWithErrorProps {
-  label?: string
-  name: string
-  options: { value: string; label: string }[]
-  error?: string
-  placeholder?: string
-  onChange: ({ value, name }: { value: string; name: string }) => void
-  [x: string | number | symbol]: unknown
+  label?: string;
+  name?: string;
+  options: { value: string; label: string }[];
+  error?: string;
+  placeholder?: string;
+  [x: string | number | symbol]: unknown;
 }
-export default function SelectWithError({
-  label,
-  name,
-  options,
-  onChange,
-  error,
-  placeholder,
-  ...props
-}: SelectWithErrorProps) {
+export default function SelectWithErrorCustomSelect<
+  Option,
+  IsMulti extends boolean = false,
+  Group extends GroupBase<Option> = GroupBase<Option>
+>(props: Props<Option, IsMulti, Group> & SelectWithErrorProps) {
   return (
     <div>
-      {label && (
-        <label className='text-co-black font-bold text-base' htmlFor={name}>
-          {label}
+      {props.label && (
+        <label className="text-co-black font-bold text-base" htmlFor={props.id}>
+          {props.label}
         </label>
       )}
       <Select
         {...props}
-        placeholder={placeholder}
-        id={name}
         styles={{
-          control: baseStyles => ({
+          control: (baseStyles: object) => ({
             ...baseStyles,
-            borderColor: !error ? 'grey' : 'red',
+            borderColor: !props.error ? "grey" : "red",
           }),
         }}
-        options={options}
-        onChange={e =>
-          onChange({
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            value: e!.value,
-            name: name,
-          })
-        }
       />
-      {error && <p className='text-red-500 text-xs'>{error}</p>}
+      {props.error && <p className="text-red-500 text-xs">{props.error}</p>}
     </div>
-  )
+  );
 }

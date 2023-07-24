@@ -5,6 +5,8 @@ import Providers from "./_providers";
 import cn from "@/lib/classNames";
 import Navbar from "@/components/organisms/navbar";
 import Footer from "@/components/organisms/footer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <ToastContainer />
         <Providers>
           <div
             className={cn(
@@ -31,7 +34,7 @@ export default function RootLayout({
             )}
           >
             <nav
-              className="sticky w-full bg-white z-[9999] filter-blur dark:bg-black top-0 px-4 md:px-10 py-5
+              className="sticky w-full bg-white z-50 filter-blur dark:bg-black top-0 px-4 md:px-10 py-5
          rounded-md mx-auto flex justify-between items-center shadow-sm"
             >
               <Navbar />

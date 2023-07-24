@@ -8,7 +8,7 @@ import Heading from "../atoms/Heading";
 import Spinner from "../atoms/Spinner";
 import { ICategory } from "@/types/schemas";
 
-async function GetCategories() {
+export async function GetCategories() {
   const res = await fetch(`${BASE_URL}/categories?status=ACTIVE`);
   const users = await res.json();
   return users;

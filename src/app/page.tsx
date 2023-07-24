@@ -1,6 +1,6 @@
-import Heading from "@/components/atoms/Heading";
 import HomeImageSlider from "@/components/molecules/HomeImageSlider";
 import CategoriesList from "@/components/organisms/CategoriesList";
+import HowItWorks from "@/components/organisms/HowItWorks";
 import PopularHotels from "@/components/organisms/PopularHotels";
 
 export default function Home() {
@@ -9,6 +9,7 @@ export default function Home() {
       <HomeImageSlider />
       <CategoriesList />
       <PopularHotels />
+      <HowItWorks />
     </main>
   );
 }

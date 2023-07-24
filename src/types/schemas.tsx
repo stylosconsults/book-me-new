@@ -25,3 +25,16 @@ export interface ICategory {
   status: EEStatus;
   hotelsCount: number;
 }
+
+export interface ICreateHotel {
+  category: string;
+  name: string;
+  address: string;
+  state: string;
+  phone: string;
+  description: string;
+  website: string;
+  email: string;
+  images: string[];
+  amenities: string[];
+}

@@ -18,6 +18,20 @@ export interface IHotel {
   id: string;
 }
 
+export interface IRoom {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  hotel: IHotel;
+  adults: number;
+  children: number;
+  facilities: string[];
+  size?: number;
+  bedType: string;
+  status?: string;
+}
+
 export interface ICategory {
   id: string;
   name: string;

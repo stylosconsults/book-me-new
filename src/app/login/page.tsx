@@ -34,8 +34,14 @@ export default function Login() {
   const { mutate, isLoading } = useMutation({
     onSuccess(data) {
       toast.success("Login successful.");
+
+      localStorage.setItem(
+        "refreshToken",
+        JSON.stringify(data?.tokens.refresh)
+      );
+
       location.replace(
-        `https://app.bookme.rw/login?${data?.tokens.access.token}`
+        `https://admin.bookme.rw/login?token=${data?.tokens.access.token}`
       );
     },
     onError(error: { message: string }) {
@@ -66,8 +72,17 @@ export default function Login() {
         >
           Welcome, back!
         </Heading>
-        <Input {...register("email")} label="Email" />
-        <Input label="Password" {...register("password")} type="password" />
+        <Input
+          error={errors.email?.message}
+          {...register("email")}
+          label="Email"
+        />
+        <Input
+          error={errors.password?.message}
+          label="Password"
+          {...register("password")}
+          type="password"
+        />
         <Button loadingText="Signing in..." isLoading={isLoading}>
           Sign in
         </Button>

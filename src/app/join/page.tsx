@@ -6,12 +6,15 @@ import { CreateUser } from "../register/page";
 import { useMutation } from "@tanstack/react-query";
 import { ICreateUser } from "@/types/user.schema";
 import { toast } from "react-toastify";
-import EmailSent from "@/components/molecules/EmailSent";
+import EmailSent, {
+  ResentEmailVerification,
+} from "@/components/molecules/EmailSent";
 
 export default function Join() {
   const { mutate, isLoading, isSuccess, data } = useMutation({
-    onSuccess() {
+    async onSuccess(data) {
       toast.success("Registration successful.");
+      await ResentEmailVerification(data?.user, data?.tokens.access.token);
     },
     onError(error: { message: string }) {
       toast.error(error.message ?? "An error occurred during registration.");

@@ -1,49 +1,65 @@
-import React, { useState } from 'react'
+import { useState } from "react";
 
-import axios from 'axios'
+import Button from "../atoms/Button";
+import { BASE_URL } from "@/lib/share";
+import SelectWithErrorCustomSelect from "../atoms/Select";
+import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import Script from "next/script";
 
-import SelectWithError from 'components/atoms/Select'
+const CreatePayMentSession = async ({
+  amountToPay,
+}: {
+  amountToPay: number;
+}) => {
+  const res = await fetch(`${BASE_URL}/payments/session`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ amount: amountToPay }),
+  });
 
-import Button from '../atoms/Button'
+  if (!res.ok) {
+    const errorData = await res.json();
+    const errorMessage =
+      errorData?.message || "An error occurred during booking.";
+    throw new Error(errorMessage);
+  }
+
+  const payment = await res.json();
+  return payment;
+};
 
 interface PaymentFormProps {
-  setNextStep?: any
-  current?: number
-  amountToPay: number
-  bookingID: string
+  amountToPay: number;
+  bookingID: string;
 }
 
-function PaymentForm({
-  setNextStep,
-  current,
-  amountToPay,
-  bookingID,
-}: PaymentFormProps) {
-  let Checkout: any
-  if (typeof window !== 'undefined') {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+function PaymentForm({ amountToPay, bookingID }: PaymentFormProps) {
+  let Checkout: any;
+
+  if (typeof window !== "undefined") {
     // @ts-ignore
-    Checkout = window.Checkout
+    Checkout = window.Checkout;
   }
-  const [isLoading, setisLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [selectedpaymentMethod, setselectedpaymentMethod] = useState('')
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
 
   const paymentMethods = [
-    { value: 'visa', label: 'Visa card' },
-    { value: 'mastercard', label: 'Mastercard' },
-    { value: 'bank', label: 'Bank transfer' },
-  ]
+    { value: "visa", label: "Visa card" },
+    { value: "mastercard", label: "Mastercard" },
+    { value: "bank", label: "Bank transfer" },
+  ];
 
   const pay = (sessionId: string, uid: number) => {
     Checkout.configure({
       session: {
         id: `${sessionId}`,
       },
-      merchant: '8206000697',
+      merchant: "8206000697",
       order: {
         amount: amountToPay,
-        currency: 'USD',
+        currency: "USD",
         description: `Payment for booking with GoDiscoverAfrica via bookme.rw for amount ${amountToPay}`,
         id: uid,
         reference: uid,
@@ -52,71 +68,66 @@ function PaymentForm({
         reference: uid,
       },
       interaction: {
-        operation: 'PURCHASE',
+        operation: "PURCHASE",
         merchant: {
-          name: 'GODISCOVER AFRICA LTD',
+          name: "GODISCOVER AFRICA LTD",
           address: {
-            line1: 'kicukiro',
+            line1: "kicukiro",
           },
         },
       },
-    })
-    Checkout.showLightbox()
-  }
+    });
+    Checkout.showLightbox();
+  };
 
-  const handleSubmit = async () => {
-    setisLoading(true)
-    setError('')
-    const uid = Math.abs(new Date().valueOf())
-    await axios
-      .post(`${process.env.NEXT_PUBLIC_BACKEND_API}/payments/session`, {
-        amount: amountToPay,
-      })
-      .then(res => {
-        sessionStorage.setItem('bookingID', bookingID)
-        pay(res.data.sessionId, uid)
-      })
-      .catch(function (error) {
-        setError('Something went wrong')
-      })
-    setisLoading(false)
-  }
+  const { mutate, isLoading } = useMutation({
+    async onSuccess(data) {
+      const uid = Math.abs(new Date().valueOf());
+      sessionStorage.setItem("bookingID", bookingID);
+      pay(data.sessionId, uid);
+    },
+    onError(error: { message: string }) {
+      toast.error(error.message ?? "An error occurred during payment session.");
+    },
+    mutationFn: () => CreatePayMentSession({ amountToPay }),
+  });
 
   return (
     <>
-      <div className='flex flex-col gap-2'>
-        <p className='text-co-black font-bold text-base'>
+      {/* load mastercard payment javascript */}
+
+      <Script
+        src="https://ap-gateway.mastercard.com/checkout/version/61/checkout.js"
+        data-error="errorCallback"
+        data-cancel="cancelCallback"
+        data-complete="completeCallback"
+      />
+
+      <Script src="/static/js/script.js" />
+
+      <div className="flex flex-col gap-2">
+        <p className="text-co-black font-bold text-base">
           How Do You Want To Pay.
         </p>
-        <SelectWithError
-          name={'paymentMethod'}
+        <SelectWithErrorCustomSelect
+          name={"paymentMethod"}
           options={paymentMethods}
-          placeholder='Select payment option'
-          error={!selectedpaymentMethod ? 'Please select a payment method' : ''}
-          onChange={e => setselectedpaymentMethod(e?.value)}
+          placeholder="Select payment option"
+          onChange={(e) => setSelectedPaymentMethod(e?.value as string)}
         />
       </div>
-      {error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
 
-      <div className='flex gap-3'>
+      <div className="flex gap-3">
         <Button
-          disabled={isLoading || !selectedpaymentMethod}
-          onClick={handleSubmit}
-          className='mt-5 bg-co-blue text-white hover:bg-blue-700 border-0'
+          disabled={isLoading || !selectedPaymentMethod}
+          onClick={mutate}
+          className="mt-5 bg-co-blue text-white hover:bg-blue-700 border-0"
         >
-          {isLoading ? 'Loading...' : 'Pay now'}
+          {isLoading ? "Loading..." : "Pay now"}
         </Button>
-        {/* <Button
-          disabled={isLoading}
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          onClick={() => setNextStep(current! - 1)}
-          className='mt-5'
-        >
-          Back
-        </Button> */}
       </div>
     </>
-  )
+  );
 }
 
-export default PaymentForm
+export default PaymentForm;

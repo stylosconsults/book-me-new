@@ -1,5 +1,4 @@
 "use client";
-import { ChangeEvent } from "react";
 import Select, { GroupBase, OnChangeValue, Props } from "react-select";
 
 interface SelectWithErrorProps {

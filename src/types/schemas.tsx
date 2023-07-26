@@ -30,6 +30,7 @@ export interface IRoom {
   size?: number;
   bedType: string;
   status?: string;
+  image: string;
 }
 
 export interface ICategory {

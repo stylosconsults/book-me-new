@@ -46,13 +46,13 @@ function RangeCustomInput({ openCalendar, value }: any) {
   );
 }
 
-interface BookingInfoProps<T> {
+interface BookingInfoProps {
   facilities: string[];
   handleFormChange: (data: Partial<IBooking>) => void;
   handleNightToStay: (nights: number) => void;
   roomAmount: number;
   handleGoNext: () => void;
-  formData: T;
+  formData: IBookingStepOne;
 }
 
 export default function BookingStepOne({
@@ -62,7 +62,7 @@ export default function BookingStepOne({
   handleGoNext,
   handleNightToStay,
   formData,
-}: BookingInfoProps<IBookingStepOne>) {
+}: BookingInfoProps) {
   const {
     register,
     watch,

@@ -1,30 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
-
-import { HiOutlineXMark } from "react-icons/hi2";
-import { IoMdCheckmark } from "react-icons/io";
-import DatePicker, { DateObject } from "react-multi-date-picker";
-import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import Breadcrumb from "@/components/molecules/Breadcrumb";
 import Steps from "@/components/molecules/Steps";
-import Input from "@/components/atoms/Input";
-import RoomCard from "@/components/molecules/RoomCard";
-import PaymentForm from "@/components/molecules/PaymentForm";
 import { BASE_URL } from "@/lib/share";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
-import {
-  IBooking,
-  IBookingStepOne,
-  bookingStepOneSchema,
-} from "@/types/booking.schema";
-import { toast } from "react-toastify";
-import { formatDate, getDaysBetweenDates } from "@/lib/date";
+import { IBooking } from "@/types/booking.schema";
 import { IRoom } from "@/types/schemas";
 import Button from "@/components/atoms/Button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import BookingStepOne from "@/components/organisms/BookingStepOne";
+import BookingStepTwo from "@/components/organisms/BookingStepTwo";
+import BookingStepThree from "@/components/organisms/BookingStepThree";
+import PaymentForm from "@/components/molecules/PaymentForm";
 
 export async function GetRoomById(id: string) {
   const res = await fetch(`${BASE_URL}/rooms/${id}`);
@@ -32,34 +19,19 @@ export async function GetRoomById(id: string) {
   return users;
 }
 
-export async function BookingAction(data: IBooking) {}
-
 export default function Booking() {
   const router = useRouter();
   const params = useParams();
 
-  const { data: room, isLoading: isRoomLoading } = useQuery<IRoom>({
+  const { data: room } = useQuery<IRoom>({
     queryKey: ["room", params?.roomId!],
     queryFn: () => GetRoomById(params?.roomId as string),
     enabled: Boolean(params?.roomId),
   });
 
-  const { mutate, isLoading, isSuccess } = useMutation({
-    async onSuccess(data) {
-      toast.success("Registration successful.");
-    },
-    onError(error: { message: string }) {
-      toast.error(error.message ?? "An error occurred during registration.");
-    },
-    mutationFn: BookingAction,
-  });
-
-  const handleSubmit = (data: IBooking) => {
-    mutate(data);
-  };
-
   const [current, setCurrent] = useState<number>(0);
   const [nightsToStay, setNightsToStay] = useState(1);
+  const [bookingID, setBookingId] = useState("");
   const [formData, setFormData] = useState<Partial<IBooking>>();
 
   const steps = [
@@ -70,10 +42,24 @@ export default function Booking() {
   ];
 
   const handleGoNext = () => setCurrent(current + 1);
+  const handleGoBack = () => setCurrent(current - 1);
+  const handleStepChange = (page: number) => setCurrent(page);
 
   const handleFormChange = (data: Partial<IBooking>) => {
     setFormData({ ...formData, ...data });
   };
+
+  const handleSuccessBooking = (id: string) => setBookingId(id);
+
+  useEffect(() => {
+    if (window && window !== undefined) {
+      const bookingId = sessionStorage.getItem("bookingID");
+      if (bookingId) {
+        setBookingId(bookingId);
+        setCurrent(3);
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -138,64 +124,53 @@ export default function Booking() {
                 handleGoNext={handleGoNext}
               />
             )}
+
+            {current === 1 && (
+              <BookingStepTwo
+                handleFormChange={handleFormChange}
+                formData={{
+                  email: formData?.email ?? "",
+                  firstName: formData?.firstName ?? "",
+                  lastName: formData?.lastName ?? "",
+                  phone: formData?.phone ?? "",
+                  arrivalTime: formData?.arrivalTime ?? "00:00",
+                }}
+                handleGoBack={handleGoBack}
+                handleGoNext={handleGoNext}
+              />
+            )}
+
+            {current === 2 && (
+              <BookingStepThree
+                room={room}
+                nightsToStay={nightsToStay}
+                formData={formData as IBooking}
+                handleStepChange={handleStepChange}
+                handleGoBack={handleGoBack}
+                handleGoNext={handleGoNext}
+                handleSuccessBooking={handleSuccessBooking}
+              />
+            )}
+
+            {current === 3 && (
+              <div className="flex flex-col gap-4">
+                <h1 className="font-bold">
+                  You have now booked it is time to pay
+                </h1>
+                {
+                  <PaymentForm
+                    bookingID={bookingID}
+                    amountToPay={
+                      formData?.amount! ??
+                      sessionStorage.getItem("bookingAmount")!
+                    }
+                  />
+                }
+              </div>
+            )}
           </div>
         )}
       </div>
     </>
-  );
-}
-
-export function CustomCardData({
-  changeState,
-  columns,
-  pageIndex,
-  title,
-}: {
-  title: string;
-  pageIndex: number;
-  changeState: (page: number) => void;
-  columns: { name: string; value?: string }[];
-}) {
-  return (
-    <div
-      className="bg-white flex flex-col justify-between rounded-2xl group mt-5 border p-2 shadow"
-      style={{
-        width: "calc(25% - 10px)",
-      }}
-    >
-      <div className="text-sm mt-2">
-        <h1 className="font-bold text-lg mb-5 capitalize">{title} Info</h1>
-        {columns.map(
-          (column, index) =>
-            column.value && (
-              <p key={index}>
-                {column.name}: <span className="font-bold">{column.value}</span>
-              </p>
-            )
-        )}
-      </div>
-      <Button
-        onClick={() => changeState(pageIndex)}
-        className="py-1 font-medium bg-co-blue text-white border-0 w-full mt-2"
-      >
-        Change {title.toLowerCase()} info
-      </Button>
-    </div>
-  );
-}
-
-function TimeCustomInput({ openCalendar, value }: any) {
-  return (
-    <div className="flex gap-2 mt-2">
-      <Input
-        name="checkIn"
-        type="text"
-        label="Arrival time (optional):"
-        value={value[0]}
-        placeholder="Arrival time (optional):"
-        onFocus={openCalendar}
-        readOnly
-      />
-    </div>
   );
 }

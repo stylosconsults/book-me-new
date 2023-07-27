@@ -39,10 +39,6 @@ export default function Login() {
         "refreshToken",
         JSON.stringify(data?.tokens.refresh)
       );
-
-      location.replace(
-        `https://admin.bookme.rw/login?token=${data?.tokens.access.token}`
-      );
     },
     onError(error: { message: string }) {
       toast.error(error.message ?? "An error occurred during registration.");

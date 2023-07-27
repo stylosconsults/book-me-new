@@ -4,41 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "../atoms/Logo";
 import Button from "../atoms/Button";
-import { useEffect, useState } from "react";
-
-interface StoredData {
-  token: string;
-  expires: number;
-}
-
-function getLocalStorageWithExpiration(key: string): any {
-  const data = localStorage.getItem(key);
-  if (data !== null) {
-    const parsedData: StoredData = JSON.parse(data);
-    if (parsedData && new Date() < new Date(parsedData.expires)) {
-      return parsedData.token;
-    }
-  }
-
-  // If the data has expired or does not exist, remove it from localStorage
-  localStorage.removeItem(key);
-  return null;
-}
+import useStore from "@/store/main";
+import { useUserStore } from "@/store/user";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [refreshToken, setRefreshToken] = useState("");
-
-  // set refresh token if window is defined with use effect
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const token = getLocalStorageWithExpiration("refreshToken");
-      if (token) {
-        setRefreshToken(token);
-      }
-    }
-  }, []);
+  const auth = useStore(useUserStore, (state) => state);
+  const tokenStillActive =
+    auth?.accessToken?.expires &&
+    new Date(auth?.accessToken?.expires) > new Date();
 
   return (
     <>
@@ -58,12 +32,10 @@ export default function Navbar() {
         >
           Contact us
         </Link>
-        {refreshToken ? (
-          <a
-            href={`${process.env.NEXT_PUBLIC_DASHBOARD_URL}/login?token=${refreshToken}`}
-          >
-            <Button className="capitalize">Go to dashboard</Button>
-          </a>
+        {tokenStillActive ? (
+          <p>
+            <Button className="capitalize">{auth?.user?.name}</Button>
+          </p>
         ) : (
           <>
             <Link

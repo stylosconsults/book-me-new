@@ -25,4 +25,7 @@ export const RegisterFormSchema = z.object({
 }).merge(LoginFormSchema);
 
 export type ICreateUser = z.infer<typeof RegisterFormSchema>;
+export type IUser = ICreateUser & {
+  id: string;
+}
 export type ISignIn = z.infer<typeof LoginFormSchema>;

@@ -7,11 +7,12 @@ import { ISignIn, IUser, LoginFormSchema } from "@/types/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
-import React from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useStore from "@/store/main";
 import { ITokenData, useUserStore } from "@/store/user";
+import { useRouter } from "next/navigation";
+import { USER_TYPES } from "@/utils/user";
 
 export async function SignIn(data: ISignIn) {
   const response = await fetch(`${BASE_URL}/auth/login`, {
@@ -33,6 +34,7 @@ export async function SignIn(data: ISignIn) {
 }
 
 export default function Login() {
+  const router = useRouter();
   const auth = useStore(useUserStore, (state) => state);
   const { mutate, isLoading } = useMutation({
     onSuccess(data: {
@@ -41,6 +43,11 @@ export default function Login() {
     }) {
       toast.success("Login successful.");
       auth?.signIn(data.user, data.tokens.access, data.tokens.refresh);
+      if (data.user.role === USER_TYPES.HOTEL_ADMIN) {
+        router.push("/portal");
+      } else {
+        router.push("/");
+      }
     },
     onError(error: { message: string }) {
       toast.error(error.message ?? "An error occurred during registration.");

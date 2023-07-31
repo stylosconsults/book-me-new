@@ -9,6 +9,11 @@ interface SelectWithErrorProps {
   placeholder?: string;
   [x: string | number | symbol]: unknown;
 }
+
+export interface IOption {
+  label: string;
+  value: string;
+}
 export default function SelectWithErrorCustomSelect<
   Option,
   IsMulti extends boolean = false,
@@ -27,6 +32,14 @@ export default function SelectWithErrorCustomSelect<
           control: (baseStyles: object) => ({
             ...baseStyles,
             borderColor: !props.error ? "grey" : "red",
+          }),
+          valueContainer: (base: object) => ({
+            ...base,
+            textTransform: "capitalize",
+          }),
+          option: (base) => ({
+            ...base,
+            textTransform: "capitalize",
           }),
         }}
       />

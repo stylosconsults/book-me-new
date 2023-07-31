@@ -1,21 +1,22 @@
 import React, { ComponentProps, forwardRef } from "react";
 
-interface InputProps extends ComponentProps<"input"> {
+interface TextAreaProps extends ComponentProps<"textarea"> {
   error?: string;
   label?: string;
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ error, label, ...props }, ref) => {
     return (
-      <div className="h-fit w-full flex flex-col">
+      <div className="w-full flex flex-col">
         {label && (
           <label className="text-co-black font-bold text-base">{label}</label>
         )}
-        <input
+        <textarea
           {...props}
+          rows={4}
           ref={ref}
-          className={`bg-white focus:outline-none focus:shadow-outline border max-h-9 border-gray-300 rounded-lg py-2 px-4 block w-full h-full appearance-none leading-normal
+          className={`bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full h-full appearance-none leading-normal
           ${error ? "border-red-500 border-2 " : ""}`}
         />
         {error && <p className="text-red-500 text-xs">{error}</p>}
@@ -24,6 +25,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-Input.displayName = "Input";
+TextArea.displayName = "TextArea";
 
-export default Input;
+export default TextArea;

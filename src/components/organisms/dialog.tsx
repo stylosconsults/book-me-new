@@ -10,7 +10,7 @@ export interface DialogProps extends React.HTMLAttributes<HTMLElement> {
   className?: string;
   open?: boolean;
   setOpen?(open: boolean): void;
-  trigger: ReactNode;
+  trigger?: ReactNode;
 }
 
 export default function Dialog({
@@ -49,10 +49,12 @@ export default function Dialog({
               ) : (
                 <p></p>
               )}
-              <DialogPrimitives.Close className="relative w-8 h-8 bg-[#F3F3F3] rounded-lg text-2xl">
-                close
-                <span className="sr-only">close</span>
-              </DialogPrimitives.Close>
+              {setOpen && (
+                <DialogPrimitives.Close className="relative w-8 h-8 bg-[#F3F3F3] rounded-lg text-2xl">
+                  close
+                  <span className="sr-only">close</span>
+                </DialogPrimitives.Close>
+              )}
             </div>
             {children}
           </DialogPrimitives.Content>

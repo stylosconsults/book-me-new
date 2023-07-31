@@ -6,18 +6,25 @@ import Logo from "../atoms/Logo";
 import Button from "../atoms/Button";
 import useStore from "@/store/main";
 import { useUserStore } from "@/store/user";
+import { useEffect } from "react";
 
-export default function Navbar() {
+export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
   const pathname = usePathname();
   const auth = useStore(useUserStore, (state) => state);
   const tokenStillActive =
     auth?.accessToken?.expires &&
     new Date(auth?.accessToken?.expires) > new Date();
 
+  useEffect(() => {
+    if (!tokenStillActive) {
+      auth?.logout();
+    }
+  }, [auth, tokenStillActive]);
+
   return (
     <>
       <div className="flex flex-row gap-1 text-tertiary">
-        <Logo />
+        {haveLogo && <Logo />}
       </div>
       <div className={cn("flex flex-row items-center font-bold space-x-4")}>
         <Link

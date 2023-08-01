@@ -1,7 +1,6 @@
 "use client";
 import UserForm from "@/components/organisms/UserForm";
 import { USER_TYPES } from "@/utils/user";
-import React, { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { ICreateUser } from "@/types/user.schema";
 import { toast } from "react-toastify";
@@ -24,26 +23,9 @@ export default function Join() {
     mutate(data);
   };
 
-  const [isSessionStorageAvailable, setSessionStorageAvailable] =
-    useState(false);
-
-  useEffect(() => {
-    // Check if sessionStorage is available
-    setSessionStorageAvailable(() => {
-      try {
-        sessionStorage.setItem("__test__", "test");
-        sessionStorage.removeItem("__test__");
-        return true;
-      } catch (error) {
-        return false;
-      }
-    });
-  }, []);
-
   return (
     <div className="max-w-[400px] bg-white p-4 rounded-md mx-auto">
-      {isSuccess ||
-      (isSessionStorageAvailable && sessionStorage.getItem("token")) ? (
+      {isSuccess ? (
         <EmailSent user={data?.user} token={data?.tokens.access.token} />
       ) : (
         <UserForm

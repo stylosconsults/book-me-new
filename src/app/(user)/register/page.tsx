@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import { ICreateUser } from "@/types/user.schema";
 import EmailSent from "@/components/molecules/EmailSent";
 import { createUser } from "@/utils/auth.api";
-import { useEffect, useState } from "react";
 
 export default function RegisterProperty() {
   const { mutate, isLoading, isSuccess, data } = useMutation({
@@ -24,26 +23,9 @@ export default function RegisterProperty() {
     mutate(data);
   };
 
-  const [isSessionStorageAvailable, setSessionStorageAvailable] =
-    useState(false);
-
-  useEffect(() => {
-    // Check if sessionStorage is available
-    setSessionStorageAvailable(() => {
-      try {
-        sessionStorage.setItem("__test__", "test");
-        sessionStorage.removeItem("__test__");
-        return true;
-      } catch (error) {
-        return false;
-      }
-    });
-  }, []);
-
   return (
     <div className="max-w-[400px] bg-white p-4 rounded-md mx-auto">
-      {isSuccess ||
-      (isSessionStorageAvailable && sessionStorage.getItem("token")) ? (
+      {isSuccess ? (
         <EmailSent user={data?.user} token={data?.tokens.access.token} />
       ) : (
         <UserForm

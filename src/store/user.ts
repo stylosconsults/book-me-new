@@ -1,6 +1,6 @@
 import { IUser } from '@/types/user.schema'
 import { create } from 'zustand'
-import { createJSONStorage, persist, StateStorage } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 export interface ITokenData {
   token: string;
@@ -27,7 +27,6 @@ export const useUserStore = create<IUserState>()(
     {
       name: 'user',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ refreshToken: state.refreshToken, accessToken: state.accessToken, user: state.user }),
     }
   )
 )

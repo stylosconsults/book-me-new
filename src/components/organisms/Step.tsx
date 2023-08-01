@@ -27,7 +27,7 @@ export default function Step({ image, title, description, more }: StepProps) {
 
         <h1 className="font-bold text-co-black text-2xl mb-2">{title}</h1>
         {description}
-        {moreShown && <p>{more}</p>}
+        {moreShown && <>{more}</>}
         <Button
           className="mt-3 w-full"
           onClick={() => setMoreShown(!moreShown)}

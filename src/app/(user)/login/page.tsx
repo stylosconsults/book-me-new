@@ -25,9 +25,9 @@ export default function Login() {
       toast.success("Login successful.");
       auth?.signIn(data.user, data.tokens.access, data.tokens.refresh);
       if (data.user.role === USER_TYPES.HOTEL_ADMIN) {
-        router.push("/portal");
+        router.replace("/portal");
       } else {
-        router.push("/");
+        router.replace("/");
       }
     },
     onError(error: { message: string }) {

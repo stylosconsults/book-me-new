@@ -2,11 +2,7 @@ import cn from "@/lib/classNames";
 import Navbar from "@/components/organisms/navbar";
 import Footer from "@/components/organisms/footer";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body

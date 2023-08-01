@@ -1,25 +1,44 @@
 "use client";
 import cn from "@/lib/classNames";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Logo from "../atoms/Logo";
 import Button from "../atoms/Button";
 import useStore from "@/store/main";
 import { useUserStore } from "@/store/user";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { USER_TYPES } from "@/utils/user";
 
 export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [hasAppMounted, setHasAppMounted] = useState(false);
   const auth = useStore(useUserStore, (state) => state);
   const tokenStillActive =
     auth?.accessToken?.expires &&
     new Date(auth?.accessToken?.expires) > new Date();
 
   useEffect(() => {
-    if (!tokenStillActive) {
-      auth?.logout();
-    }
-  }, [auth, tokenStillActive]);
+    setHasAppMounted(true);
+  }, []);
+
+  const dropdownLinks = [
+    {
+      name: "Dashboard",
+      href: "/portal",
+      for: [USER_TYPES.ADMIN, USER_TYPES.HOTEL_ADMIN],
+    },
+    {
+      name: "Settings",
+      href: "/settings/account",
+      for: [USER_TYPES.ADMIN, USER_TYPES.HOTEL_ADMIN, USER_TYPES.USER],
+    },
+    {
+      name: "My bookings",
+      href: `/bookings/c/${auth?.user?.id}`,
+      for: [USER_TYPES.USER],
+    },
+  ];
 
   return (
     <>
@@ -39,25 +58,58 @@ export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
         >
           Contact us
         </Link>
-        {tokenStillActive ? (
-          <p>
-            <Button className="capitalize">{auth?.user?.name}</Button>
-          </p>
-        ) : (
+        {hasAppMounted ? (
           <>
-            <Link
-              className={pathname?.includes("join") ? "text-blue-500" : ""}
-              href={"/join"}
-            >
-              Open account
-            </Link>
-            <Link href={"/login"}>
-              <Button>Login</Button>
-            </Link>
-            <Link href={"/register"}>
-              <Button className="bg-co-blue">Register property</Button>
-            </Link>
+            {tokenStillActive ? (
+              <div className="relative flex group w-fit min-w-[150px]">
+                <Button className="capitalize mx-auto">
+                  {auth?.user?.name}
+                </Button>
+                <div className="absolute group-focus-within:block hidden bg-white shadow-lg w-full p-4 top-12 rounded-md">
+                  {dropdownLinks.map((link, key) => (
+                    <>
+                      {link.for.includes(auth?.user?.role!) && (
+                        <Link
+                          key={key}
+                          className="block hover:text-blue-500 py-1 text-base"
+                          href={link.href}
+                        >
+                          {link.name}
+                        </Link>
+                      )}
+                    </>
+                  ))}
+
+                  <button
+                    onClick={async () => {
+                      await auth?.logout?.();
+                      router.replace("/login");
+                    }}
+                    className="block hover:text-red-500 py-1"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <Link
+                  className={pathname?.includes("join") ? "text-blue-500" : ""}
+                  href={"/join"}
+                >
+                  Open account
+                </Link>
+                <Link href={"/login"}>
+                  <Button>Login</Button>
+                </Link>
+                <Link href={"/register"}>
+                  <Button className="bg-co-blue">Register property</Button>
+                </Link>
+              </>
+            )}
           </>
+        ) : (
+          <div className="h-10 w-52 bg-gray-300 animate-pulse" />
         )}
       </div>
     </>

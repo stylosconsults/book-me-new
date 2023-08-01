@@ -7,15 +7,15 @@ import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
-  const router = useRouter();
-  const auth = useStore(useUserStore, (state) => state);
+  // const router = useRouter();
+  // const auth = useStore(useUserStore, (state) => state);
 
-  useEffect(() => {
-    if (!auth?.accessToken?.token) {
-      router.push("/login");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth]);
+  // useEffect(() => {
+  //   if (!auth?.accessToken?.token) {
+  //     router.push("/login");
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [auth]);
   return (
     <div className="w-full relative flex">
       <aside className="h-screen sticky top-0 max-w-[350px] min-w-[300px] bg-co-black">

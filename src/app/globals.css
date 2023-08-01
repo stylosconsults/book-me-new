@@ -185,6 +185,7 @@
   .highlight-link {
     @apply -mx-0.5 bg-opacity-20 px-0.5 text-gray-1000 dark:bg-gray-100 dark:bg-opacity-20 dark:text-gray-300 md:hover:bg-opacity-30 md:dark:hover:bg-yellow-500 md:dark:hover:bg-opacity-100 md:dark:hover:text-gray-1000;
   }
+  
 
   .blink {
     animation: blink-animation 1.5s steps(2, start) infinite;

@@ -8,10 +8,8 @@ import SelectWithErrorCustomSelect, {
 } from "@/components/atoms/Select";
 import TextArea from "@/components/atoms/TextArea";
 import Steps from "@/components/molecules/Steps";
-import { GetCategories } from "@/components/organisms/CategoriesList";
 import Dialog from "@/components/organisms/dialog";
 import { countries } from "@/data/countries";
-import { BASE_URL } from "@/lib/share";
 import useStore from "@/store/main";
 import { useUserStore } from "@/store/user";
 import {
@@ -24,54 +22,14 @@ import {
   IHotel,
 } from "@/types/hotel.schema";
 import { ICategory } from "@/types/schemas";
+import { getCategories } from "@/utils/category.api";
+import { addHotel, getUserNumberOfHotels } from "@/utils/hotel.api";
 import { USER_TYPES } from "@/utils/user";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-
-export async function GetUserNumberOfHotels(userId: string) {
-  const res = await fetch(`${BASE_URL}/hotels/user/${userId}`);
-  const users = await res.json();
-  return users;
-}
-
-export async function AddHotel(createData: IHotel, token: string) {
-  const formData = new FormData();
-
-  createData?.images.forEach((img, index: number) => {
-    formData.append("images" + index, img as unknown as Blob);
-  });
-
-  formData.append("name", createData?.name);
-  formData.append("description", createData?.description);
-  formData.append("address", createData?.address);
-  formData.append("state", createData?.state);
-  formData.append("city", createData?.city);
-  formData.append("phone", createData?.phone);
-  formData.append("email", createData?.email);
-  formData.append("website", createData?.website);
-  formData.append("category", createData.category);
-  formData.append("admin", createData.admin!);
-
-  const response = await fetch(`${BASE_URL}/hotels`, {
-    method: "POST",
-    headers: {
-      Authentication: `Bearer ${token}`,
-    },
-    body: formData,
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    const errorMessage =
-      errorData?.message || "An error occurred during adding property.";
-    throw new Error(errorMessage);
-  }
-
-  return response.json();
-}
 
 export default function AdminHome() {
   const [open, setOpen] = useState(false);
@@ -80,7 +38,7 @@ export default function AdminHome() {
 
   const { data: userHotels, isLoading: isUserHotelsLoading } = useQuery({
     queryKey: ["userHotels"],
-    queryFn: () => GetUserNumberOfHotels(userId!),
+    queryFn: () => getUserNumberOfHotels(userId!),
     enabled: Boolean(userId),
   });
 
@@ -171,7 +129,7 @@ function SelectPropertyType({
   const { data: propertyCategories, isLoading: isPropertyCategoriesLoading } =
     useQuery({
       queryKey: ["propertyCategories"],
-      queryFn: GetCategories,
+      queryFn: getCategories,
     });
 
   const {
@@ -366,7 +324,7 @@ function PropertyImages({
     onError(error: { message: string }) {
       toast.error(error.message ?? "An error occurred during registration.");
     },
-    mutationFn: (data: IHotel) => AddHotel(data, auth?.accessToken?.token!),
+    mutationFn: (data: IHotel) => addHotel(data, auth?.accessToken?.token!),
   });
 
   const images = watch("images");

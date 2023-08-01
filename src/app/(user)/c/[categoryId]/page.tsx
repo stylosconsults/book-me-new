@@ -2,15 +2,10 @@
 import Heading from "@/components/atoms/Heading";
 import ListHotels from "@/components/molecules/ListHotels";
 import { BASE_URL } from "@/lib/share";
+import { getHotelsByCategory } from "@/utils/hotel.api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
 import React from "react";
-
-export async function GetHotelsByCategory(category: string) {
-  const res = await fetch(`${BASE_URL}/hotels?category=${category}`);
-  const users = await res.json();
-  return users;
-}
 
 export default function GetHotelsInCategory() {
   const params = useParams();
@@ -18,7 +13,7 @@ export default function GetHotelsInCategory() {
 
   const { data: hotels, isLoading: isHotelsLoading } = useQuery({
     queryKey: ["hotelsCategories", params?.categoryId!],
-    queryFn: () => GetHotelsByCategory(params?.categoryId as string),
+    queryFn: () => getHotelsByCategory(params?.categoryId as string),
     enabled: Boolean(params?.categoryId),
   });
 

@@ -6,25 +6,8 @@ import { BASE_URL } from "@/lib/share";
 import { toast } from "react-toastify";
 import { ICreateUser } from "@/types/user.schema";
 import EmailSent from "@/components/molecules/EmailSent";
-
-export const CreateUser = async (data: ICreateUser) => {
-  const response = await fetch(`${BASE_URL}/auth/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    const errorMessage =
-      errorData?.message || "An error occurred during registration.";
-    throw new Error(errorMessage);
-  }
-
-  return response.json();
-};
+import { createUser } from "@/utils/auth.api";
+import { useEffect, useState } from "react";
 
 export default function RegisterProperty() {
   const { mutate, isLoading, isSuccess, data } = useMutation({
@@ -34,16 +17,33 @@ export default function RegisterProperty() {
     onError(error: { message: string }) {
       toast.error(error.message ?? "An error occurred during registration.");
     },
-    mutationFn: CreateUser,
+    mutationFn: createUser,
   });
 
   const handleSubmit = (data: ICreateUser) => {
     mutate(data);
   };
 
+  const [isSessionStorageAvailable, setSessionStorageAvailable] =
+    useState(false);
+
+  useEffect(() => {
+    // Check if sessionStorage is available
+    setSessionStorageAvailable(() => {
+      try {
+        sessionStorage.setItem("__test__", "test");
+        sessionStorage.removeItem("__test__");
+        return true;
+      } catch (error) {
+        return false;
+      }
+    });
+  }, []);
+
   return (
     <div className="max-w-[400px] bg-white p-4 rounded-md mx-auto">
-      {isSuccess || sessionStorage.getItem("token") ? (
+      {isSuccess ||
+      (isSessionStorageAvailable && sessionStorage.getItem("token")) ? (
         <EmailSent user={data?.user} token={data?.tokens.access.token} />
       ) : (
         <UserForm

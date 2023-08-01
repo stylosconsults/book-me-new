@@ -7,18 +7,13 @@ import { BASE_URL } from "@/lib/share";
 import Heading from "../atoms/Heading";
 import Spinner from "../atoms/Spinner";
 import { ICategory } from "@/types/schemas";
-
-export async function GetCategories() {
-  const res = await fetch(`${BASE_URL}/categories?status=ACTIVE`);
-  const users = await res.json();
-  return users;
-}
+import { getCategories } from "@/utils/category.api";
 
 export default function CategoriesList() {
   const { data: propertyCategories, isLoading: isPropertyCategoriesLoading } =
     useQuery({
       queryKey: ["propertyCategories"],
-      queryFn: GetCategories,
+      queryFn: getCategories,
     });
   return (
     <>

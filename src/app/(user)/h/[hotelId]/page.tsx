@@ -6,18 +6,12 @@ import EmblaCarousel from "@/components/molecules/EmblaCarousel";
 import RoomCard from "@/components/molecules/RoomCard";
 import Tabs from "@/components/molecules/Tabs";
 import LocationGoogleMap from "@/components/organisms/LocationGoogleMap";
-import { BASE_URL } from "@/lib/share";
+import { getAllRoomsWithHotel } from "@/utils/room.api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { Fragment, useState } from "react";
 import { HiOutlineXMark } from "react-icons/hi2";
 import { IoMdCheckmark } from "react-icons/io";
-
-export async function AllRoomsWithHotel(hotel: string) {
-  const res = await fetch(`${BASE_URL}/rooms?hotel=${hotel}`);
-  const users = await res.json();
-  return users;
-}
 
 export default function HotelInformation() {
   const params = useParams();
@@ -25,7 +19,7 @@ export default function HotelInformation() {
 
   const { data: rooms, isLoading: isHotelLoading } = useQuery({
     queryKey: ["roomsInHotel", params?.hotelId!],
-    queryFn: () => AllRoomsWithHotel(params?.hotelId as string),
+    queryFn: () => getAllRoomsWithHotel(params?.hotelId as string),
     enabled: Boolean(params?.hotelId),
   });
   return (

@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import HotelCard from "./HotelCard";
 import Spinner from "../atoms/Spinner";
-import { IHotel } from "@/types/schemas";
+import { IHotel } from "@/types/hotel.schema";
 
 interface ListHotelsProps {
   isHotelsLoading: boolean;

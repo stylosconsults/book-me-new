@@ -29,10 +29,12 @@ export const propertyDetails = z.object({
 
 export const propertyImage = z.object({
     images: z.array(imageSchema).min(1),
-    admin: z.string().optional(),
   });
 
 export type IPropertyCategorySchema = z.infer<typeof propertyCategorySchema>;
 export type IPropertyDetails = z.infer<typeof propertyDetails>;
 export type IPropertyImage = z.infer<typeof propertyImage>;
-export type IHotel = IPropertyCategorySchema & IPropertyDetails & IPropertyImage;
+export type IHotel = IPropertyCategorySchema & IPropertyDetails & IPropertyImage & {
+  id: string;
+  admin: string;
+};

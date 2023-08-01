@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import Breadcrumb from "@/components/molecules/Breadcrumb";
 import Steps from "@/components/molecules/Steps";
-import { BASE_URL } from "@/lib/share";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { IBooking } from "@/types/booking.schema";
@@ -12,12 +11,7 @@ import BookingStepOne from "@/components/organisms/BookingStepOne";
 import BookingStepTwo from "@/components/organisms/BookingStepTwo";
 import BookingStepThree from "@/components/organisms/BookingStepThree";
 import PaymentForm from "@/components/molecules/PaymentForm";
-
-export async function GetRoomById(id: string) {
-  const res = await fetch(`${BASE_URL}/rooms/${id}`);
-  const users = await res.json();
-  return users;
-}
+import { getRoomById } from "@/utils/room.api";
 
 export default function Booking() {
   const router = useRouter();
@@ -25,7 +19,7 @@ export default function Booking() {
 
   const { data: room } = useQuery<IRoom>({
     queryKey: ["room", params?.roomId!],
-    queryFn: () => GetRoomById(params?.roomId as string),
+    queryFn: () => getRoomById(params?.roomId as string),
     enabled: Boolean(params?.roomId),
   });
 

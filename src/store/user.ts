@@ -15,8 +15,6 @@ export interface IUserState {
   logout: ()=>void;
 }
 
-const storage: StateStorage = localStorage;
-
 export const useUserStore = create<IUserState>()(
   persist(
     (set) => ({
@@ -28,7 +26,7 @@ export const useUserStore = create<IUserState>()(
     }),
     {
       name: 'user',
-      storage: createJSONStorage(() => storage),
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ refreshToken: state.refreshToken, accessToken: state.accessToken, user: state.user }),
     }
   )

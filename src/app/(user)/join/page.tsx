@@ -1,33 +1,49 @@
 "use client";
 import UserForm from "@/components/organisms/UserForm";
 import { USER_TYPES } from "@/utils/user";
-import React from "react";
-import { CreateUser } from "../register/page";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { ICreateUser } from "@/types/user.schema";
 import { toast } from "react-toastify";
-import EmailSent, {
-  ResentEmailVerification,
-} from "@/components/molecules/EmailSent";
+import { createUser, resentEmailVerification } from "@/utils/auth.api";
+import EmailSent from "@/components/molecules/EmailSent";
 
 export default function Join() {
   const { mutate, isLoading, isSuccess, data } = useMutation({
     async onSuccess(data) {
       toast.success("Registration successful.");
-      await ResentEmailVerification(data?.user, data?.tokens.access.token);
+      await resentEmailVerification(data?.user, data?.tokens.access.token);
     },
     onError(error: { message: string }) {
       toast.error(error.message ?? "An error occurred during registration.");
     },
-    mutationFn: CreateUser,
+    mutationFn: createUser,
   });
 
   const handleSubmit = (data: ICreateUser) => {
     mutate(data);
   };
+
+  const [isSessionStorageAvailable, setSessionStorageAvailable] =
+    useState(false);
+
+  useEffect(() => {
+    // Check if sessionStorage is available
+    setSessionStorageAvailable(() => {
+      try {
+        sessionStorage.setItem("__test__", "test");
+        sessionStorage.removeItem("__test__");
+        return true;
+      } catch (error) {
+        return false;
+      }
+    });
+  }, []);
+
   return (
     <div className="max-w-[400px] bg-white p-4 rounded-md mx-auto">
-      {isSuccess || sessionStorage.getItem("token") ? (
+      {isSuccess ||
+      (isSessionStorageAvailable && sessionStorage.getItem("token")) ? (
         <EmailSent user={data?.user} token={data?.tokens.access.token} />
       ) : (
         <UserForm

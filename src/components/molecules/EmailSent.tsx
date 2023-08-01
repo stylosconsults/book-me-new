@@ -4,28 +4,7 @@ import { ICreateUser } from "@/types/user.schema";
 import { BASE_URL } from "@/lib/share";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-
-export async function ResentEmailVerification(
-  user: ICreateUser,
-  token: string
-) {
-  const response = await fetch(`${BASE_URL}/auth/send-verification-email`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ user }),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    const errorMessage = errorData?.message || "Unable to sent email";
-    throw new Error(errorMessage);
-  }
-
-  return response.json();
-}
+import { resentEmailVerification } from "@/utils/auth.api";
 
 export default function EmailSent({
   user: actualUser,
@@ -41,7 +20,7 @@ export default function EmailSent({
   const [token, setToken] = React.useState<string | undefined>(actualToken);
 
   const { mutateAsync, isSuccess, error } = useMutation(() =>
-    ResentEmailVerification(user!, token!)
+    resentEmailVerification(user!, token!)
   );
 
   useEffect(() => {

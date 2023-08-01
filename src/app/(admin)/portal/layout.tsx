@@ -14,7 +14,8 @@ export default function Layout({ children }: { children: ReactNode }) {
     if (!auth?.accessToken?.token) {
       router.push("/login");
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth]);
   return (
     <div className="w-full relative flex">
       <aside className="h-screen sticky top-0 max-w-[350px] min-w-[300px] bg-co-black">

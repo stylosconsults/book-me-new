@@ -2,7 +2,6 @@
 import Button from "@/components/atoms/Button";
 import Heading from "@/components/atoms/Heading";
 import Input from "@/components/atoms/Input";
-import { BASE_URL } from "@/lib/share";
 import { ISignIn, IUser, LoginFormSchema } from "@/types/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -13,25 +12,7 @@ import useStore from "@/store/main";
 import { ITokenData, useUserStore } from "@/store/user";
 import { useRouter } from "next/navigation";
 import { USER_TYPES } from "@/utils/user";
-
-export async function SignIn(data: ISignIn) {
-  const response = await fetch(`${BASE_URL}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    const errorMessage =
-      errorData?.message || "An error occurred during registration.";
-    throw new Error(errorMessage);
-  }
-
-  return response.json();
-}
+import { signIn } from "@/utils/auth.api";
 
 export default function Login() {
   const router = useRouter();
@@ -52,7 +33,7 @@ export default function Login() {
     onError(error: { message: string }) {
       toast.error(error.message ?? "An error occurred during registration.");
     },
-    mutationFn: SignIn,
+    mutationFn: signIn,
   });
 
   const {

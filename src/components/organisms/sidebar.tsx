@@ -19,7 +19,7 @@ export default function Sidebar() {
     },
     {
       name: "Bookings",
-      href: "/portal/booking",
+      href: "/portal/bookings",
       for: [USER_TYPES.ADMIN, USER_TYPES.HOTEL_ADMIN],
     },
     {
@@ -29,7 +29,7 @@ export default function Sidebar() {
     },
     {
       name: "Properties",
-      href: "/portal/hotels",
+      href: "/portal/properties",
       for: [USER_TYPES.ADMIN],
     },
     {

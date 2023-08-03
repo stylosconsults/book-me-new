@@ -37,4 +37,5 @@ export type IPropertyImage = z.infer<typeof propertyImage>;
 export type IHotel = IPropertyCategorySchema & IPropertyDetails & IPropertyImage & {
   id: string;
   admin: string;
+  status: string;
 };

@@ -87,7 +87,11 @@ export default function PropertyCategories() {
         </Heading>
         <Button className="h-fit">Add Category</Button>
       </div>
-      <CustomTable table={table} isLoading={isPropertyCategoriesLoading} />
+      <CustomTable
+        totalPages={propertyCategories?.totalPages}
+        table={table}
+        isLoading={isPropertyCategoriesLoading}
+      />
     </div>
   );
 }

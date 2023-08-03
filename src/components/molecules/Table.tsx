@@ -3,6 +3,7 @@ import { flexRender } from "@tanstack/react-table";
 import { ComponentProps, PropsWithChildren } from "react";
 import { Table } from "@tanstack/react-table";
 import cn from "@/lib/classNames";
+import Pagination, { IPaginationProps } from "./Pagination";
 
 export type TableProps = PropsWithChildren<ComponentProps<"table">>;
 export type THeadProps = PropsWithChildren<ComponentProps<"thead">>;
@@ -16,16 +17,16 @@ export interface TdProps
   center?: boolean;
 }
 
-export interface CustomTableProps<Tdata> {
-  table: Table<Tdata>;
+export interface CustomTableProps<TData> extends Partial<IPaginationProps> {
+  table: Table<TData>;
   isLoading?: boolean;
-  checkBoxCol?: keyof Tdata;
+  checkBoxCol?: keyof TData;
   error?: string;
 }
 
-export interface MarksTableProps<Tdata> {
-  table: Table<Tdata>;
-  firstColName: keyof Tdata;
+export interface MarksTableProps<TData> {
+  table: Table<TData>;
+  firstColName: keyof TData;
 }
 
 const Table = ({ children, className, ...props }: TableProps) => {
@@ -96,6 +97,9 @@ const CustomTable = <TData,>({
   table,
   isLoading,
   checkBoxCol,
+  totalPages,
+  handlePageChange,
+  currentPage,
 }: CustomTableProps<TData>) => {
   return (
     <div>
@@ -188,6 +192,13 @@ const CustomTable = <TData,>({
           )}
         </TBody>
       </Table>
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          handlePageChange={handlePageChange}
+          totalPages={totalPages}
+        />
+      )}
     </div>
   );
 };

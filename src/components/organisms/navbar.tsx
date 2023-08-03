@@ -67,7 +67,7 @@ export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
                 </Button>
                 <div className="absolute group-focus-within:block hidden bg-white shadow-lg w-full p-4 top-12 rounded-md">
                   {dropdownLinks.map((link, key) => (
-                    <>
+                    <p key={key}>
                       {link.for.includes(auth?.user?.role!) && (
                         <Link
                           key={key}
@@ -77,7 +77,7 @@ export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
                           {link.name}
                         </Link>
                       )}
-                    </>
+                    </p>
                   ))}
 
                   <button

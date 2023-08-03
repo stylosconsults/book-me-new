@@ -1,10 +1,12 @@
 import { BASE_URL } from "@/lib/share";
 import { IHotel } from "@/types/hotel.schema";
+import { IFilters } from "@/types/share";
+import { objectToQueryParams } from "./queryParams";
 
 export async function getUserNumberOfHotels(userId: string) {
     const res = await fetch(`${BASE_URL}/hotels/user/${userId}`);
-    const users = await res.json();
-    return users;
+    const hotels = await res.json();
+    return hotels;
   }
   
   export async function addHotel(createData: IHotel, token: string) {
@@ -45,6 +47,14 @@ export async function getUserNumberOfHotels(userId: string) {
   
   export async function getHotelsByCategory(category: string) {
     const res = await fetch(`${BASE_URL}/hotels?category=${category}`);
-    const users = await res.json();
-    return users;
+    const hotels = await res.json();
+    return hotels;
+  }
+
+
+  export async function getAllHotels({limit, page}: IFilters) {
+    const params  = objectToQueryParams({limit, page});
+    const res = await fetch(`${BASE_URL}/hotels?${params}`);
+    const hotels = await res.json();
+    return hotels;
   }

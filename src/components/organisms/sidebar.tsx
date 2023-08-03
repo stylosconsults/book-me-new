@@ -56,7 +56,7 @@ export default function Sidebar() {
       </div>
       <div className="my-auto">
         {sidebarLinks.map((link, key) => (
-          <>
+          <p key={key}>
             {link.for.includes(auth?.user?.role!) && (
               <Link
                 key={key}
@@ -66,7 +66,7 @@ export default function Sidebar() {
                 {link.name}
               </Link>
             )}
-          </>
+          </p>
         ))}
       </div>
       <div className="mt-auto">

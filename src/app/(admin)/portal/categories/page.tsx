@@ -2,6 +2,7 @@
 import Button from "@/components/atoms/Button";
 import Heading from "@/components/atoms/Heading";
 import { CustomTable } from "@/components/molecules/Table";
+import { ViewImage } from "@/components/molecules/ViewImage";
 import Dialog from "@/components/organisms/dialog";
 import { ICategory } from "@/types/schemas";
 import { getCategories } from "@/utils/category.api";
@@ -88,26 +89,5 @@ export default function PropertyCategories() {
       </div>
       <CustomTable table={table} isLoading={isPropertyCategoriesLoading} />
     </div>
-  );
-}
-
-export function ViewImage({ url }: { url: string }) {
-  const [modalOpen, setModalOpen] = useState(false);
-
-  return (
-    <>
-      <button
-        className="text-blue-500 hover:underline"
-        onClick={() => setModalOpen(true)}
-      >
-        View Image
-      </button>
-      <Dialog open={modalOpen} setOpen={setModalOpen}>
-        <div className="flex flex-col items-center justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={url} alt="" className="w-full h-full" />
-        </div>
-      </Dialog>
-    </>
   );
 }

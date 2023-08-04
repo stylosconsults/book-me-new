@@ -192,7 +192,7 @@ const CustomTable = <TData,>({
           )}
         </TBody>
       </Table>
-      {totalPages > 1 && (
+      {totalPages && totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
           handlePageChange={handlePageChange}

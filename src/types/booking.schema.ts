@@ -43,5 +43,9 @@ export type IBookingStepOne = z.infer<typeof bookingStepOneSchema>;
 export type IBookingStepTwo = z.infer<typeof bookingStepTwoSchema>;
 export type IBooking = z.infer<typeof bookingSchema> & IBookingStepOne & IBookingStepTwo & {
     status: string;
+};
+
+export type IBookingRoom = z.infer<typeof bookingSchema> & IBookingStepOne & IBookingStepTwo & {
+    status: string;
     room: IRoom
 };

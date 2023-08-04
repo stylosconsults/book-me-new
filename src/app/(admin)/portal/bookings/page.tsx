@@ -1,7 +1,7 @@
 "use client";
 import Heading from "@/components/atoms/Heading";
 import { CustomTable } from "@/components/molecules/Table";
-import { IBooking } from "@/types/booking.schema";
+import { IBookingRoom } from "@/types/booking.schema";
 import { getAllBookings } from "@/utils/bookings.api";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -11,7 +11,7 @@ import {
 } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 
-const categoryColumnHelper = createColumnHelper<IBooking>();
+const categoryColumnHelper = createColumnHelper<IBookingRoom>();
 
 export default function Bookings() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,7 +20,7 @@ export default function Bookings() {
     queryKey: ["bookings", currentPage],
     queryFn: () => getAllBookings({ limit: 7, page: currentPage }),
   });
-  const [data, setData] = useState<IBooking[]>([]);
+  const [data, setData] = useState<IBookingRoom[]>([]);
   const columns = [
     categoryColumnHelper.accessor("firstName", {
       id: "fullNames",

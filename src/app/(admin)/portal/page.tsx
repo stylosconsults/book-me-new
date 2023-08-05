@@ -1,34 +1,19 @@
 "use client";
-import Button from "@/components/atoms/Button";
 import Heading from "@/components/atoms/Heading";
-import ImageUploader from "@/components/atoms/ImageUploader";
-import Input from "@/components/atoms/Input";
-import SelectWithErrorCustomSelect, {
-  IOption,
-} from "@/components/atoms/Select";
-import TextArea from "@/components/atoms/TextArea";
 import Steps from "@/components/molecules/Steps";
+import {
+  PropertyDetails,
+  PropertyImages,
+  SelectPropertyType,
+} from "@/components/organisms/HotelForms";
 import Dialog from "@/components/organisms/dialog";
-import { countries } from "@/data/countries";
 import useStore from "@/store/main";
 import { useUserStore } from "@/store/user";
-import {
-  IPropertyCategorySchema,
-  IPropertyDetails,
-  IPropertyImage,
-  propertyCategorySchema,
-  propertyDetails,
-  propertyImage,
-  IHotel,
-} from "@/types/hotel.schema";
-import { ICategory } from "@/types/schemas";
-import { getCategories } from "@/utils/category.api";
+import { IHotel } from "@/types/hotel.schema";
 import { addHotel, getUserNumberOfHotels } from "@/utils/hotel.api";
 import { USER_TYPES } from "@/utils/user";
-import { zodResolver } from "@hookform/resolvers/zod/dist/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 export default function AdminHome() {
@@ -70,6 +55,21 @@ export default function AdminHome() {
   const handlePrev = () => setCurrent(current - 1);
   const handleModalClose = () => setOpen(false);
 
+  const { mutate, isLoading } = useMutation({
+    async onSuccess(data: { hotel: IHotel }) {
+      toast.success("You have successful added a property.");
+      handleModalClose?.();
+    },
+    onError(error: { message: string }) {
+      toast.error(error.message ?? "An error occurred during registration.");
+    },
+    mutationFn: (data: IHotel) => addHotel(data, auth?.accessToken?.token!),
+  });
+
+  const onSubmit = (formData: IHotel) => {
+    mutate(formData);
+  };
+
   return (
     <div>
       <Dialog open={open}>
@@ -105,268 +105,11 @@ export default function AdminHome() {
             formData={formData}
             handleNext={handleNext}
             handlePrev={handlePrev}
-            handleModalClose={handleModalClose}
+            mutate={onSubmit}
+            isLoading={isLoading}
           />
         ) : null}
       </Dialog>
     </div>
-  );
-}
-
-interface HotelRegisterProps {
-  formData?: Partial<IHotel>;
-  handleFormDataChange?: (data: Partial<IHotel>) => void;
-  handleNext?: () => void;
-  handlePrev?: () => void;
-  handleModalClose?: () => void;
-}
-
-function SelectPropertyType({
-  formData,
-  handleFormDataChange,
-  handleNext,
-}: HotelRegisterProps) {
-  const { data: propertyCategories, isLoading: isPropertyCategoriesLoading } =
-    useQuery({
-      queryKey: ["propertyCategories"],
-      queryFn: getCategories,
-    });
-
-  const {
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors, isValid, isSubmitted },
-  } = useForm<IPropertyCategorySchema>({
-    resolver: zodResolver(propertyCategorySchema),
-    defaultValues: {
-      category: formData?.category,
-    },
-  });
-
-  const formattedOptions =
-    propertyCategories?.results?.map((cat: ICategory) => ({
-      value: cat.id,
-      label: cat.name,
-    })) ?? [];
-
-  const onSubmit = (data: IPropertyCategorySchema) => {
-    handleFormDataChange?.(data);
-    handleNext?.();
-  };
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <SelectWithErrorCustomSelect
-        label="Select your property category"
-        options={formattedOptions}
-        error={errors.category?.message}
-        isLoading={isPropertyCategoriesLoading}
-        defaultInputValue={
-          formattedOptions?.find(
-            (opt: IOption) => opt.value === watch("category")
-          )?.label ?? ""
-        }
-        placeholder={"Select property category"}
-        onChange={(newValue) => {
-          const val: { value: string } = newValue as unknown as IOption;
-          setValue("category", String(val?.value), { shouldValidate: true });
-        }}
-      />
-      <Button type="submit" disabled={isSubmitted && !isValid}>
-        Next
-      </Button>
-    </form>
-  );
-}
-
-function PropertyDetails({
-  handleFormDataChange,
-  formData,
-  handleNext,
-  handlePrev,
-}: HotelRegisterProps) {
-  const {
-    handleSubmit,
-    watch,
-    register,
-    setValue,
-    formState: { errors, isValid, isSubmitted },
-  } = useForm<IPropertyDetails>({
-    resolver: zodResolver(propertyDetails),
-    defaultValues: {
-      address: formData?.address,
-      description: formData?.description,
-      email: formData?.email,
-      name: formData?.name,
-      phone: formData?.phone,
-      state: formData?.state,
-      website: formData?.website,
-      city: formData?.city,
-    },
-  });
-
-  const onSubmit = (data: IPropertyDetails) => {
-    handleFormDataChange?.(data);
-    handleNext?.();
-  };
-
-  return (
-    <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
-      <Input
-        {...register("name")}
-        label="Name"
-        placeholder="Your property name"
-        error={errors.name?.message}
-      />
-      <Input
-        {...register("email")}
-        label="Email address"
-        placeholder="Your property email address"
-        error={errors.email?.message}
-      />
-
-      <SelectWithErrorCustomSelect
-        label="Select country"
-        options={countries.map((count) => ({
-          label: count.name,
-          value: count.code,
-        }))}
-        error={errors.state?.message}
-        defaultInputValue={
-          countries?.find((opt) => opt.code === watch("state"))?.name ?? ""
-        }
-        placeholder={"Select property category"}
-        onChange={(newValue) => {
-          const val: { value: string } = newValue as unknown as IOption;
-          setValue("state", String(val?.value), { shouldValidate: true });
-        }}
-      />
-
-      <Input
-        {...register("city")}
-        disabled={!watch("state")}
-        label="City"
-        placeholder="Your property city"
-        error={errors.address?.message}
-      />
-
-      <Input
-        {...register("address")}
-        label="Property Address"
-        placeholder="Your property location"
-        error={errors.address?.message}
-      />
-
-      <Input
-        {...register("phone")}
-        label="Phone number"
-        placeholder="Your property phone number"
-        error={errors.phone?.message}
-      />
-
-      <Input
-        {...register("website")}
-        type="url"
-        label="Website URL"
-        placeholder="https://feldux.com"
-        error={errors.website?.message}
-      />
-
-      <TextArea
-        {...register("description")}
-        label="Description"
-        placeholder="Your property description"
-        error={errors.description?.message}
-      />
-
-      <div className="flex gap-4">
-        <Button
-          className="flex-grow"
-          type="submit"
-          disabled={isSubmitted && !isValid}
-        >
-          Next
-        </Button>
-        <Button className="flex-grow" type="button" onClick={handlePrev}>
-          Back
-        </Button>
-      </div>
-    </form>
-  );
-}
-
-function PropertyImages({
-  handleFormDataChange,
-  formData,
-  handlePrev,
-  handleModalClose,
-}: HotelRegisterProps) {
-  const auth = useStore(useUserStore, (state) => state);
-  const {
-    handleSubmit,
-    setValue,
-    getValues,
-    watch,
-    formState: { isValid, isSubmitted },
-  } = useForm<IPropertyImage>({
-    resolver: zodResolver(propertyImage),
-    defaultValues: {
-      images: formData?.images,
-    },
-  });
-
-  const { mutate, isLoading } = useMutation({
-    async onSuccess(data: { hotel: IHotel }) {
-      toast.success("You have successful added a proprty.");
-      handleModalClose?.();
-    },
-    onError(error: { message: string }) {
-      toast.error(error.message ?? "An error occurred during registration.");
-    },
-    mutationFn: (data: IHotel) => addHotel(data, auth?.accessToken?.token!),
-  });
-
-  const images = watch("images");
-
-  const onSubmit = () => {
-    mutate({ ...formData, images, admin: auth?.user?.id } as IHotel);
-  };
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <ImageUploader
-        type={"file"}
-        label={
-          watch("images")?.length <= 0 ? "Upload images" : "Add another images"
-        }
-        onImageChange={(images) => {
-          setValue("images", images, { shouldValidate: true });
-        }}
-        defaultImages={images}
-      />
-
-      <div className="flex gap-4">
-        <Button
-          isLoading={isLoading}
-          className="flex-grow"
-          type="submit"
-          disabled={isSubmitted && !isValid}
-        >
-          Next
-        </Button>
-        <Button
-          disabled={isLoading}
-          className="flex-grow"
-          type="button"
-          onClick={() => {
-            handleFormDataChange?.({ images: getValues("images") });
-            handlePrev?.();
-          }}
-        >
-          Back
-        </Button>
-      </div>
-    </form>
   );
 }

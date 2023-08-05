@@ -38,4 +38,5 @@ export type IHotel = IPropertyCategorySchema & IPropertyDetails & IPropertyImage
   id: string;
   admin: string;
   status: string;
+  promoted: boolean;
 };

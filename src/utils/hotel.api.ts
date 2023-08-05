@@ -58,3 +58,29 @@ export async function getUserNumberOfHotels(userId: string) {
     const hotels = await res.json();
     return hotels;
   }
+
+  export async function getHotelById(id: string) {
+    const res = await fetch(`${BASE_URL}/hotels/${id}`);
+    const hotel = await res.json();
+    return hotel;
+  }
+
+  export async function updateHotel(id: string, data: Partial<IHotel>){
+    const res = await fetch(`${BASE_URL}/hotels/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data)
+    });
+    const hotel = await res.json();
+    return hotel;
+  }
+
+  export async function deleteHotel(id: string){
+    const res = await fetch(`${BASE_URL}/hotels/${id}`, {
+      method: "DELETE",
+    });
+    const hotel = await res.json();
+    return hotel;
+  }

@@ -1,7 +1,9 @@
 "use client";
+import ActionModal from "@/components/atoms/ActionModal";
 import Button from "@/components/atoms/Button";
 import Heading from "@/components/atoms/Heading";
 import { CustomTable } from "@/components/molecules/Table";
+import PromoteProperty from "@/components/organisms/PromoteProperty";
 import { IHotel } from "@/types/hotel.schema";
 import { getAllHotels } from "@/utils/hotel.api";
 import { useQuery } from "@tanstack/react-query";
@@ -10,6 +12,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const categoryColumnHelper = createColumnHelper<IHotel>();
@@ -71,6 +74,19 @@ export default function Properties() {
         <span className="font-medium text-sm">{info.getValue()}</span>
       ),
     }),
+    categoryColumnHelper.accessor("promoted", {
+      id: "promoted",
+      header: () => <span className="text-xs">Promoted</span>,
+      cell: (info) => (
+        <span className="font-medium text-sm">
+          {info.getValue() ? (
+            <span className="text-green-500">Yes</span>
+          ) : (
+            <span className="text-red-500">No</span>
+          )}
+        </span>
+      ),
+    }),
     categoryColumnHelper.accessor("status", {
       id: "status",
       header: () => <span className="text-xs">Status</span>,
@@ -81,7 +97,23 @@ export default function Properties() {
     categoryColumnHelper.accessor("status", {
       id: "actions",
       header: () => <span className="text-xs">Actions</span>,
-      cell: (info) => <span className="font-medium text-sm">...</span>,
+      cell: (info) => (
+        <>
+          <ActionModal
+            actions={[
+              {
+                label: (
+                  <PromoteProperty
+                    name={info.row.original.name}
+                    id={info.row.original.id}
+                  />
+                ),
+              },
+            ]}
+          />
+          ,
+        </>
+      ),
     }),
   ];
 
@@ -106,7 +138,9 @@ export default function Properties() {
         >
           All Properties
         </Heading>
-        <Button>Add Hotel</Button>
+        <Link href="/portal/properties/new">
+          <Button>Add Hotel</Button>
+        </Link>
       </div>
       <CustomTable
         totalPages={properties?.totalPages}

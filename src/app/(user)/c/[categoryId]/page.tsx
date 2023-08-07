@@ -2,6 +2,7 @@
 import Heading from "@/components/atoms/Heading";
 import ListHotels from "@/components/molecules/ListHotels";
 import { BASE_URL } from "@/lib/share";
+import { IHotel } from "@/types/hotel.schema";
 import { getHotelsByCategory } from "@/utils/hotel.api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
@@ -27,7 +28,9 @@ export default function GetHotelsInCategory() {
       <ListHotels
         notFoundMessage={`No properties in ${category} category`}
         isHotelsLoading={isHotelsLoading}
-        hotels={hotels?.results}
+        hotels={hotels?.results?.filter(
+          (h: IHotel) => h.category === params?.categoryId
+        )}
       />
     </>
   );

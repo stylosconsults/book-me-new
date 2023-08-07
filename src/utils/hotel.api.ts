@@ -46,7 +46,8 @@ export async function getUserNumberOfHotels(userId: string) {
   }
   
   export async function getHotelsByCategory(category: string) {
-    const res = await fetch(`${BASE_URL}/hotels?category=${category}`);
+    // this will be enable later category=${category}
+    const res = await fetch(`${BASE_URL}/hotels`);
     const hotels = await res.json();
     return hotels;
   }

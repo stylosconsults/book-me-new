@@ -3,6 +3,7 @@ import ActionModal from "@/components/atoms/ActionModal";
 import Button from "@/components/atoms/Button";
 import Heading from "@/components/atoms/Heading";
 import { CustomTable } from "@/components/molecules/Table";
+import DeleteProperty from "@/components/organisms/DeleteProperty";
 import PromoteProperty from "@/components/organisms/PromoteProperty";
 import { IHotel } from "@/types/hotel.schema";
 import { getAllHotels } from "@/utils/hotel.api";
@@ -103,15 +104,32 @@ export default function Properties() {
             actions={[
               {
                 label: (
+                  <Link href={`/portal/properties/${info.row.original.id}`}>
+                    Rooms
+                  </Link>
+                ),
+              },
+              {
+                label: (
                   <PromoteProperty
                     name={info.row.original.name}
                     id={info.row.original.id}
+                    isPromoted={info.row.original.promoted}
                   />
+                ),
+              },
+              {
+                label: (
+                  <>
+                    <DeleteProperty
+                      id={info.row.original.id}
+                      name={info.row.original.name}
+                    />
+                  </>
                 ),
               },
             ]}
           />
-          ,
         </>
       ),
     }),

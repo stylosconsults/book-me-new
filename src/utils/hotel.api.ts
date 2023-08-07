@@ -81,6 +81,6 @@ export async function getUserNumberOfHotels(userId: string) {
     const res = await fetch(`${BASE_URL}/hotels/${id}`, {
       method: "DELETE",
     });
-    const hotel = await res.json();
-    return hotel;
+    return true
   }
+

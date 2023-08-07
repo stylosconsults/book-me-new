@@ -3,7 +3,6 @@ import Button from "../atoms/Button";
 import Dialog from "./dialog";
 import { useState } from "react";
 import { deleteHotel } from "@/utils/hotel.api";
-import { IHotel } from "@/types/hotel.schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function DeleteProperty({
@@ -19,31 +18,36 @@ export default function DeleteProperty({
     setOpen(false);
   };
   const { mutate, isLoading } = useMutation({
-    async onSuccess(data: { hotel: IHotel }) {
-      toast.success(`${name} promoted`);
+    onSuccess() {
+      toast.success(`hotel deleted`);
       queryClient.invalidateQueries(["properties"]);
       handleModalClose();
     },
     onError(error: { message: string }) {
-      toast.error(error.message ?? "An error occurred during registration.");
+      toast.error(error.message ?? "An error occurred while deleting hotel");
     },
     mutationFn: () => deleteHotel(id),
   });
 
   return (
-    <Dialog open={open} setOpen={setOpen} trigger={<>Promote</>}>
+    <Dialog
+      open={open}
+      setOpen={setOpen}
+      trigger={<p className="text-red-500 text-left">Delete</p>}
+    >
       <p>
         Are you sure you want <span className="text-blue-500">{name}</span> to
-        be promoted
+        be deleted
       </p>
       <div className="flex gap-3">
         <Button
           onClick={() => mutate()}
-          className="flex-grow"
+          loadingText="Deleting hotel"
+          className="flex-grow bg-red-500"
           type="submit"
           isLoading={isLoading}
         >
-          Promote
+          Delete
         </Button>
         <Button
           className="flex-grow"

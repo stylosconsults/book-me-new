@@ -27,7 +27,7 @@ const ActionModal: React.FC<ActionModalProps> = ({ actionButton, actions }) => {
       <Portal>
         <PopoverContent
           sideOffset={2}
-          className="bg-white z-50 min-w-[160px] rounded-2xl  bg-popover p-4 text-popover-foreground shadow-2xl outline-none animate-in data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
+          className="bg-white z-50 min-w-[160px] border rounded-2xl  bg-popover p-4 text-popover-foreground shadow-2xl outline-none animate-in data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
         >
           <DialogRoot>
             {actions.map(({ label, onClick, className }, key) => {

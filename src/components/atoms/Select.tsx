@@ -20,7 +20,7 @@ export default function SelectWithErrorCustomSelect<
   Group extends GroupBase<Option> = GroupBase<Option>
 >(props: Props<Option, IsMulti, Group> & SelectWithErrorProps) {
   return (
-    <div>
+    <div className="w-full">
       {props.label && (
         <label className="text-co-black font-bold text-base" htmlFor={props.id}>
           {props.label}

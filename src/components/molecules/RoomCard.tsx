@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -18,6 +18,7 @@ interface RoomCardProps {
   hideBtn?: boolean;
   image: string;
   discountedPrice?: number;
+  children?: ReactNode;
 }
 export default function RoomCard({
   id,
@@ -32,10 +33,11 @@ export default function RoomCard({
   hideBtn,
   image,
   discountedPrice,
+  children,
 }: RoomCardProps) {
   return (
     <div
-      className="bg-white rounded-2xl group mt-5 border p-2 shadow"
+      className="bg-white h-full rounded-2xl group mt-5 border p-2 shadow"
       style={{
         width: "calc(25% - 10px)",
         minWidth: "200px",
@@ -95,6 +97,7 @@ export default function RoomCard({
           </Button>
         </Link>
       )}
+      {children}
     </div>
   );
 }

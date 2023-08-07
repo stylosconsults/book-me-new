@@ -25,7 +25,9 @@ export default function Dialog({
 }: DialogProps) {
   return (
     <DialogPrimitives.Root open={open} onOpenChange={setOpen}>
-      <DialogPrimitives.Trigger>{trigger}</DialogPrimitives.Trigger>
+      <DialogPrimitives.Trigger className="w-full">
+        {trigger}
+      </DialogPrimitives.Trigger>
       <DialogPrimitives.Portal>
         <section className="fixed inset-0 z-50 flex items-start justify-center sm:items-center">
           <DialogPrimitives.Overlay className="fixed inset-0 z-50 bg-black/40 bg-blend-overlay transition-all duration-100 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in" />
@@ -62,16 +64,16 @@ export default function Dialog({
                     <path
                       d="M17.25 6.75L6.75 17.25"
                       stroke="#515866"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M6.75 6.75L17.25 17.25"
                       stroke="#515866"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
 

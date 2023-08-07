@@ -5,19 +5,19 @@ import Steps from "@/components/molecules/Steps";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { IBooking } from "@/types/booking.schema";
-import { IRoom } from "@/types/schemas";
 import Button from "@/components/atoms/Button";
 import BookingStepOne from "@/components/organisms/BookingStepOne";
 import BookingStepTwo from "@/components/organisms/BookingStepTwo";
 import BookingStepThree from "@/components/organisms/BookingStepThree";
 import PaymentForm from "@/components/molecules/PaymentForm";
 import { getRoomById } from "@/utils/room.api";
+import { IRoomWithHotel } from "@/types/room.schema";
 
 export default function Booking() {
   const router = useRouter();
   const params = useParams();
 
-  const { data: room } = useQuery<IRoom>({
+  const { data: room } = useQuery<IRoomWithHotel>({
     queryKey: ["room", params?.roomId!],
     queryFn: () => getRoomById(params?.roomId as string),
     enabled: Boolean(params?.roomId),

@@ -47,7 +47,7 @@ function RangeCustomInput({ openCalendar, value }: any) {
 }
 
 interface BookingInfoProps {
-  facilities: string[];
+  facilities?: string[];
   handleFormChange: (data: Partial<IBooking>) => void;
   handleNightToStay: (nights: number) => void;
   roomAmount: number;

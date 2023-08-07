@@ -1,12 +1,12 @@
 import React from "react";
 import RoomCard from "../molecules/RoomCard";
-import { IRoom } from "@/types/schemas";
 import { IBooking } from "@/types/booking.schema";
 import Button from "../atoms/Button";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { BASE_URL } from "@/lib/share";
 import { useParams } from "next/navigation";
+import { IRoomWithHotel } from "@/types/room.schema";
 
 export async function BookingAction(data: IBooking) {
   const res = await fetch(`${BASE_URL}/bookings`, {
@@ -37,7 +37,7 @@ export default function BookingStepThree({
   handleGoNext,
   handleSuccessBooking,
 }: {
-  room: IRoom;
+  room: IRoomWithHotel;
   formData: IBooking;
   handleStepChange: (page: number) => void;
   nightsToStay: number;
@@ -74,7 +74,7 @@ export default function BookingStepThree({
           price={room?.price}
           // discountedPrice={room?.discountedPrice}
           refundable={true}
-          bedType={room?.bedType}
+          bedType={String(room?.bedType)}
           breakfast={true}
           roomSize={room?.size!}
           hideBtn

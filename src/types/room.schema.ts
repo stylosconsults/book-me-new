@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { IHotel } from "./hotel.schema";
 
 export const zodRoom = z.object({
     name: z.string({ required_error: "Name is required." }),
@@ -17,4 +18,8 @@ export const zodRoom = z.object({
 
 export type IRoom = z.infer<typeof zodRoom> & {
   id: string;
+}
+
+export type IRoomWithHotel = IRoom & {
+  hotel: IHotel
 }

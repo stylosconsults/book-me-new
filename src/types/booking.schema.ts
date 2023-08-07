@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { IRoom } from './schemas';
+import { IRoomWithHotel } from './room.schema';
 
 export const bookingSchema = z.object({
     hotel: z.string().uuid(),
@@ -47,5 +47,5 @@ export type IBooking = z.infer<typeof bookingSchema> & IBookingStepOne & IBookin
 
 export type IBookingRoom = z.infer<typeof bookingSchema> & IBookingStepOne & IBookingStepTwo & {
     status: string;
-    room: IRoom
+    room: IRoomWithHotel
 };

@@ -29,7 +29,7 @@ export default function RoomsOfProperties() {
             <Fragment key={index}>
               <RoomCard
                 id={room.id}
-                image={room.image}
+                images={room.images}
                 name={room?.name}
                 noAdults={room.adults}
                 noChildren={room.children}

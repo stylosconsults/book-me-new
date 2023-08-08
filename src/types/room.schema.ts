@@ -10,9 +10,7 @@ export const zodRoom = z.object({
     adults: z.number({ required_error: "Number of adults is required." }),
     size: z.number({ required_error: "Size is required." }),
     hotel: z.string({ required_error: "Hotel is required." }),
-    image: z.any({
-        required_error: "Please upload at least one image"
-    }),
+    images: z.array(z.any()).min(1, "Please upload at least one image"),
     facilities: z.array(z.string()).optional()
   });
 

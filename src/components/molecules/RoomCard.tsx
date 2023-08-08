@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -16,7 +16,7 @@ interface RoomCardProps {
   breakfast: boolean;
   roomSize: number;
   hideBtn?: boolean;
-  image: string;
+  images: string[];
   discountedPrice?: number;
   children?: ReactNode;
 }
@@ -31,10 +31,11 @@ export default function RoomCard({
   refundable,
   roomSize,
   hideBtn,
-  image,
+  images,
   discountedPrice,
   children,
 }: RoomCardProps) {
+  const [activeImage, setActiveImage] = useState(0);
   return (
     <div
       className="bg-white h-full rounded-2xl group mt-5 border p-2 shadow"
@@ -43,18 +44,36 @@ export default function RoomCard({
         minWidth: "200px",
       }}
     >
-      <div className="relative overflow-hidden rounded-2xl w-full h-40">
-        <Image
-          src={image}
-          alt=""
-          className="w-full h-32 overflow-clip duration-1000 object-cover group-hover:scale-110"
-          draggable="false"
-          fill
-          loading="lazy"
-          placeholder="blur"
-          blurDataURL={BlurredDataImage}
-          onError={ImagePlaceholderOnError}
-        />
+      <div className="relative flex justify-center">
+        <div className="relative overflow-hidden rounded-2xl w-full h-40">
+          <Image
+            src={images[activeImage]}
+            alt=""
+            className="w-full h-32 overflow-clip duration-1000 object-cover group-hover:scale-110"
+            draggable="false"
+            fill
+            loading="lazy"
+            placeholder="blur"
+            blurDataURL={BlurredDataImage}
+            onError={ImagePlaceholderOnError}
+          />
+        </div>
+        <div className="flex gap-1 z-50 absolute bottom-2">
+          {images.length > 1 &&
+            images?.map((img, i) => (
+              <div
+                key={i}
+                className={`w-6 h-6 ${
+                  activeImage === i
+                    ? "bg-blue-500 text-white"
+                    : "bg-white text-black"
+                }  rounded-2xl text-xs  flex items-center justify-center border cursor-pointer`}
+                onClick={() => setActiveImage(i)}
+              >
+                {i + 1}
+              </div>
+            ))}
+        </div>
       </div>
       <div className="flex justify-between my-2 group">
         <p className="group-hover:text-co-blue text-sm py-2 font-medium duration-200 text-co-black">

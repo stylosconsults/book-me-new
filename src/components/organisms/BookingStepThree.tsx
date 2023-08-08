@@ -70,7 +70,7 @@ export default function BookingStepThree({
           name={room?.name}
           noAdults={room?.adults}
           noChildren={room?.children}
-          image={room?.image}
+          images={room?.images}
           price={room?.price}
           // discountedPrice={room?.discountedPrice}
           refundable={true}

@@ -22,10 +22,26 @@ export default function RoomForm({ room, trigger }: RoomFormProps) {
   const queryClient = useQueryClient();
   const [modalOpen, setModalOpen] = useState(false);
 
+  const {
+    register,
+    watch,
+    setValue,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid, isDirty },
+  } = useForm<IRoom>({
+    resolver: zodResolver(zodRoom),
+    defaultValues: {
+      ...room,
+      hotel: String(params?.propertyId),
+    },
+  });
+
   const { mutate: createRoom, isLoading: isCreatingRoom } = useMutation({
     onSuccess() {
       toast.success(`Room added successful.`);
       queryClient.invalidateQueries(["roomsInHotel"]);
+      reset();
       setModalOpen(false);
     },
     onError(error: { message: string }) {
@@ -38,26 +54,13 @@ export default function RoomForm({ room, trigger }: RoomFormProps) {
     onSuccess() {
       toast.success(`Room added successful.`);
       queryClient.invalidateQueries(["roomsInHotel"]);
+      reset();
       setModalOpen(false);
     },
     onError(error: { message: string }) {
       toast.error(error.message ?? "An error occurred during registration.");
     },
     mutationFn: (data: IRoom) => updateRoom(room?.id!, data),
-  });
-
-  const {
-    register,
-    watch,
-    setValue,
-    handleSubmit,
-    formState: { errors, isValid, isDirty },
-  } = useForm<IRoom>({
-    resolver: zodResolver(zodRoom),
-    defaultValues: {
-      ...room,
-      hotel: String(params?.propertyId),
-    },
   });
 
   const onSubmit = (data: IRoom) => {
@@ -88,6 +91,8 @@ export default function RoomForm({ room, trigger }: RoomFormProps) {
     { value: "queen", label: "Queen" },
     { value: "king", label: "King" },
   ];
+
+  console.log({ errors });
 
   return (
     <Dialog
@@ -170,9 +175,8 @@ export default function RoomForm({ room, trigger }: RoomFormProps) {
         <ImageUploader
           type={"file"}
           label={"Upload image"}
-          max={1}
           onImageChange={(images) => {
-            setValue("image", images, { shouldDirty: true });
+            setValue("images", images, { shouldDirty: true });
           }}
         />
         <div className="flex gap-3">

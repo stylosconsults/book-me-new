@@ -16,6 +16,10 @@ export async function getRoomById(id: string) {
   export async function addRoom(createData: IRoom) {
     const formData = new FormData();
     const token = '';
+
+    createData?.images.forEach((img, index: number) => {
+      formData.append("images" + index, img as unknown as Blob);
+    });
   
     formData.append("name", createData?.name);
     formData.append("description", createData?.description);
@@ -23,15 +27,11 @@ export async function getRoomById(id: string) {
     formData.append("bedType", String(createData?.bedType));
     formData.append("children", String(createData?.children));
     formData.append("hotel", createData?.hotel);
-    formData.append("image", createData?.image?.[0] as unknown as Blob);
     formData.append("price", String(createData?.price));
     formData.append("size", String(createData.size));
   
     const response = await fetch(`${BASE_URL}/rooms`, {
       method: "POST",
-      headers: {
-        Authentication: `Bearer ${token}`,
-      },
       body: formData,
     });
   

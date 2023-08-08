@@ -66,7 +66,7 @@ export default function Button({
       {...rest}
     >
       {isLoading && (
-        <div className="w-4 h-4 border-4 bg-transparent border-l-blue-700 rounded-full" />
+        <div className="w-4 h-4 border-4 bg-transparent border-l-blue-700 rounded-full animate-spin" />
       )}
       {icon}
       {isLoading ? loadingText : children}

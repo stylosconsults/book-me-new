@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   // }, [auth]);
   return (
     <div className="w-full relative flex">
-      <aside className="h-screen sticky top-0 max-w-[350px] min-w-[300px] bg-co-black">
+      <aside className="min-h-screen sticky top-0 max-w-[350px] min-w-[300px] bg-co-black">
         <Sidebar />
       </aside>
       <div className="flex-grow">

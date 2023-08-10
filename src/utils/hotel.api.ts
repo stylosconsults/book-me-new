@@ -25,9 +25,9 @@ export async function getUserNumberOfHotels(userId: string) {
     formData.append("address", createData?.address);
     formData.append("state", createData?.state);
     formData.append("city", createData?.city);
-    formData.append("phone", createData?.phone);
-    formData.append("email", createData?.email);
-    formData.append("website", createData?.website);
+    formData.append("phone", createData?.phone??"");
+    formData.append("email", createData?.email??"");
+    formData.append("website", createData?.website??"");
     formData.append("category", createData.category);
     formData.append("admin", createData.admin!);
 

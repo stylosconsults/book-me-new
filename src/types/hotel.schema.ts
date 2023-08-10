@@ -20,10 +20,10 @@ export const propertyDetails = z.object({
     name: z.string().nonempty("Property name should not be empty."),
     address: z.string().nonempty("Address should not be empty."),
     state: z.string().nonempty("State should not be empty."),
-    phone: z.string().nonempty("Phone number should not be empty."),
+    phone: z.string().optional(),
     description: z.string().nonempty("Description should not be empty."),
-    website: z.string().url("Invalid website URL format."),
-    email: z.string().email("Invalid email address format."),
+    website: z.string().url("Invalid website URL format.").optional(),
+    email: z.string().email("Invalid email address format.").optional(),
     city: z.string().nonempty("City should not be empty."),
     amenities: z.array(z.string()).min(1, "Upload at least one image")
 })

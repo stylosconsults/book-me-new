@@ -92,8 +92,6 @@ export default function RoomForm({ room, trigger }: RoomFormProps) {
     { value: "king", label: "King" },
   ];
 
-  console.log({ errors });
-
   return (
     <Dialog
       title={`Create new room`}
@@ -159,13 +157,13 @@ export default function RoomForm({ room, trigger }: RoomFormProps) {
         <SelectWithErrorCustomSelect
           className="flex-grow w-full"
           options={facilities}
+          value={watch("facilities")?.map((fa) => ({ label: fa, value: fa }))}
           error={errors.facilities?.message}
-          isMulti={true}
+          isMulti
           onChange={(val) => {
-            const facilities = (
-              val as unknown as { label: string; value: string[] }
-            )?.value;
-            setValue("facilities", facilities, {
+            const facilities = val as unknown as IOption[];
+            const value = facilities.map((fac) => fac.value);
+            setValue("facilities", value, {
               shouldDirty: true,
             });
           }}

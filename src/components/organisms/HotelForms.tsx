@@ -221,6 +221,7 @@ export function PropertyDetails({
       state: formData?.state,
       website: formData?.website,
       city: formData?.city,
+      amenities: formData?.amenities,
     },
   });
 
@@ -228,6 +229,20 @@ export function PropertyDetails({
     handleFormDataChange?.(data);
     handleNext?.();
   };
+
+  const amenities = [
+    { value: "wifi", label: "Wifi" },
+    { value: "parking", label: "Parking" },
+    { value: "pool", label: "Pool" },
+    { value: "gym", label: "Gym" },
+    { value: "spa", label: "Spa" },
+    { value: "laundry", label: "Laundry" },
+    { value: "room service", label: "Room Service" },
+    { value: "air conditioning", label: "Air Conditioning" },
+    { value: "tv", label: "TV" },
+    { value: "kitchen", label: "Kitchen" },
+    { value: "smoking", label: "Smoking" },
+  ];
 
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
@@ -296,6 +311,23 @@ export function PropertyDetails({
         label="Description"
         placeholder="Your property description"
         error={errors.description?.message}
+      />
+
+      <SelectWithErrorCustomSelect
+        className="flex-grow w-full"
+        options={amenities}
+        value={watch("amenities")?.map((fa) => ({ label: fa, value: fa }))}
+        error={errors.amenities?.message}
+        isMulti
+        onChange={(val) => {
+          const facilities = (
+            val as unknown as { label: string; value: string[] }
+          )?.value;
+          setValue("amenities", facilities, {
+            shouldDirty: true,
+          });
+        }}
+        label="Facilities"
       />
 
       <div className="flex gap-4">

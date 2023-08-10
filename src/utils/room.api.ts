@@ -20,6 +20,10 @@ export async function getRoomById(id: string) {
     createData?.images.forEach((img, index: number) => {
       formData.append("images" + index, img as unknown as Blob);
     });
+
+    createData.facilities.map((fac)=>{
+      formData.append('facilities', fac);
+    })
   
     formData.append("name", createData?.name);
     formData.append("description", createData?.description);
@@ -30,6 +34,8 @@ export async function getRoomById(id: string) {
     formData.append("price", String(createData?.price));
     formData.append("size", String(createData.size));
   
+    console.log(formData)
+
     const response = await fetch(`${BASE_URL}/rooms`, {
       method: "POST",
       body: formData,

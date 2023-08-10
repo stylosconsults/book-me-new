@@ -16,6 +16,10 @@ export async function getUserNumberOfHotels(userId: string) {
       formData.append("images" + index, img as unknown as Blob);
     });
   
+    createData.amenities.map((amenity)=>{
+      formData.append('amenities', amenity);
+    })
+
     formData.append("name", createData?.name);
     formData.append("description", createData?.description);
     formData.append("address", createData?.address);
@@ -26,7 +30,7 @@ export async function getUserNumberOfHotels(userId: string) {
     formData.append("website", createData?.website);
     formData.append("category", createData.category);
     formData.append("admin", createData.admin!);
-  
+
     const response = await fetch(`${BASE_URL}/hotels`, {
       method: "POST",
       headers: {

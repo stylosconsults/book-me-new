@@ -11,7 +11,7 @@ export const zodRoom = z.object({
     size: z.number({ required_error: "Size is required." }),
     hotel: z.string({ required_error: "Hotel is required." }),
     images: z.array(z.any()).min(1, "Please upload at least one image"),
-    facilities: z.array(z.string()).optional()
+    facilities: z.array(z.string()).min(1, "One facility is required")
   });
 
 export type IRoom = z.infer<typeof zodRoom> & {

@@ -25,6 +25,7 @@ export const propertyDetails = z.object({
     website: z.string().url("Invalid website URL format."),
     email: z.string().email("Invalid email address format."),
     city: z.string().nonempty("City should not be empty."),
+    amenities: z.array(z.string()).min(1, "Upload at least one image")
 })
 
 export const propertyImage = z.object({

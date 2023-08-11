@@ -3,11 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import Carousel from "../molecules/Carousel";
 import CategoryCard from "../molecules/CategoryCard";
-import { BASE_URL } from "@/lib/share";
 import Heading from "../atoms/Heading";
 import Spinner from "../atoms/Spinner";
-import { ICategory } from "@/types/schemas";
 import { getCategories } from "@/utils/category.api";
+import { ICategory } from "@/types/category.schema";
 
 export default function CategoriesList() {
   const { data: propertyCategories, isLoading: isPropertyCategoriesLoading } =

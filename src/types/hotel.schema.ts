@@ -22,8 +22,8 @@ export const propertyDetails = z.object({
     state: z.string().nonempty("State should not be empty."),
     phone: z.string().optional(),
     description: z.string().nonempty("Description should not be empty."),
-    website: z.string().url("Invalid website URL format.").optional(),
-    email: z.string().email("Invalid email address format.").optional(),
+    website: z.string().optional(),
+    email: z.string().optional(),
     city: z.string().nonempty("City should not be empty."),
     amenities: z.array(z.string()).min(1, "Upload at least one image")
 })

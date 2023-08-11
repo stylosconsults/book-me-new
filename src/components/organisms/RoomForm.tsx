@@ -165,6 +165,7 @@ export default function RoomForm({ room, trigger }: RoomFormProps) {
             const value = facilities.map((fac) => fac.value);
             setValue("facilities", value, {
               shouldDirty: true,
+              shouldValidate: true,
             });
           }}
           label="Facilities"

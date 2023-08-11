@@ -320,11 +320,11 @@ export function PropertyDetails({
         error={errors.amenities?.message}
         isMulti
         onChange={(val) => {
-          const facilities = (
-            val as unknown as { label: string; value: string[] }
-          )?.value;
-          setValue("amenities", facilities, {
+          const facilities = val as unknown as IOption[];
+          const value = facilities.map((fac) => fac.value);
+          setValue("amenities", value, {
             shouldDirty: true,
+            shouldValidate: true,
           });
         }}
         label="Facilities"

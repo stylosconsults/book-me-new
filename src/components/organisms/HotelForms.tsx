@@ -115,11 +115,11 @@ export function PropertySettings({
         <input
           type="checkbox"
           checked={formData?.promoted}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
             handleFormDataChange?.({
               promoted: e.target.checked,
-            })
-          }
+            });
+          }}
         />
         <p>Promote hotel</p>
       </div>
@@ -281,7 +281,7 @@ export function PropertyDetails({
         disabled={!watch("state")}
         label="City"
         placeholder="Your property city"
-        error={errors.address?.message}
+        error={errors.city?.message}
       />
 
       <Input
@@ -362,7 +362,7 @@ export function PropertyImages({
     setValue,
     getValues,
     watch,
-    formState: { isValid, isSubmitted },
+    formState: { isValid, isSubmitted, errors },
   } = useForm<IPropertyImage>({
     resolver: zodResolver(propertyImage),
     defaultValues: {
@@ -376,14 +376,29 @@ export function PropertyImages({
     mutate({ ...formData, images, admin: auth?.user?.id } as IHotel);
   };
 
+  const imageErrors = !errors.images?.message
+    ? (errors?.images as { message: string }[])?.map((err) => ({
+        message: err?.message ?? "",
+      }))
+    : [];
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <ImageUploader
         type={"file"}
         label={"Upload images"}
         onImageChange={(images) => {
-          setValue("images", images, { shouldValidate: true });
+          setValue("images", images, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
         }}
+        errors={imageErrors}
+        singleError={
+          typeof errors.images?.message === "string"
+            ? errors.images?.message
+            : ""
+        }
         defaultImages={images}
       />
 

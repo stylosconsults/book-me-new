@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 
 export default function AdminHome() {
   const [open, setOpen] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const auth = useStore(useUserStore, (state) => state);
   const [userId, setUserId] = useState(auth?.user?.id);
 
@@ -29,15 +30,17 @@ export default function AdminHome() {
 
   useEffect(() => {
     if (
+      hasMounted &&
       userHotels &&
       auth?.user?.role === USER_TYPES.HOTEL_ADMIN &&
       userHotels?.numberHotels <= 0
     ) {
+      alert("ji");
       setOpen(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userHotels]);
+  }, [userHotels, hasMounted]);
 
   useEffect(() => {
     setUserId(auth?.user?.id!);
@@ -70,46 +73,55 @@ export default function AdminHome() {
     mutate(formData);
   };
 
+  useEffect(() => {
+    if (!hasMounted) {
+      setHasMounted(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div>
-      <Dialog open={open}>
-        <Heading
-          subTitleClassName="max-w-[600px]"
-          subTitle="Now that you have successfully registered as a hotel administrator, it's time to enrich your profile with essential and captivating details about your property."
-        >
-          Welcome, Back!
-        </Heading>
+      {hasMounted && !isUserHotelsLoading && (
+        <Dialog open={open}>
+          <Heading
+            subTitleClassName="max-w-[600px]"
+            subTitle="Now that you have successfully registered as a hotel administrator, it's time to enrich your profile with essential and captivating details about your property."
+          >
+            Welcome, Back!
+          </Heading>
 
-        <Steps
-          current={current}
-          setCurrent={setCurrent}
-          steps={["Property type", "Property Details", "Property Images"]}
-        />
+          <Steps
+            current={current}
+            setCurrent={setCurrent}
+            steps={["Property type", "Property Details", "Property Images"]}
+          />
 
-        {current === 0 ? (
-          <SelectPropertyType
-            handleFormDataChange={handleFormDataChange}
-            formData={formData}
-            handleNext={handleNext}
-          />
-        ) : current === 1 ? (
-          <PropertyDetails
-            handleFormDataChange={handleFormDataChange}
-            formData={formData}
-            handleNext={handleNext}
-            handlePrev={handlePrev}
-          />
-        ) : current === 2 ? (
-          <PropertyImages
-            handleFormDataChange={handleFormDataChange}
-            formData={formData}
-            handleNext={handleNext}
-            handlePrev={handlePrev}
-            mutate={onSubmit}
-            isLoading={isLoading}
-          />
-        ) : null}
-      </Dialog>
+          {current === 0 ? (
+            <SelectPropertyType
+              handleFormDataChange={handleFormDataChange}
+              formData={formData}
+              handleNext={handleNext}
+            />
+          ) : current === 1 ? (
+            <PropertyDetails
+              handleFormDataChange={handleFormDataChange}
+              formData={formData}
+              handleNext={handleNext}
+              handlePrev={handlePrev}
+            />
+          ) : current === 2 ? (
+            <PropertyImages
+              handleFormDataChange={handleFormDataChange}
+              formData={formData}
+              handleNext={handleNext}
+              handlePrev={handlePrev}
+              mutate={onSubmit}
+              isLoading={isLoading}
+            />
+          ) : null}
+        </Dialog>
+      )}
     </div>
   );
 }

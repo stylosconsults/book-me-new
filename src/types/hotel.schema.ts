@@ -1,14 +1,6 @@
 import { z } from "zod";
-const MAX_FILE_SIZE = 500000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+import { imageSchema } from "./schemas";
 
-export const imageSchema = z.any().refine(
-    (file) => file?.size <= MAX_FILE_SIZE,
-    {message: `Max image size is 5MB. This image is`}
-  ).refine(
-    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-   {message: "Only .jpg, .jpeg, .png and .webp formats are supported."}
-  );
   
 export const propertyCategorySchema = z.object({
     category: z.string({
@@ -25,7 +17,7 @@ export const propertyDetails = z.object({
     website: z.string().optional(),
     email: z.string().optional(),
     city: z.string().nonempty("City should not be empty."),
-    amenities: z.array(z.string()).min(1, "Upload at least one image")
+    amenities: z.array(z.string()).min(2, "Add at least two amenities")
 })
 
 export const propertyImage = z.object({

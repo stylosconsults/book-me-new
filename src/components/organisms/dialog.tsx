@@ -11,6 +11,7 @@ export interface DialogProps extends React.HTMLAttributes<HTMLElement> {
   open?: boolean;
   setOpen?(open: boolean): void;
   trigger?: ReactNode;
+  triggerClassName?: string;
 }
 
 export default function Dialog({
@@ -21,11 +22,12 @@ export default function Dialog({
   open,
   setOpen,
   trigger,
+  triggerClassName,
   ...rest
 }: DialogProps) {
   return (
     <DialogPrimitives.Root open={open} onOpenChange={setOpen}>
-      <DialogPrimitives.Trigger className="w-full">
+      <DialogPrimitives.Trigger className={triggerClassName}>
         {trigger}
       </DialogPrimitives.Trigger>
       <DialogPrimitives.Portal>

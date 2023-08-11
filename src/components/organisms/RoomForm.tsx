@@ -92,6 +92,12 @@ export default function RoomForm({ room, trigger }: RoomFormProps) {
     { value: "king", label: "King" },
   ];
 
+  const imageErrors = !errors.images?.message
+    ? (errors?.images as { message: string }[])?.map((err) => ({
+        message: err?.message ?? "",
+      }))
+    : [];
+
   return (
     <Dialog
       title={`Create new room`}
@@ -175,8 +181,17 @@ export default function RoomForm({ room, trigger }: RoomFormProps) {
           type={"file"}
           label={"Upload image"}
           onImageChange={(images) => {
-            setValue("images", images, { shouldDirty: true });
+            setValue("images", images, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
           }}
+          errors={imageErrors}
+          singleError={
+            typeof errors.images?.message === "string"
+              ? errors.images?.message
+              : ""
+          }
         />
         <div className="flex gap-3">
           <Button

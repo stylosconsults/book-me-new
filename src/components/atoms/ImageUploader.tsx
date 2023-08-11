@@ -49,7 +49,7 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
     };
 
     return (
-      <div className="ull flex flex-col">
+      <div className=" flex flex-col">
         <div>
           {label && (
             <label className="text-co-black font-bold text-base">{label}</label>
@@ -91,7 +91,7 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
         {selectedImages.length > 0 && (
           <div className="flex gap-1 flex-wrap">
             {selectedImages.map((image, index) => (
-              <div key={index} className="mb-4 max-w-[250px]">
+              <div key={index} className="mb-4 w-36">
                 <div className="w-fit">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -109,7 +109,7 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
                   </button>
                 </div>
                 {errors?.[index] && (
-                  <p className="text-red-500 text-xs max-w-fit">
+                  <p className="text-red-500 text-xs break-words w-fit">
                     {errors?.[index]?.message}
                   </p>
                 )}

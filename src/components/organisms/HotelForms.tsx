@@ -15,7 +15,6 @@ import Input from "../atoms/Input";
 import ImageUploader from "../atoms/ImageUploader";
 import TextArea from "../atoms/TextArea";
 import { getCategories } from "@/utils/category.api";
-import { ICategory } from "@/types/schemas";
 import { countries } from "@/data/countries";
 import useStore from "@/store/main";
 import { useUserStore } from "@/store/user";
@@ -24,6 +23,7 @@ import Heading from "../atoms/Heading";
 import Steps from "../molecules/Steps";
 import { ChangeEvent, useState } from "react";
 import { USER_TYPES } from "@/utils/user";
+import { ICategory } from "@/types/category.schema";
 
 export interface HotelRegisterProps {
   formData?: Partial<IHotel>;

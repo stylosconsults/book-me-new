@@ -1,10 +1,12 @@
 "use client";
+import ActionModal from "@/components/atoms/ActionModal";
 import Button from "@/components/atoms/Button";
 import Heading from "@/components/atoms/Heading";
 import { CustomTable } from "@/components/molecules/Table";
 import { ViewImage } from "@/components/molecules/ViewImage";
+import CategoryForm from "@/components/organisms/categoryForm";
 import Dialog from "@/components/organisms/dialog";
-import { ICategory } from "@/types/schemas";
+import { ICategory } from "@/types/category.schema";
 import { getCategories } from "@/utils/category.api";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -60,7 +62,22 @@ export default function PropertyCategories() {
     categoryColumnHelper.accessor("status", {
       id: "status",
       header: () => <span className="text-xs">Actions</span>,
-      cell: (info) => <span className="font-medium text-sm">...</span>,
+      cell: (info) => (
+        <>
+          <ActionModal
+            actions={[
+              {
+                label: (
+                  <CategoryForm
+                    trigger={<p>Edit</p>}
+                    formData={info.row.original}
+                  />
+                ),
+              },
+            ]}
+          />
+        </>
+      ),
     }),
   ];
 
@@ -85,7 +102,15 @@ export default function PropertyCategories() {
         >
           Registered Categories
         </Heading>
-        <Button className="h-fit">Add Category</Button>
+        <div>
+          <CategoryForm
+            trigger={
+              <p className="h-fit w-fit px-4 py-2  bg-blue-500 rounded-full text-white font-bold border-co-primary">
+                Add Category
+              </p>
+            }
+          />
+        </div>
       </div>
       <CustomTable
         totalPages={propertyCategories?.totalPages}

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { IHotel } from "./hotel.schema";
+import { imageSchema } from "./schemas";
 
 export const zodRoom = z.object({
     name: z.string({ required_error: "Name is required." }),
@@ -10,8 +11,8 @@ export const zodRoom = z.object({
     adults: z.number({ required_error: "Number of adults is required." }),
     size: z.number({ required_error: "Size is required." }),
     hotel: z.string({ required_error: "Hotel is required." }),
-    images: z.array(z.any()).min(1, "Please upload at least one image"),
-    facilities: z.array(z.string()).min(1, "One facility is required")
+    images: z.array(imageSchema).min(1, "Please upload at least one image"),
+    facilities: z.array(z.string()).min(2, "Two facility is required")
   });
 
 export type IRoom = z.infer<typeof zodRoom> & {

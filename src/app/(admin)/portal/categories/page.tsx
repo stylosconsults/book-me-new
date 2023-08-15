@@ -1,11 +1,9 @@
 "use client";
 import ActionModal from "@/components/atoms/ActionModal";
-import Button from "@/components/atoms/Button";
 import Heading from "@/components/atoms/Heading";
 import { CustomTable } from "@/components/molecules/Table";
 import { ViewImage } from "@/components/molecules/ViewImage";
 import CategoryForm from "@/components/organisms/categoryForm";
-import Dialog from "@/components/organisms/dialog";
 import { ICategory } from "@/types/category.schema";
 import { getCategories } from "@/utils/category.api";
 import { useQuery } from "@tanstack/react-query";

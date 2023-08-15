@@ -1,7 +1,5 @@
 import "./globals.css";
 import Providers from "./_providers";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,7 +15,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ToastContainer />
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -4,18 +4,23 @@ import Sidebar from "@/components/organisms/sidebar";
 import useStore from "@/store/main";
 import { useUserStore } from "@/store/user";
 import { useRouter } from "next/navigation";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
-  // const router = useRouter();
-  // const auth = useStore(useUserStore, (state) => state);
+  const router = useRouter();
+  const auth = useStore(useUserStore, (state) => state);
+  const [hasAppMounted, setHasAppMounted] = useState(false);
 
-  // useEffect(() => {
-  //   if (!auth?.accessToken?.token) {
-  //     router.push("/login");
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [auth]);
+  useEffect(() => {
+    setHasAppMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (hasAppMounted && !auth?.accessToken?.token) {
+      router.push("/login");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasAppMounted]);
   return (
     <div className="w-full relative flex">
       <aside className="min-h-screen sticky top-0 max-w-[350px] min-w-[300px] bg-co-black">

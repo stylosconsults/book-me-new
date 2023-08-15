@@ -35,7 +35,7 @@ export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
     },
     {
       name: "My bookings",
-      href: `/bookings/c/${auth?.user?.id}`,
+      href: `/bookings/u/${auth?.user?.id}`,
       for: [USER_TYPES.USER],
     },
   ];

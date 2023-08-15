@@ -24,16 +24,18 @@ export default function Join() {
   };
 
   return (
-    <div className="max-w-[400px] bg-white p-4 rounded-md mx-auto">
-      {isSuccess ? (
-        <EmailSent user={data?.user} token={data?.tokens.access.token} />
-      ) : (
-        <UserForm
-          isLoading={isLoading}
-          mutate={handleSubmit}
-          userType={USER_TYPES.USER}
-        />
-      )}
-    </div>
+    <>
+      <div className="max-w-[400px] bg-white p-4 rounded-md mx-auto">
+        {isSuccess ? (
+          <EmailSent user={data?.user} token={data?.tokens.access.token} />
+        ) : (
+          <UserForm
+            isLoading={isLoading}
+            mutate={handleSubmit}
+            userType={USER_TYPES.USER}
+          />
+        )}
+      </div>
+    </>
   );
 }

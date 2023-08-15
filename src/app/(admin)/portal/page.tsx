@@ -35,7 +35,6 @@ export default function AdminHome() {
       auth?.user?.role === USER_TYPES.HOTEL_ADMIN &&
       userHotels?.numberHotels <= 0
     ) {
-      alert("ji");
       setOpen(true);
     }
 

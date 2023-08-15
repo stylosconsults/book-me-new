@@ -1,6 +1,8 @@
 import cn from "@/lib/classNames";
 import Navbar from "@/components/organisms/navbar";
 import Footer from "@/components/organisms/footer";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,6 +15,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
           "motion-reduce:transition-none motion-reduce:transform-none"
         )}
       >
+        <ToastContainer />
         <nav
           className="sticky w-full bg-white z-50 filter-blur dark:bg-black top-0 px-4 md:px-10 py-5
          rounded-md mx-auto flex justify-between items-center shadow-sm"

@@ -83,14 +83,7 @@ export function PropertyForm({
             handleNext={handleNext}
             handlePrev={handlePrev}
           />
-        ) : isAdmin && current === 2 ? (
-          <PropertySettings
-            formData={formData}
-            handleFormDataChange={handleFormDataChange}
-            handleNext={handleNext}
-            handlePrev={handlePrev}
-          />
-        ) : current === allSteps.length - 1 ? (
+        ) : current === 2 ? (
           <PropertyImages
             handleFormDataChange={handleFormDataChange}
             formData={formData}

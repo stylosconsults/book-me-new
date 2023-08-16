@@ -1,11 +1,23 @@
 import { BASE_URL } from "@/lib/share";
-import { ICreateCategory } from "@/types/category.schema";
+import { ICreateCategory, IEditCategory } from "@/types/category.schema";
 
 export async function getCategories() {
     const res = await fetch(`${BASE_URL}/categories?status=ACTIVE`);
-    const users = await res.json();
-    return users;
-  }
+    const categories = await res.json();
+    return categories;
+}
+
+export async function updateCategory(id: string, data: IEditCategory){
+    const res = await fetch(`${BASE_URL}/categories/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const categories = await res.json();
+      return categories;
+}
 
   export async function addCategory(data: ICreateCategory) {
     const formData = new FormData();

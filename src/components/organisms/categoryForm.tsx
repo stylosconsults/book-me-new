@@ -4,11 +4,13 @@ import Dialog from "@/components/organisms/dialog";
 import {
   ICategory,
   ICreateCategory,
+  IEditCategory,
   zodCategory,
+  zodEditCategory,
 } from "@/types/category.schema";
-import { addCategory } from "@/utils/category.api";
+import { addCategory, updateCategory } from "@/utils/category.api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -22,6 +24,7 @@ export default function CategoryForm({
   trigger: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const {
     handleSubmit,
@@ -30,16 +33,16 @@ export default function CategoryForm({
     reset,
     formState: { errors, isDirty },
   } = useForm<ICreateCategory>({
-    resolver: zodResolver(zodCategory),
+    resolver: zodResolver(formData?.id ? zodEditCategory : zodCategory),
     defaultValues: {
       name: formData?.name,
-      image: formData?.image,
     },
   });
 
   const { mutate, isLoading } = useMutation({
     async onSuccess() {
       toast.success("You have successful added a property.");
+      queryClient.invalidateQueries(["propertyCategories"]);
       reset();
       setOpen(false);
     },
@@ -49,8 +52,21 @@ export default function CategoryForm({
     mutationFn: addCategory,
   });
 
+  const { mutate: updateMutate, isLoading: isUpdating } = useMutation({
+    async onSuccess() {
+      toast.success("You have successful updated a property.");
+      queryClient.invalidateQueries(["propertyCategories"]);
+      reset();
+      setOpen(false);
+    },
+    onError(error: { message: string }) {
+      toast.error(error.message ?? "An error occurred during updating.");
+    },
+    mutationFn: (data: IEditCategory) => updateCategory(formData?.id!, data),
+  });
+
   const onSubmit = (data: ICreateCategory) => {
-    mutate(data);
+    formData?.id ? updateMutate(data) : mutate(data);
   };
 
   const handleClose = () => {
@@ -73,13 +89,14 @@ export default function CategoryForm({
         />
         <ImageUploader
           type={"file"}
-          label={"Upload images"}
+          label={"Upload image"}
           onImageChange={(images) => {
             setValue("image", images?.[0], {
               shouldValidate: true,
               shouldDirty: true,
             });
           }}
+          savedImages={[formData?.image!]}
           max={1}
           singleError={
             typeof errors.image?.message === "string"
@@ -87,18 +104,19 @@ export default function CategoryForm({
               : ""
           }
         />
+
         <div className="flex gap-3">
           <Button
             disabled={!isDirty}
             theme="secondary"
             className="flex-grow"
-            isLoading={isLoading}
+            isLoading={isLoading || isUpdating}
             loadingText="Saving..."
           >
             Save
           </Button>
           <Button
-            disabled={isLoading}
+            disabled={isLoading || isUpdating}
             className="flex-grow"
             onClick={handleClose}
           >

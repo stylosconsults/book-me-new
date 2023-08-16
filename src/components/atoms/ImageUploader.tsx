@@ -7,6 +7,7 @@ interface ImageUploaderProps extends ComponentProps<"input"> {
   errors?: { message: string }[];
   singleError?: string;
   defaultImages?: File[];
+  savedImages?: string[];
   label: string;
 }
 
@@ -21,6 +22,7 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
       label,
       className,
       singleError,
+      savedImages,
       ...otherProps
     } = props;
 
@@ -88,35 +90,48 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
           )}
         </div>
 
-        {selectedImages.length > 0 && (
-          <div className="flex gap-1 flex-wrap">
-            {selectedImages.map((image, index) => (
-              <div key={index} className="mb-4 w-36">
+        <div className="flex gap-1 flex-wrap">
+          {max == 1 &&
+            !selectedImages.length &&
+            savedImages?.map((img, key) => (
+              <div key={key} className="mb-4 w-36">
                 <div className="w-fit">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     alt="Image"
                     width={"250px"}
                     className="h-36 w-36 object-cover"
-                    src={URL.createObjectURL(image)}
+                    src={img}
                   />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveImage(index)}
-                    className="bg-red-400 text-white w-full"
-                  >
-                    Remove
-                  </button>
                 </div>
-                {errors?.[index] && (
-                  <p className="text-red-500 text-xs break-words w-fit">
-                    {errors?.[index]?.message}
-                  </p>
-                )}
               </div>
             ))}
-          </div>
-        )}
+          {selectedImages.map((image, index) => (
+            <div key={index} className="mb-4 w-36">
+              <div className="w-fit">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  alt="Image"
+                  width={"250px"}
+                  className="h-36 w-36 object-cover"
+                  src={URL.createObjectURL(image)}
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(index)}
+                  className="bg-red-400 text-white w-full"
+                >
+                  Remove
+                </button>
+              </div>
+              {errors?.[index] && (
+                <p className="text-red-500 text-xs break-words w-fit">
+                  {errors?.[index]?.message}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

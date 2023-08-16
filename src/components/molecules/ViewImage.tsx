@@ -12,8 +12,8 @@ export function ViewImage({ url }: { url: string }) {
       >
         View Image
       </button>
-      <Dialog open={modalOpen} setOpen={setModalOpen}>
-        <div className="flex flex-col items-center justify-center">
+      <Dialog title="Category Image" open={modalOpen} setOpen={setModalOpen}>
+        <div className="flex flex-col items-center justify-center max-w-[500px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={url} alt="" className="w-full h-full" />
         </div>

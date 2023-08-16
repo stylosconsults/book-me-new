@@ -30,6 +30,8 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
       defaultImages ?? []
     );
 
+    const [savedImageState, setSavedImageState] = useState(savedImages);
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
 
@@ -91,10 +93,23 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
         </div>
 
         <div className="flex gap-1 flex-wrap">
-          {max == 1 &&
-            !selectedImages.length &&
-            savedImages?.map((img, key) => (
-              <div key={key} className="mb-4 w-36">
+          {/* for upload one images */}
+          {max == 1 && !selectedImages.length ? (
+            <div className="mb-4 w-36">
+              <div className="w-fit">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  alt="Image"
+                  width={"250px"}
+                  className="h-36 w-36 object-cover"
+                  src={savedImageState?.[0]!}
+                />
+              </div>
+            </div>
+          ) : (
+            (Number(max) > 1 || !max) &&
+            savedImageState?.map((img, index) => (
+              <div key={index} className="mb-4 w-36">
                 <div className="w-fit">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -103,9 +118,18 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
                     className="h-36 w-36 object-cover"
                     src={img}
                   />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(index)}
+                    className="bg-red-400 text-white w-full"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
-            ))}
+            ))
+          )}
+
           {selectedImages.map((image, index) => (
             <div key={index} className="mb-4 w-36">
               <div className="w-fit">

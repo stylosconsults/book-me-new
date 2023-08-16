@@ -8,12 +8,15 @@ export async function getCategories() {
 }
 
 export async function updateCategory(id: string, data: IEditCategory){
+    const formData = new FormData();
+    if(data.image){
+      formData.append('image', data.image)
+    }
+    formData.append('name', data.name)
+
     const res = await fetch(`${BASE_URL}/categories/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        body: formData,
       });
       const categories = await res.json();
       return categories;

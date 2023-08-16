@@ -36,6 +36,7 @@ export default function CategoryForm({
     resolver: zodResolver(formData?.id ? zodEditCategory : zodCategory),
     defaultValues: {
       name: formData?.name,
+      ...(!formData?.id ? { image: formData?.image } : {}),
     },
   });
 
@@ -89,7 +90,7 @@ export default function CategoryForm({
         />
         <ImageUploader
           type={"file"}
-          label={"Upload image"}
+          label={formData?.id ? "Replace image" : "Upload image"}
           onImageChange={(images) => {
             setValue("image", images?.[0], {
               shouldValidate: true,

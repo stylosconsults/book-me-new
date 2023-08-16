@@ -260,6 +260,34 @@ export function PropertyDetails({
         error={errors.email?.message}
       />
 
+      <div>
+        <SelectWithErrorCustomSelect
+          className="flex-grow w-full"
+          options={amenities}
+          value={watch("amenities")?.map((fa) => ({ label: fa, value: fa }))}
+          error={errors.amenities?.message}
+          isMulti
+          isLoading={isLoading}
+          onChange={(val) => {
+            const facilities = val as unknown as IOption[];
+            const value = facilities.map((fac) => fac.value);
+            setValue("amenities", value, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
+          }}
+          label="Facilities"
+        />
+        {isAdmin && (
+          <Link
+            href={"/portal/facilities"}
+            className="leading-none text-blue-500 underline text-sm -mt-3"
+          >
+            Add more amenities
+          </Link>
+        )}
+      </div>
+
       <SelectWithErrorCustomSelect
         label="Select country"
         options={countries.map((count) => ({
@@ -311,32 +339,6 @@ export function PropertyDetails({
         placeholder="Your property description"
         error={errors.description?.message}
       />
-
-      <SelectWithErrorCustomSelect
-        className="flex-grow w-full"
-        options={amenities}
-        value={watch("amenities")?.map((fa) => ({ label: fa, value: fa }))}
-        error={errors.amenities?.message}
-        isMulti
-        isLoading={isLoading}
-        onChange={(val) => {
-          const facilities = val as unknown as IOption[];
-          const value = facilities.map((fac) => fac.value);
-          setValue("amenities", value, {
-            shouldDirty: true,
-            shouldValidate: true,
-          });
-        }}
-        label="Facilities"
-      />
-      {isAdmin && (
-        <Link
-          href={"/portal/facilities"}
-          className="leading-none text-blue-500 underline text-sm -mt-3"
-        >
-          Add more amenities
-        </Link>
-      )}
 
       <div className="flex gap-4">
         <Button

@@ -47,6 +47,11 @@ export default function Sidebar() {
       href: `/bookings/c/${auth?.user?.id}`,
       for: [USER_TYPES.USER],
     },
+    {
+      name: "Facilities",
+      href: "/portal/facilities",
+      for: [USER_TYPES.ADMIN],
+    },
   ];
 
   return (

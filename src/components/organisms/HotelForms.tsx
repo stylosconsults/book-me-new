@@ -24,6 +24,9 @@ import Steps from "../molecules/Steps";
 import { ChangeEvent, useState } from "react";
 import { USER_TYPES } from "@/utils/user";
 import { ICategory } from "@/types/category.schema";
+import { getFacilities } from "@/utils/facilities.api";
+import { IFacility } from "@/types/facilities.schema";
+import Link from "next/link";
 
 export interface HotelRegisterProps {
   formData?: Partial<IHotel>;
@@ -48,16 +51,15 @@ export function PropertyForm({
 }: IPropFormProps) {
   const [current, setCurrent] = useState(0);
   const auth = useStore(useUserStore, (state) => state);
+  const isAdmin = auth?.user?.role === USER_TYPES.ADMIN;
 
   const handleNext = () => setCurrent(current + 1);
   const handlePrev = () => setCurrent(current - 1);
 
-  const isAdmin = auth?.user?.role === USER_TYPES.ADMIN;
-
   const allSteps = [
     "Property type",
     "Property Details",
-    ...(isAdmin ? ["Property Settings"] : []),
+    // ...(isAdmin ? ["Property Settings"] : []),
     "Property Images",
   ];
 
@@ -225,24 +227,23 @@ export function PropertyDetails({
     },
   });
 
+  const auth = useStore(useUserStore, (state) => state);
+  const isAdmin = auth?.user?.role === USER_TYPES.ADMIN;
+
   const onSubmit = (data: IPropertyDetails) => {
     handleFormDataChange?.(data);
     handleNext?.();
   };
 
-  const amenities = [
-    { value: "wifi", label: "Wifi" },
-    { value: "parking", label: "Parking" },
-    { value: "pool", label: "Pool" },
-    { value: "gym", label: "Gym" },
-    { value: "spa", label: "Spa" },
-    { value: "laundry", label: "Laundry" },
-    { value: "room service", label: "Room Service" },
-    { value: "air conditioning", label: "Air Conditioning" },
-    { value: "tv", label: "TV" },
-    { value: "kitchen", label: "Kitchen" },
-    { value: "smoking", label: "Smoking" },
-  ];
+  const { data, isLoading } = useQuery({
+    queryFn: getFacilities,
+    queryKey: ["facilities"],
+  });
+
+  const amenities = data?.results?.map((fac: IFacility) => ({
+    value: fac.name,
+    label: fac.name,
+  }));
 
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
@@ -263,12 +264,10 @@ export function PropertyDetails({
         label="Select country"
         options={countries.map((count) => ({
           label: count.name,
-          value: count.code,
+          value: count.name,
         }))}
         error={errors.state?.message}
-        defaultInputValue={
-          countries?.find((opt) => opt.code === watch("state"))?.name ?? ""
-        }
+        defaultInputValue={watch("state")}
         placeholder={"Select property category"}
         onChange={(newValue) => {
           const val: { value: string } = newValue as unknown as IOption;
@@ -319,6 +318,7 @@ export function PropertyDetails({
         value={watch("amenities")?.map((fa) => ({ label: fa, value: fa }))}
         error={errors.amenities?.message}
         isMulti
+        isLoading={isLoading}
         onChange={(val) => {
           const facilities = val as unknown as IOption[];
           const value = facilities.map((fac) => fac.value);
@@ -329,6 +329,14 @@ export function PropertyDetails({
         }}
         label="Facilities"
       />
+      {isAdmin && (
+        <Link
+          href={"/portal/facilities"}
+          className="leading-none text-blue-500 underline text-sm -mt-3"
+        >
+          Add more amenities
+        </Link>
+      )}
 
       <div className="flex gap-4">
         <Button

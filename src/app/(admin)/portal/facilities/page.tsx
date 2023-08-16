@@ -8,7 +8,7 @@ import {
   getFacilities,
 } from "@/utils/facilities.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { MdRemoveCircle } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 import { toast } from "react-toastify";
 
 export default function PropertyFacilities() {
@@ -61,16 +61,19 @@ export default function PropertyFacilities() {
       {isFacilitiesLoading ? (
         <div>Loading...</div>
       ) : (
-        <div>
+        <div className="flex flex-wrap gap-3">
           {facilities.results?.length > 0 ? (
             facilities.results?.map((fac: IFacility, key: number) => (
-              <div className="flex gap-5" key={key}>
+              <div
+                className="flex gap-2 bg-gray-400 w-fit p-2 rounded-full"
+                key={key}
+              >
                 <h3>{fac.name}</h3>
                 <button
                   disabled={isRemovingFacility}
                   onClick={() => mutate(fac._id)}
                 >
-                  <MdRemoveCircle />
+                  <MdClose />
                 </button>
               </div>
             ))

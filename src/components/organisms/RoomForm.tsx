@@ -5,13 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { IRoom, zodRoom } from "@/types/room.schema";
 import { toast } from "react-toastify";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addRoom, updateRoom } from "@/utils/room.api";
 import SelectWithErrorCustomSelect, { IOption } from "../atoms/Select";
 import TextArea from "../atoms/TextArea";
 import Button from "../atoms/Button";
 import { useParams } from "next/navigation";
 import ImageUploader from "../atoms/ImageUploader";
+import { IFacility } from "@/types/facilities.schema";
+import { getFacilities } from "@/utils/facilities.api";
 
 interface RoomFormProps {
   room?: IRoom;
@@ -71,25 +73,41 @@ export default function RoomForm({ room, trigger }: RoomFormProps) {
     }
   };
 
-  const facilities = [
-    { value: "wifi", label: "Wifi" },
-    { value: "parking", label: "Parking" },
-    { value: "pool", label: "Pool" },
-    { value: "gym", label: "Gym" },
-    { value: "spa", label: "Spa" },
-    { value: "laundry", label: "Laundry" },
-    { value: "room service", label: "Room Service" },
-    { value: "air conditioning", label: "Air Conditioning" },
-    { value: "tv", label: "TV" },
-    { value: "kitchen", label: "Kitchen" },
-    { value: "smoking", label: "Smoking" },
-  ];
+  const { data, isLoading } = useQuery({
+    queryFn: getFacilities,
+    queryKey: ["facilities"],
+  });
+
+  const facilities = data?.results?.map((fac: IFacility) => ({
+    value: fac.name,
+    label: fac.name,
+  }));
 
   const bedType = [
     { value: "single", label: "Single" },
+    { value: "twin", label: "Twin" },
     { value: "double", label: "Double" },
     { value: "queen", label: "Queen" },
     { value: "king", label: "King" },
+    { value: "super-king", label: "Super King" },
+    { value: "twin-double", label: "Twin/Double" },
+    { value: "triple", label: "Triple" },
+    { value: "quad", label: "Quad" },
+    { value: "suite", label: "Suite" },
+    { value: "studio", label: "Studio" },
+    { value: "penthouse", label: "Penthouse" },
+    { value: "cottage", label: "Cottage" },
+    { value: "villa", label: "Villa" },
+    { value: "bungalow", label: "Bungalow" },
+    { value: "chalet", label: "Chalet" },
+    { value: "apartment", label: "Apartment" },
+    { value: "loft", label: "Loft" },
+    { value: "futon", label: "Futon" },
+    { value: "sofa-bed", label: "Sofa Bed" },
+    { value: "rollaway", label: "Rollaway Bed" },
+    { value: "murphy", label: "Murphy Bed" },
+    { value: "daybed", label: "Daybed" },
+    { value: "hammock", label: "Hammock" },
   ];
 
   const imageErrors = !errors.images?.message

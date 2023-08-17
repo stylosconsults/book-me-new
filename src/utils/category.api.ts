@@ -37,8 +37,8 @@ export async function updateCategory(id: string, data: IEditCategory){
       body: formData,
     });
   
-    if (!response.ok) {
       const errorData = await response.json();
+    if (!response.ok) {
       const errorMessage =
         errorData?.message || "An error occurred during adding category.";
       throw new Error(errorMessage);

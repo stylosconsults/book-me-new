@@ -111,6 +111,15 @@ export default function Properties() {
               },
               {
                 label: (
+                  <Link
+                    href={`/portal/properties/${info.row.original.id}/edit`}
+                  >
+                    Edit
+                  </Link>
+                ),
+              },
+              {
+                label: (
                   <PromoteProperty
                     name={info.row.original.name}
                     id={info.row.original.id}

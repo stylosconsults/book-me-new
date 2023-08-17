@@ -33,3 +33,7 @@ export type IHotel = IPropertyCategorySchema & IPropertyDetails & IPropertyImage
   status: string;
   promoted: boolean;
 };
+
+export type IEditHotel = IHotel & {
+  savedImages: string[]
+}

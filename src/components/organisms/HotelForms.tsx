@@ -1,4 +1,5 @@
 import {
+  IEditHotel,
   IHotel,
   IPropertyCategorySchema,
   IPropertyDetails,
@@ -29,7 +30,7 @@ import { IFacility } from "@/types/facilities.schema";
 import Link from "next/link";
 
 export interface HotelRegisterProps {
-  formData?: Partial<IHotel>;
+  formData?: Partial<IEditHotel>;
   handleFormDataChange?: (data: Partial<IHotel>) => void;
   handleNext?: () => void;
   handlePrev?: () => void;
@@ -37,13 +38,11 @@ export interface HotelRegisterProps {
 
 interface IPropFormProps
   extends Pick<HotelRegisterProps, "formData" | "handleFormDataChange"> {
-  property?: IHotel;
   mutate: (formData: IHotel) => void;
   isLoading: boolean;
 }
 
 export function PropertyForm({
-  property,
   formData,
   isLoading,
   mutate,
@@ -175,18 +174,21 @@ export function SelectPropertyType({
         options={formattedOptions}
         error={errors.category?.message}
         isLoading={isPropertyCategoriesLoading}
-        defaultInputValue={
-          formattedOptions?.find(
-            (opt: IOption) => opt.value === watch("category")
-          )?.label ?? ""
-        }
         placeholder={"Select property category"}
+        defaultInputValue={
+          formattedOptions.find(
+            (value: IOption) => value.value === watch("category")
+          ).label
+        }
         onChange={(newValue) => {
           const val: { value: string } = newValue as unknown as IOption;
           setValue("category", String(val?.value), { shouldValidate: true });
         }}
       />
-      <Button type="submit" disabled={isSubmitted && !isValid}>
+      <Button
+        type="submit"
+        disabled={(isSubmitted && !isValid) || isPropertyCategoriesLoading}
+      >
         Next
       </Button>
     </form>
@@ -389,13 +391,14 @@ export function PropertyImages({
     <form onSubmit={handleSubmit(onSubmit)}>
       <ImageUploader
         type={"file"}
-        label={"Upload images"}
+        label={formData?.id ? "Add images" : "Upload images"}
         onImageChange={(images) => {
           setValue("images", images, {
             shouldValidate: true,
             shouldDirty: true,
           });
         }}
+        savedImages={formData?.savedImages ?? []}
         errors={imageErrors}
         singleError={
           typeof errors.images?.message === "string"
@@ -419,7 +422,7 @@ export function PropertyImages({
           className="flex-grow"
           type="button"
           onClick={() => {
-            handleFormDataChange?.({ images: getValues("images") });
+            handleFormDataChange?.({ images });
             handlePrev?.();
           }}
         >

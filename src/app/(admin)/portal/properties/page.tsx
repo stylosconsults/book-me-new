@@ -166,7 +166,7 @@ export default function Properties() {
           All Properties
         </Heading>
         <Link href="/portal/properties/new">
-          <Button>Add Hotel</Button>
+          <Button>Add new property</Button>
         </Link>
       </div>
       <CustomTable

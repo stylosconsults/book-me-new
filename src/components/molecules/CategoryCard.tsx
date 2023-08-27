@@ -6,16 +6,18 @@ interface CategoryCardProps {
   size: number;
   image: string;
   id: string;
+  link?: string;
 }
 export default function CategoryCard({
   image,
   name,
   size,
   id,
+  link,
 }: CategoryCardProps) {
   return (
     <div className="w-full">
-      <Link href={`/c/${id}?cat=${name}`}>
+      <Link href={link ?? `/c/${id}?cat=${name}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={image} alt={name} className="w-full h-[300px] object-cover" />
         <div className="flex flex-col justify-center items-center">

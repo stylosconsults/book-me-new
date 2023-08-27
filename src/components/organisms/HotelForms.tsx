@@ -178,7 +178,7 @@ export function SelectPropertyType({
         defaultInputValue={
           formattedOptions.find(
             (value: IOption) => value.value === watch("category")
-          ).label
+          )?.label
         }
         onChange={(newValue) => {
           const val: { value: string } = newValue as unknown as IOption;

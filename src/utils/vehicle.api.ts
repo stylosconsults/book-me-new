@@ -1,5 +1,15 @@
 import { BASE_URL } from "@/lib/share";
 import { IVehicle } from "@/types/vehicle.schema";
+import { objectToQueryParams } from "./queryParams";
+import { IFilters } from "@/types/share";
+
+export async function getAllVehicles({limit, page}: IFilters) {
+  const params  = objectToQueryParams({limit, page});
+  const res = await fetch(`${BASE_URL}/vehicles?${params}`);
+  const hotels = await res.json();
+  return hotels;
+}
+
 
 export async function addVehicle(createData: IVehicle) {
     const formData = new FormData();
@@ -24,7 +34,7 @@ export async function addVehicle(createData: IVehicle) {
     formData.append("year", String(createData.year));
     formData.append("admin", createData.admin!);
 
-    const response = await fetch(`${BASE_URL}/hotels`, {
+    const response = await fetch(`${BASE_URL}/vehicles`, {
       method: "POST",
       // headers: {
       //   Authentication: `Bearer ${token}`,

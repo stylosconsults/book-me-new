@@ -48,6 +48,12 @@ export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
       <div className={cn("flex flex-row items-center font-bold space-x-4")}>
         <Link
           className={pathname?.includes("about") ? "text-blue-500" : ""}
+          href="/vehicles"
+        >
+          Vehicles
+        </Link>
+        <Link
+          className={pathname?.includes("about") ? "text-blue-500" : ""}
           href="/about-us"
         >
           About us

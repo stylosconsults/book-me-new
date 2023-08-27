@@ -4,12 +4,15 @@ import { IVehicle, zodVehicle } from "@/types/vehicle.schema";
 import { addVehicle } from "@/utils/vehicle.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import Input from "@/components/atoms/Input";
 import TextArea from "@/components/atoms/TextArea";
 import SelectWithErrorCustomSelect from "@/components/atoms/Select";
+import Heading from "@/components/atoms/Heading";
+import Button from "@/components/atoms/Button";
+import ImageUploader from "@/components/atoms/ImageUploader";
 export default function VehicleForm() {
   const { user } = useUserStore((state) => state);
   const router = useRouter();
@@ -40,9 +43,24 @@ export default function VehicleForm() {
   const onSubmit = (formData: IVehicle) => {
     mutate(formData);
   };
+
+  const features = [
+    { label: "GPS Navigation", value: "gps" },
+    { label: "Bluetooth", value: "bluetooth" },
+    { label: "Backup Camera", value: "camera" },
+    { label: "Leather Seats", value: "leather_seats" },
+    { label: "Sunroof", value: "sunroof" },
+    { label: "Keyless Entry", value: "keyless_entry" },
+  ];
+
   return (
-    <div>
-      <form action="" onSubmit={handleSubmit(onSubmit)}>
+    <div className="max-w-[600px] mx-auto py-10">
+      <Heading className="mb-5">Adding new Vehicle</Heading>
+      <form
+        className="flex flex-col gap-3"
+        action=""
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Input
           {...register("make")}
           label="Make"
@@ -59,7 +77,7 @@ export default function VehicleForm() {
           error={errors.type?.message}
         />
         <Input
-          {...register("year")}
+          {...register("year", { valueAsNumber: true })}
           label="Year"
           error={errors.year?.message}
         />
@@ -92,15 +110,36 @@ export default function VehicleForm() {
         />
         <TextArea {...register("description")} label="Description" />
         <SelectWithErrorCustomSelect
-          label="Select your property category"
-          options={[]}
+          label="Select your vehicle features"
+          options={features}
           isMulti
           error={errors.features?.message}
-          placeholder={"Select property category"}
+          placeholder={"Select vehicle features"}
           onChange={(newValue) => {
             setValue("features", [], { shouldValidate: true });
           }}
         />
+        <ImageUploader
+          type={"file"}
+          label={"Upload images"}
+          onImageChange={(images) => {
+            setValue("images", images, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          }}
+          // savedImages={formData?.savedImages ?? []}
+          // errors={imageErrors}
+          singleError={
+            typeof errors.images?.message === "string"
+              ? errors.images?.message
+              : ""
+          }
+          // defaultImages={images}
+        />
+        <Button isLoading={isLoading} className="mt-4">
+          Save Vehicle
+        </Button>
       </form>
     </div>
   );

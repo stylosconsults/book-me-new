@@ -17,4 +17,6 @@ export const zodVehicle = z.object({
   admin: z.string()
 });
 
-export type IVehicle = z.infer<typeof zodVehicle>
+export type IVehicle = z.infer<typeof zodVehicle> & {
+  id: string
+}

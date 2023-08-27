@@ -33,6 +33,11 @@ export default function Sidebar() {
       for: [USER_TYPES.ADMIN],
     },
     {
+      name: "Vehicles",
+      href: "/portal/vehicles",
+      for: [USER_TYPES.ADMIN],
+    },
+    {
       name: "Property Categories",
       href: `/portal/categories`,
       for: [USER_TYPES.ADMIN],

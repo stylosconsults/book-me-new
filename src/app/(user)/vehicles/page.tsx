@@ -18,6 +18,11 @@ export default function VehiclesPage() {
   return (
     <div>
       <Heading>All Vehicles</Heading>
+      {vehicles?.length <= 0 && (
+        <p className="text-sm text-red-500">
+          No Vehicles available at the moment
+        </p>
+      )}
       {vehicles?.map((vehicle: IVehicle, index: number) => (
         <div
           key={index}

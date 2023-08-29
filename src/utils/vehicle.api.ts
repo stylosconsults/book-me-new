@@ -10,7 +10,11 @@ export async function getAllVehicles({limit, page}: IFilters) {
   return hotels;
 }
 
-
+export async function getVehicleById(id: string) {
+  const res = await fetch(`${BASE_URL}/vehicles/${id}`);
+  const vehicles = await res.json();
+  return vehicles;
+}
 export async function addVehicle(createData: IVehicle) {
     const formData = new FormData();
   

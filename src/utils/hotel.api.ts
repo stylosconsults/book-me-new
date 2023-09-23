@@ -59,7 +59,8 @@ export async function getUserNumberOfHotels(userId: string) {
 
   export async function getAllHotels({limit, page}: IFilters) {
     const params  = objectToQueryParams({limit, page});
-    const res = await fetch(`${BASE_URL}/hotels?${params}`);
+    // const res = await fetch(`${BASE_URL}/hotels?${params}`);
+      const res = await fetch(`${BASE_URL}/hotels/promoted`);
     const hotels = await res.json();
     return hotels;
   }

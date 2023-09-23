@@ -10,7 +10,7 @@ export default function Home() {
       <HomeImageSlider />
       <CategoriesList />
       <PopularHotels />
-      <PopularCars />
+{/*       <PopularCars /> */}
       <HowItWorks />
     </main>
   );

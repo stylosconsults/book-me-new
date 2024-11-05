@@ -20,7 +20,7 @@ export default function CategoriesList() {
 
       {!isPropertyCategoriesLoading &&
       propertyCategories?.results.length > 0 ? (
-        <Carousel itemsToShow={3} slideInterval={5000}>
+        <Carousel itemsToShow={3} slideInterval={5000} >
           {propertyCategories?.results.map(
             (category: ICategory, key: number) => (
               <CategoryCard

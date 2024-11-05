@@ -109,7 +109,7 @@ export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
                   <Button>Login</Button>
                 </Link>
                 <Link href={"/register"}>
-                  <Button className="bg-co-blue">Register property</Button>
+                  <Button className="bg-co-blue p-5 text-white hover:text-co-blue hover:bg-transparent-60 duration-300 transition-all">Register property</Button>
                 </Link>
               </>
             )}

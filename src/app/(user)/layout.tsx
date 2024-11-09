@@ -17,7 +17,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
       >
         <ToastContainer />
         <nav
-          className="sticky w-full bg-white z-50 filter-blur dark:bg-black top-0 px-4 md:px-10 py-5
+          className="sticky w-full bg-white z-50 filter-blur dark:bg-black top-0 px-4 md:px-10
          rounded-md mx-auto flex justify-between items-center shadow-sm"
         >
           <Navbar />
@@ -25,7 +25,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
 
         <main
           className={cn(
-            "w-full flex-grow relative px-4 md:px-10 py-4",
+            "w-full flex-grow relative px-4 md:px-10 py-[90px]",
             "mx-auto my-auto",
             "flex gap-12",
             "flex-col",

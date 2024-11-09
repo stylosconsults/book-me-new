@@ -41,29 +41,66 @@ export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
   ];
 
   return (
-    <>
+    <div className="fixed top-0 left-0 right-0 backdrop-blur-custom h-[90px]  bg-co-search bg-opacity-25 z-50 px-6 py-4 flex justify-between items-center"
+    style={{
+      backdropFilter: "blur(32px)",
+      WebkitBackdropFilter: "blur(32px)",
+    }}
+    >
+      
       <div className="flex flex-row gap-1 text-tertiary">
         {haveLogo && <Logo />}
       </div>
-      <div className={cn("flex flex-row items-center font-bold space-x-4")}>
+      
+      <div className="flex-1 flex justify-center items-center space-x-8">
         <Link
-          className={pathname?.includes("about") ? "text-blue-500" : ""}
+          className={cn(
+            "relative group",
+            pathname?.includes("vehicles") ? "text-[#0142EB]" : ""
+          )}
           href="/vehicles"
         >
           Vehicles
+          {!pathname?.includes("vehicles") && (
+            <span className="absolute -bottom-1 left-1/2 w-0 h-0.5 bg-[#0142EB] rounded-full group-hover:w-full group-hover:left-0 transition-all duration-300" />
+          )}
+          {pathname?.includes("vehicles") && (
+            <span className="absolute -bottom-1 left-1/2 w-1.5 h-1.5 bg-[#0142EB] rounded-full transform -translate-x-1/2" />
+          )}
         </Link>
         <Link
-          className={pathname?.includes("about") ? "text-blue-500" : ""}
+          className={cn(
+            "relative group",
+            pathname?.includes("about") ? "text-[#0142EB]" : ""
+          )}
           href="/about-us"
         >
           About us
+          {!pathname?.includes("about") && (
+            <span className="absolute -bottom-1 left-1/2 w-0 h-0.5 bg-[#0142EB] rounded-full group-hover:w-full group-hover:left-0 transition-all duration-300" />
+          )}
+          {pathname?.includes("about") && (
+            <span className="absolute -bottom-1 left-1/2 w-1.5 h-1.5 bg-[#0142EB] rounded-full transform -translate-x-1/2" />
+          )}
         </Link>
         <Link
-          className={pathname?.includes("contact") ? "text-blue-500" : ""}
+          className={cn(
+            "relative group",
+            pathname?.includes("contact") ? "text-[#0142EB]" : ""
+          )}
           href="/contact-us"
         >
           Contact us
+          {!pathname?.includes("contact") && (
+            <span className="absolute -bottom-1 left-1/2 w-0 h-0.5 bg-[#0142EB] rounded-full group-hover:w-full group-hover:left-0 transition-all duration-300" />
+          )}
+          {pathname?.includes("contact") && (
+            <span className="absolute -bottom-1 left-1/2 w-1.5 h-1.5 bg-[#0142EB] rounded-full transform -translate-x-1/2" />
+          )}
         </Link>
+      </div>
+
+      <div className="flex items-center space-x-4">
         {hasAppMounted ? (
           <>
             {tokenStillActive ? (
@@ -118,6 +155,6 @@ export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
           <div className="h-10 w-52 bg-gray-300 animate-pulse" />
         )}
       </div>
-    </>
+    </div>
   );
 }

@@ -16,12 +16,20 @@ import { IoMdCheckmark } from "react-icons/io";
 export default function HotelInformation() {
   const params = useParams();
   const [activeTab, setActiveTab] = useState(0);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   const { data: rooms, isLoading: isHotelLoading } = useQuery({
     queryKey: ["roomsInHotel", params?.hotelId!],
     queryFn: () => getAllRoomsWithHotel(params?.hotelId as string),
     enabled: Boolean(params?.hotelId),
   });
+
+  const truncateText = (text: string, maxLength: number) => {
+    if (!text) return "";
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + "...";
+  };
+
   return (
     <>
       <Breadcrumb
@@ -65,29 +73,42 @@ export default function HotelInformation() {
                 <h3 className="mb-4 font-semibold text-co-black text-2xl">
                   Description
                 </h3>
-                <p
-                  className="text-co-black w-10/12"
-                  style={{ whiteSpace: "pre-wrap" }}
-                >
-                  {rooms?.hotel.description}
-                  {rooms?.hotel.description.length === 0 && (
-                    <span>
-                      {rooms?.hotel.name} is a hotel in {rooms?.hotel.state}
-                    </span>
+                <div className="text-co-black w-10/12">
+                  <p style={{ whiteSpace: "pre-wrap" }} 
+                     className="transition-all duration-300">
+                    {rooms?.hotel.description ? (
+                      showFullDescription ? (
+                        rooms.hotel.description
+                      ) : (
+                        truncateText(rooms.hotel.description, 300)
+                      )
+                    ) : (
+                      <span>
+                        {rooms?.hotel.name} is a hotel in {rooms?.hotel.state}
+                      </span>
+                    )}
+                  </p>
+                  {rooms?.hotel.description && rooms.hotel.description.length > 300 && (
+                    <button
+                      onClick={() => setShowFullDescription(!showFullDescription)}
+                      className="text-co-green hover:text-co-green/80 font-medium mt-2 transition-colors"
+                    >
+                      Show {showFullDescription ? "Less" : "More"}
+                    </button>
                   )}
-                </p>
+                </div>
               </>
             )}
             {(activeTab === 0 || activeTab === 2) && (
               <>
                 <h3 className="my-4 font-semibold text-co-black text-2xl">
-                  Amerities overview
+                  Amenities overview
                 </h3>
                 <ul className="flex flex-col max-w-[600px] flex-wrap gap-2">
                   {rooms?.hotel.amenities.map((amenity: any, index: number) => (
                     <li
                       key={index}
-                      className="text-co-black flex items-center gap-1"
+                      className="text-co-black flex items-center gap-1 hover:bg-gray-50 p-2 rounded-md transition-colors cursor-default"
                     >
                       <IoMdCheckmark /> {amenity}
                     </li>

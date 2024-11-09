@@ -25,9 +25,9 @@ export default function Step({ image, title, description, more }: StepProps) {
           loading="lazy"
         />
 
-        <h1 className="font-bold text-[#0143ebd2] text-2xl mb-2">{title}</h1>
-        <p className="text-co-black text-opacity-80">{description}</p>
-        <p className="text-co-black text-opacity-80">{moreShown && <>{more}</>}</p>
+        <h1 className="font-bold text-[#00113d] text-2xl mb-2">{title}</h1>
+        <p className="text-[#00113d] text-opacity-80">{description}</p>
+        <p className="text-[#00113d] text-opacity-80">{moreShown && <>{more}</>}</p>
         
         <Button
           className="mt-3 w-full"

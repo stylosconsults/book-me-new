@@ -1,83 +1,116 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-
-import Autoplay from "embla-carousel-autoplay";
-import useEmblaCarousel, { EmblaOptionsType } from "embla-carousel-react";
+import { useState, useEffect, useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
-
-import { Thumb } from "./ThumbCoursel";
 import { BlurredDataImage } from "@/lib/blurredImage";
 
 type PropType = {
-  slides: number[];
-  options?: EmblaOptionsType;
+  slides: string[];
+  autoplay?: boolean;
+  delayMs?: number;
+  showProgress?: boolean;
+  showThumbnails?: boolean;
 };
 
-const EmblaCarousel: React.FC<PropType> = (props) => {
-  const { slides } = props;
-  const options: EmblaOptionsType = {
-    dragFree: true,
-    containScroll: "trimSnaps",
-  };
-  const autoplayOptions = useRef(
-    Autoplay(
-      { delay: 1000, stopOnInteraction: false },
-      // @ts-ignore
-      (emblaRoot) => emblaRoot.parentElement
-    )
-  );
-
+const EmblaCarousel = ({
+  slides,
+  autoplay = true,
+  delayMs = 5000,
+  showProgress = true,
+  showThumbnails = true,
+}: PropType) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [emblaMainRef, emblaMainApi] = useEmblaCarousel(options);
-  const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel(
-    {
-      containScroll: "keepSnaps",
-      dragFree: true,
-    },
-    [autoplayOptions.current]
-  );
+  const [progress, setProgress] = useState(0);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [thumbsRef, thumbsApi] = useEmblaCarousel({
+    containScroll: "keepSnaps",
+    dragFree: true,
+  });
 
   const onThumbClick = useCallback(
     (index: number) => {
-      if (!emblaMainApi || !emblaThumbsApi) return;
-      // @ts-ignore
-      if (emblaThumbsApi.clickAllowed()) emblaMainApi.scrollTo(index);
+      if (!emblaApi || !thumbsApi) return;
+      emblaApi.scrollTo(index);
     },
-    [emblaMainApi, emblaThumbsApi]
+    [emblaApi, thumbsApi]
   );
 
-  const onSelect = useCallback(() => {
-    if (!emblaMainApi || !emblaThumbsApi) return;
-    setSelectedIndex(emblaMainApi.selectedScrollSnap());
-    emblaThumbsApi.scrollTo(emblaMainApi.selectedScrollSnap());
-  }, [emblaMainApi, emblaThumbsApi, setSelectedIndex]);
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
+
+    emblaApi.on("select", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi]);
 
   useEffect(() => {
-    if (!emblaMainApi) return;
-    onSelect();
-    emblaMainApi.on("select", onSelect);
-    emblaMainApi.on("reInit", onSelect);
-  }, [emblaMainApi, onSelect]);
+    if (!emblaApi || !autoplay) return;
+
+    let animationFrame: number;
+    let lastTime = Date.now();
+    let isRunning = true;
+
+    const animate = () => {
+      if (!isRunning || !emblaApi || !emblaApi.canScrollNext()) {
+        cancelAnimationFrame(animationFrame);
+        return;
+      }
+
+      const now = Date.now();
+      const elapsed = now - lastTime;
+
+      setProgress((prev) => {
+        const next = prev + (elapsed / delayMs) * 100;
+        if (next >= 100) {
+          lastTime = now;
+          try {
+            if (emblaApi && emblaApi.canScrollNext()) {
+              emblaApi.scrollNext();
+            }
+          } catch (error) {
+            console.error('Error scrolling:', error);
+          }
+          return 0;
+        }
+        return next;
+      });
+
+      lastTime = now;
+      animationFrame = requestAnimationFrame(animate);
+    };
+
+    animate();
+    
+    return () => {
+      isRunning = false;
+      cancelAnimationFrame(animationFrame);
+    };
+  }, [emblaApi, autoplay, delayMs]);
+
+  if (!slides.length) return null;
 
   return (
-    <div className="">
-      <div className="overflow-hidden" ref={emblaMainRef}>
-        <div className="flex flex-row h-auto -ml-4">
-          {slides.map((src, index) => (
+    <div className="relative">
+      <div className="overflow-hidden rounded-lg max-h-[60vh]" ref={emblaRef}>
+        <div className="flex touch-pan-y">
+          {slides?.map((src, index) => (
             <div
-              className="flex-shrink-0 flex-grow-0 basis-full min-w-0 pl-4 relative"
+              className="relative flex-[0_0_100%] min-w-0 flex"
               key={index}
             >
-              <div className="w-10 h-10 z-10 absolute top-2 right-2 rounded-full bg-black/10 font-bold text-center pointer-events-none flex items-center justify-center text-white">
-                <span>{index + 1}</span>
-              </div>
-              <div className="relative h-[80vh] w-full">
+              <div className="relative w-full pt-[56.25%]">
                 <Image
-                  className="block object-cover"
-                  src={src.toString()}
-                  alt="Your alt text"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  src={src}
+                  alt={`Slide ${index + 1}`}
+                  fill
                   placeholder="blur"
                   blurDataURL={BlurredDataImage}
-                  fill
+                  priority={index === 0}
                 />
               </div>
             </div>
@@ -85,21 +118,41 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
         </div>
       </div>
 
-      <div className="mt-4">
-        <div className="overflow-hidden" ref={emblaThumbsRef}>
-          <div className="flex flex-row -ml-4">
+      {showProgress && (
+        <div className="absolute bottom-0 left-0 w-full h-1 bg-black/20">
+          <div
+            className="h-full bg-white transition-all duration-200 ease-linear"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
+
+      {showThumbnails && (
+        <div className="mt-4" ref={thumbsRef}>
+          <div className="flex gap-8 px-2">
             {slides.map((src, index) => (
-              <Thumb
-                onClick={() => onThumbClick(index)}
-                selected={index === selectedIndex}
-                index={index}
-                imgSrc={src.toString()}
+              <button
                 key={index}
-              />
+                onClick={() => onThumbClick(index)}
+                className={`relative flex-[0_0_20%] min-w-0 w-40 transition-opacity duration-300 ${
+                  selectedIndex === index ? "opacity-100 scale-110 border-20 border-blue-500 rounded-md " : "  opacity-50 "
+                }`}
+              >
+                <div className="relative pt-[56.25%]">
+                  <Image
+                    className={`absolute inset-0 w-full h-full object-cover rounded-md ${selectedIndex === index ? "border-20 border-blue-500" : "hover:scale-[105%] transition-all duration-300"}`}
+                    src={src}
+                    alt={`Thumbnail ${index + 1}`}
+                    fill
+                    placeholder="blur"
+                    blurDataURL={BlurredDataImage}
+                  />
+                </div>
+              </button>
             ))}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

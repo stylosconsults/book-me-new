@@ -35,10 +35,13 @@ export default function HotelInformation() {
       <Breadcrumb
         fullLocation={[
           {
-            name: " Hotel",
-            link: "/hotel/",
+            name: "Hotels",
+            link: `/c/${rooms?.hotel.category}`,
           },
-          { name: "Hotel Name", link: "/hotel/[id]" },
+          { 
+            name: rooms?.hotel.name || "Loading...", 
+            link: `/hotel/${params.hotelId}` 
+          },
         ]}
       />
       {isHotelLoading ? (
@@ -49,7 +52,11 @@ export default function HotelInformation() {
         <>
           <div className="mt-3">
             <EmblaCarousel
-              slides={rooms?.hotel.images.length > 0 ? rooms.hotel.images : []}
+              slides={rooms?.hotel?.images || []}
+              autoplay={rooms?.hotel?.images?.length > 1}
+              delayMs={6000}
+              showProgress={false}
+              showThumbnails={rooms?.hotel?.images?.length > 1}
             />
           </div>
           <div>

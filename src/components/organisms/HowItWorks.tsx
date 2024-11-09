@@ -194,8 +194,8 @@ export default function HowItWorks() {
     },
   ];
   return (
-    <div className="w-full h-fit p-10 py-20 rounded-3xl text-center">
-      <Heading subTitle="Keep calm & travel on">How it work</Heading>
+    <div className="w-full h-fit p-10 py-20 rounded-3xl text-center mt-6">
+      <Heading subTitle="Keep calm & travel on" >How it works</Heading>
       <div className="max-w-full mx-auto relative">
         <div className="absolute top-[66px] left-1/2 -translate-x-1/2 -z-0  hidden lg:block">
           <svg

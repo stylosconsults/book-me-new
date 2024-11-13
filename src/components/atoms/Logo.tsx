@@ -11,12 +11,12 @@ export default function Logo() {
         alt='Logo'
         width={50}
         height={50}
+        loading="eager"
+        quality={75}
       />
       <div>
-        <Link href='/' legacyBehavior passHref>
-          <a className='transition-all cursor-pointer text-primary font-bold text-xl block leading-3'>
-            Bookme
-          </a>
+        <Link href='/' className='transition-all cursor-pointer text-primary font-bold text-xl block leading-3'>
+          Bookme
         </Link>
         <a
           target='_blank'

@@ -57,26 +57,26 @@ export default function Contact() {
         <div className=" w-full flex justify-between">
           <div className="flex flex-col relative gap-1">
             <label className="text-mainAboutUsBlue ps-2" htmlFor="name">Name</label>
-            <Image className="w-[15px] h-[15px] absolute top-[44px] left-[18px]" src={"/static/images/contactUS/Name.png"} alt="no_image" width={20} height={20} />
+            <Image className="w-[15px] h-[15px] absolute top-[49px] left-[18px]" src={"/static/images/contactUS/Name.png"} alt="no_image" width={20} height={20} />
             <input className=" text-[1.1em] p-4 ps-10 border-none outline-none rounded-[27px] bg-mainAboutUsBlue bg-opacity-[4%]" type="text" id="name" placeholder="Enter your name" />
           </div>
 
           <div className=" relative flex flex-col gap-1">
             <label className="text-mainAboutUsBlue ps-2" htmlFor="phone">Phone</label>
-            <Image className="w-[15px] h-[15px] absolute top-[44px] left-[18px]" src={"/static/images/contactUS/Your_phone_email.png"} alt="no_image" width={10} height={10} />
+            <Image className="w-[15px] h-[15px] absolute top-[49px] left-[18px]" src={"/static/images/contactUS/Your_phone_email.png"} alt="no_image" width={10} height={10} />
             <input className=" text-[1.1em] p-4 ps-10 border-none outline-none rounded-[27px] bg-mainAboutUsBlue bg-opacity-[4%]" type="number" name="phone" placeholder="Enter your phone number" />
           </div>
         </div>
 
         <div className="relative flex flex-col w-full gap-1">
           <label className="text-mainAboutUsBlue ps-2" htmlFor="email">Email</label>
-          <Image className="w-[15px] h-[15px] absolute top-[44px] left-[18px]" src={"/static/images/contactUS/Your_phone_email.png"} alt="no_image" width={10} height={10} />
+          <Image className="w-[15px] h-[15px] absolute top-[49px] left-[18px]" src={"/static/images/contactUS/Your_phone_email.png"} alt="no_image" width={10} height={10} />
           <input className=" text-[1.1em] p-4 ps-10 border-none outline-none  rounded-[27px] bg-mainAboutUsBlue bg-opacity-[4%]" type="email" placeholder="Enter your email" />
         </div>
 
         <div className="relative flex flex-col w-full gap-1">
           <label className="text-mainAboutUsBlue ps-2" htmlFor="message">Message</label>
-          <Image className="w-[15px] h-[15px] absolute top-[44px] left-[18px]" src={"/static/images/contactUS/your_message.png"} alt="no_image" width={10} height={10} />
+          <Image className="w-[15px] h-[15px] absolute top-[49px] left-[18px]" src={"/static/images/contactUS/your_message.png"} alt="no_image" width={10} height={10} />
           <textarea className=" text-[1.1em] p-4 ps-10 h-[200px] border-none outline-none rounded-[27px] bg-mainAboutUsBlue bg-opacity-[4%]" name="message" id="message" placeholder="Enter your message"></textarea>
         </div>
 

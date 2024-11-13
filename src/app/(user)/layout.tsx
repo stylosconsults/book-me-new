@@ -3,6 +3,7 @@ import Navbar from "@/components/organisms/navbar";
 import Footer from "@/components/organisms/footer";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import HeroSection from "@/components/molecules/helloSection";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
@@ -17,12 +18,12 @@ export default function layout({ children }: { children: React.ReactNode }) {
       >
         <ToastContainer />
         <nav
-          className="sticky w-full bg-white z-50 filter-blur dark:bg-black top-0 px-4 md:px-10 py-5
-         rounded-md mx-auto flex justify-between items-center shadow-sm"
+          className="sticky w-full bg-[#003b95] z-50 filter-blur dark:bg-black text-white top-0 px-4 md:px-10 py-5
+          mx-auto flex justify-between items-center shadow-sm"
         >
           <Navbar />
         </nav>
-
+        <HeroSection />
         <main
           className={cn(
             "w-full flex-grow relative px-4 md:px-10 py-4",

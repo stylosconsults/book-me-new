@@ -8,6 +8,12 @@ import useStore from "@/store/main";
 import { useUserStore } from "@/store/user";
 import { useEffect, useState } from "react";
 import { USER_TYPES } from "@/utils/user";
+import { MdOutlineHelpOutline } from "react-icons/md";
+import { IoBedOutline } from "react-icons/io5";
+import { SlPlane } from "react-icons/sl";
+import { LiaCarSolid } from "react-icons/lia";
+import { MdOutlineAttractions } from "react-icons/md";
+import { MdOutlineAirportShuttle } from "react-icons/md";
 
 export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
   const pathname = usePathname();
@@ -41,28 +47,29 @@ export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
   ];
 
   return (
-    <>
+    <div className="justify-between w-full">
+      <div className="flex justify-between w-full mb-[0.5%]">
       <div className="flex flex-row gap-1 text-tertiary">
         {haveLogo && <Logo />}
       </div>
       <div className={cn("flex flex-row items-center font-bold space-x-4")}>
         <Link
-          className={pathname?.includes("about") ? "text-blue-500" : ""}
-          href="/vehicles"
+          className={pathname?.includes("vehicle") ? "border sold bg-white bg-opacity-20 p-1 rounded-[20px] " : " sold hover:bg-white hover:bg-opacity-20 p-1 rounded-[20px]"}
+          href=""
         >
-          Vehicles
+          USD
         </Link>
         <Link
-          className={pathname?.includes("about") ? "text-blue-500" : ""}
-          href="/about-us"
+          className={pathname?.includes("longuage") ? "border sold bg-white bg-opacity-20 p-1 rounded-[20px] " : " sold hover:bg-white hover:bg-opacity-20 p-1 rounded-[20px]"}
+          href="#"
         >
-          About us
+          English
         </Link>
         <Link
-          className={pathname?.includes("contact") ? "text-blue-500" : ""}
+          className={pathname?.includes("contact") ? "border sold bg-white bg-opacity-20 p-1 rounded-[20px] " : " sold hover:bg-white hover:bg-opacity-20 p-1 rounded-[20px]"}
           href="/contact-us"
         >
-          Contact us
+          <MdOutlineHelpOutline size={25} />
         </Link>
         {hasAppMounted ? (
           <>
@@ -100,16 +107,16 @@ export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
             ) : (
               <>
                 <Link
-                  className={pathname?.includes("join") ? "text-blue-500" : ""}
+                  className={pathname?.includes("join") ? "border sold bg-white bg-opacity-20 p-1 rounded-[20px] " : " sold hover:bg-white hover:bg-opacity-20 p-1 rounded-[20px]"}
                   href={"/join"}
                 >
-                  Open account
+                  List property 
                 </Link>
                 <Link href={"/login"}>
-                  <Button>Login</Button>
+                  <Button className="hover:text-black">Login</Button>
                 </Link>
-                <Link href={"/register"}>
-                  <Button className="bg-co-blue">Register property</Button>
+                <Link href={"/join"}>
+                  <Button className="hover:text-black">Register</Button>
                 </Link>
               </>
             )}
@@ -118,6 +125,39 @@ export default function Navbar({ haveLogo = true }: { haveLogo?: boolean }) {
           <div className="h-10 w-52 bg-gray-300 animate-pulse" />
         )}
       </div>
-    </>
+      </div>
+      <div className={cn("flex flex-row items-center font-bold space-x-8")}>
+        <Link
+          className={`${pathname?.includes("test") ? "border sold bg-white bg-opacity-20 p-1 rounded-[20px] " : " sold hover:bg-white hover:bg-opacity-20 p-1 rounded-[20px]"}`}
+          href=""
+        >
+          <span className="flex gap-1 items-center"><IoBedOutline size={20}/>Stays</span>
+        </Link>
+        <Link
+          className={pathname?.includes("test") ? "border sold bg-white bg-opacity-20 p-1 rounded-[20px] " : " sold hover:bg-white hover:bg-opacity-20 p-1 rounded-[20px]"}
+          href=""
+        >
+          <span className="flex gap-1 items-center"><SlPlane size={20}/>Flights</span>
+        </Link>
+        <Link
+          className={pathname?.includes("vehicles") ? "border sold bg-white bg-opacity-20 p-1 rounded-[20px] " : " sold hover:bg-white hover:bg-opacity-20 p-1 rounded-[20px]"}
+          href="/vehicles"
+        >
+          <span className="flex gap-1 items-center"><LiaCarSolid size={20}/>Cars rentals</span>
+        </Link>
+        <Link
+          className={pathname?.includes("attraction") ? "border sold bg-white bg-opacity-20 p-1 rounded-[20px] " : " sold hover:bg-white hover:bg-opacity-20 p-1 rounded-[20px]"}
+          href="/vehicles"
+        >
+          <span className="flex gap-1 items-center"><MdOutlineAttractions size={20}/>Attractions</span>
+        </Link>
+        <Link
+          className={pathname?.includes("taxi") ? "border sold bg-white bg-opacity-20 p-1 rounded-[20px] " : " sold hover:bg-white hover:bg-opacity-20 p-1 rounded-[20px]"}
+          href="/vehicles"
+        >
+          <span className="flex gap-1 items-center"><MdOutlineAirportShuttle size={20}/>Airport taxies</span>
+        </Link>
+        </div>
+    </div>
   );
 }

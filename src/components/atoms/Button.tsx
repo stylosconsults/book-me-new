@@ -53,15 +53,16 @@ export default function Button({
       disabled={disabled || isLoading}
       className={cn(
         "inline-flex items-center gap-1 justify-center",
-        "px-4 py-2",
-        "text-sm font-bold",
+        "px-4 py-3",
+        "text-md font-bold",
         "focus:outline-none focus:ring-2 focus:ring-offset-2",
         "transition duration-200 ease-in-out",
         "border-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2",
         "disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-black disabled:hover:bg-gray-700 disabled:hover:text-black",
         outline ? themeStyles.base : "focus:border-co-black",
-        outline ? themeStyles.hover : "hover:bg-co-gray",
-        className!
+        outline ? themeStyles.hover : "hover:bg-mainAboutUsBlue/70",
+        className!,
+        "bg-mainAboutUsBlue text-white",
       )}
       {...rest}
     >

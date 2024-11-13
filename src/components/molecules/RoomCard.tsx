@@ -45,7 +45,7 @@ export default function RoomCard({
       }}
     >
       <div className="relative flex justify-center">
-        <div className="relative overflow-hidden rounded-2xl w-full h-40">
+        <div className="relative overflow-hidden rounded-xl w-full h-40">
           <Image
             src={images[activeImage]}
             alt=""
@@ -67,7 +67,7 @@ export default function RoomCard({
                   activeImage === i
                     ? "bg-blue-500 text-white"
                     : "bg-white text-black"
-                }  rounded-2xl text-xs  flex items-center justify-center border cursor-pointer`}
+                }  rounded-xl text-xs  flex items-center justify-center border cursor-pointer`}
                 onClick={() => setActiveImage(i)}
               >
                 {i + 1}
@@ -101,16 +101,16 @@ export default function RoomCard({
       <p className="text-gray-400 text-xs">
         {refundable ? <span>Refundable, </span> : <span>Non-refundable, </span>}
         {breakfast ? (
-          <span>Breackfast included</span>
+          <span>Breakfast included</span>
         ) : (
-          <span>Breackfast not included</span>
+          <span>Breakfast not included</span>
         )}
       </p>
       {!hideBtn && (
         <Link href={`/booking/${id}`}>
           <Button
             disabled={price === 0}
-            className="py-1 font-medium bg-co-blue text-white border-0 w-full mt-2"
+            className="py-1 font-medium bg-co-blue hover:text-co-black text-white border-0 w-full mt-2"
           >
             Book now for ${price}
           </Button>

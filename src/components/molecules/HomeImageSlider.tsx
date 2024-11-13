@@ -27,12 +27,12 @@ export default function HomeImageSlider() {
   }, [hasMounted]);
 
   return (
-    <div className="relative flex flex-col  justify-center mb-28 w-full h-fit">
+    <div className="relative flex flex-col  justify-center mb-28 w-full h-fit ">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={images[activeImage]}
         alt="Bookme"
-        className="top-0 left-0 w-full object-cover rounded-md h-[550px] border-l-co-green border"
+        className="top-0 left-0 w-full rounded-[40px] object-cover h-[550px] border-l-co-green border"
         draggable="false"
         loading="lazy"
         placeholder="blur"

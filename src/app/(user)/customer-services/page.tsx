@@ -141,11 +141,11 @@ export default function CustomerServices() {
 
         <div className="w-full flex justify-center gap-[4em]">
           <button onClick={handleScrollAssistYouLeft}>
-            <LeftArrow className="bg-white h-[50px] w-[50px] rounded-[100%] p-3 flex justify-center items-center" />
+            <RightArrow className="rotate-180 bg-white h-[50px] w-[50px] rounded-[100%] p-3 flex justify-center items-center" />
           </button>
 
           <button onClick={handleScrollAssistYouRight}>
-            <RightArrow className="bg-white h-[50px] w-[50px] rounded-[100%] p-3 flex justify-center items-center" />
+            <RightArrow className=" bg-white h-[50px] w-[50px] rounded-[100%] p-3 flex justify-center items-center" />
           </button>
         </div>
 

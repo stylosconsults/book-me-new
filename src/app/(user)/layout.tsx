@@ -14,7 +14,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
         <ToastContainer />
         <nav
           className="sticky backdrop-blur-sm z-50 w-full bg-white/80  dark:bg-black top-0 px-4 md:px-10 py-5
-         rounded-md mx-auto flex justify-between items-center shadow-sm"
+         rounded-md mx-auto flex justify-between items-center "
         >
 
         {/* <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-sm dark:bg-black/80 px-4 md:px-10 py-5 shadow-sm"> */}
@@ -24,7 +24,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
 
         <main
           className={
-            " m-2 w-full  flex-grow relative px-4 md:px-10 py-4 mx-auto my-auto flex gap-12 flex-col bg-[#F6F7F9] divide-y divide-gray-200 dark:divide-gray-900"
+            " w-full  flex-grow relative  flex gap-12 flex-col bg-[#F6F7F9] divide-y divide-gray-200 dark:divide-gray-900"
           }
         >
           <div>{children}</div>

@@ -17,6 +17,9 @@ module.exports = {
         'co-black': '#23262F',
         'co-gray': '#e7e8ec',
         'co-blue': '#0142eb',
+        mainAboutUsBlue: '#0142EB',
+        textColor: '#19165F',
+        text404: '#001209'
       },
       boxShadow: {
         'co-search': '0px 40px 64px -32px rgb(15 15 15 / 10%)',

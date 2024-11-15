@@ -56,17 +56,27 @@ export default function UserForm({
       >
         {heading}
       </Heading>
-      <Input {...register("name")} label="Names" error={errors.name?.message} />
+      <Input
+       {...register("name")} 
+       label="Names" 
+       error={errors.name?.message} 
+       imageUrl="/static/images/contactUS/Name.png"
+       />
+      
       <Input
         {...register("email")}
         label="Email"
         error={errors.email?.message}
+        imageUrl="/public/static/images/contactUS/Your_phone_email.png"
+
       />
       <Input
         {...register("password")}
         label="Password"
         type="password"
         error={errors.password?.message}
+        imageUrl="/public/static/images/login/password.png"
+
       />
       <Button isLoading={isLoading} loadingText="Registering...">
         Register
